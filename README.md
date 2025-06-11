@@ -140,20 +140,6 @@ npm run dev
 - Animaciones suaves
 - Componentes accesibles
 
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 🙏 Acknowledgments
-
-- Fundación Underlife
-- Weblifetech
-- All contributors and supporters of the project
-
 ---
 
 Desarrollado con ❤️ en Ecuador 
