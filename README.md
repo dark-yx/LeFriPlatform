@@ -72,23 +72,15 @@ MONGODB_URI=your_mongodb_uri
 SESSION_SECRET=your_secure_secret
 ```
 
-In the `client` directory, create `.env`:
-```env
-VITE_GOOGLE_CLIENT_ID=your_google_client_id
-VITE_API_URL=http://localhost:5000
-```
-
 4. Configure Google OAuth:
    - Go to [Google Cloud Console](https://console.cloud.google.com)
    - Create a new project or select an existing one
    - Enable Google OAuth 2.0 API
    - Create OAuth 2.0 credentials
-   - Add the following authorized URIs:
+   - Add the following authorized URI:
      - `http://localhost:5000`
-     - `http://localhost:5173`
-   - Add the following JavaScript origins:
+   - Add the following JavaScript origin:
      - `http://localhost:5000`
-     - `http://localhost:5173`
 
 5. Start the development server:
 ```bash
@@ -100,8 +92,8 @@ npm run dev
 The application uses Google OAuth 2.0 for authentication. To ensure proper functionality:
 
 1. Make sure environment variables are correctly configured
-2. Verify redirect URIs are set up in Google Cloud Console
-3. The client ID must be the same in both `.env` files
+2. Verify redirect URI is set up in Google Cloud Console
+3. The client ID must be correctly configured in the `.env` file
 
 ## 🚨 Troubleshooting
 
@@ -117,17 +109,13 @@ If you encounter the "Invalid server response" error:
 
 ### Common Issues
 
-1. **CORS Error**: 
-   - Verify origins are correctly configured
-   - Ensure the server is configured to accept credentials
-
-2. **MongoDB Connection Error**:
+1. **MongoDB Connection Error**:
    - Verify MongoDB URI
    - Ensure database is accessible
 
-3. **Authentication Error**:
+2. **Authentication Error**:
    - Verify Google OAuth credentials
-   - Ensure redirect URIs are correctly configured
+   - Ensure redirect URI is correctly configured
 
 ## 📝 Available Scripts
 
