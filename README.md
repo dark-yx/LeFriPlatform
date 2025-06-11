@@ -1,28 +1,12 @@
-# LeFri Platform
+## 🚀 Project Description
 
-## Derechos de Autor y Licencia
+LeFri Platform is a modern web platform developed with cutting-edge technologies to provide a robust and scalable solution. The project is being developed in Ecuador.
 
-© 2024 LeFriPlatform. Todos los derechos reservados.
-
-Este software y su documentación son propiedad intelectual de LeFriPlatform. Se prohíbe estrictamente:
-
-- La reproducción total o parcial del código
-- La distribución o comercialización del software
-- La modificación o creación de trabajos derivados
-- El uso no autorizado de cualquier parte de la propiedad intelectual
-
-Cualquier uso no autorizado de este software constituirá una violación de los derechos de autor y podrá resultar en acciones legales.
-
-## 🚀 Descripción del Proyecto
-
-LeFri Platform es una plataforma web moderna desarrollada con tecnologías de vanguardia para proporcionar una solución robusta y escalable. El proyecto está desarrollado en Ecuador.
-
-## 👨‍💻 Autor
-
+## 👨‍💻 Author
 - **Jonnatan Peña**
-- Ubicación: Ecuador
+- Location: Ecuador
 
-## 🛠️ Stack Tecnológico
+## 🛠️ Technology Stack
 
 ### Frontend
 - React 18
@@ -30,35 +14,35 @@ LeFri Platform es una plataforma web moderna desarrollada con tecnologías de va
 - TailwindCSS
 - Radix UI Components
 - React Query
-- Zustand (Gestión de Estado)
-- Wouter (Enrutamiento)
-- Framer Motion (Animaciones)
+- Zustand (State Management)
+- Wouter (Routing)
+- Framer Motion (Animations)
 
 ### Backend
 - Node.js
 - Express.js
 - TypeScript
-- MongoDB con Mongoose
-- Soporte WebSocket
-- Passport.js (Autenticación)
+- MongoDB with Mongoose
+- WebSocket Support
+- Passport.js (Authentication)
 
-### API de WhatsApp
-- Implementación personalizada
-- Integración con múltiples proveedores
-- Sistema de gestión de leads
-- Manejo de mensajes en tiempo real
+### WhatsApp API
+- Custom Implementation
+- Multi-Vendor Integration
+- Lead Management System
+- Real-Time Message Handling
 
-## 📦 Dependencias Principales
+## 📦 Main Dependencies
 
-### Componentes UI
-- @radix-ui/* (Biblioteca de componentes UI)
-- @tanstack/react-query (Manejo de datos y caché)
-- framer-motion (Animaciones)
-- lucide-react (Iconos)
-- react-hook-form (Manejo de formularios)
-- zod (Validación de esquemas)
+### UI Components
+- @radix-ui/* (UI Components Library)
+- @tanstack/react-query (Data handling and caching)
+- framer-motion (Animations)
+- lucide-react (Icons)
+- react-hook-form (Form handling)
+- zod (Schema validation)
 
-### Servicios Backend
+### Backend Services
 - express
 - mongoose
 - passport
@@ -66,80 +50,98 @@ LeFri Platform es una plataforma web moderna desarrollada con tecnologías de va
 - ws (WebSocket)
 - googleapis
 
-## 🏗️ Estructura del Proyecto
+## 🏗️ Project Structure
 
 ```
 LeFriPlatform/
-├── client/                 # Aplicación Frontend
-│   ├── src/               # Código fuente
-│   └── index.html         # Archivo HTML principal
-├── server/                # Aplicación Backend
-├── shared/                # Utilidades y tipos compartidos
-├── uploads/               # Directorio de archivos subidos
-├── whatsapp-api/          # Integración de API de WhatsApp
-└── attached_assets/       # Recursos estáticos
+├── client/ # Frontend Application
+│ ├── src/ # Source Code
+│ └── index.html # Main HTML file
+├── server/ # Backend Application
+├── shared/ # Utilities and shared types
+├── uploads/ # Directory of uploaded files
+├── whatsapp-api/ # WhatsApp API integration
+└── attached_assets/ # Static resources
 ```
 
-## 🚀 Comenzando
+## 🚀 Getting Started
 
-### Prerrequisitos
-- Node.js (Última versión LTS)
+### Prerequisites
+- Node.js (Latest LTS version)
 - MongoDB
-- npm o yarn
+- npm or yarn
 
-### Instalación
+### Installation
 
-1. Clonar el repositorio
+1. Clone the repository
 ```bash
 git clone https://github.com/dark-yx/LeFriPlatform.git
 ```
 
-2. Instalar dependencias
+2. Install dependencies
 ```bash
 npm install
 ```
 
-3. Configurar variables de entorno
+3. Set environment variables
 ```bash
 cp .env.example .env
 ```
 
-4. Iniciar servidor de desarrollo
+4. Start the development server
 ```bash
 npm run dev
 ```
 
-## 📝 Scripts Disponibles
+## 📝 Available Scripts
 
-- `npm run dev` - Iniciar servidor de desarrollo
-- `npm run build` - Construir para producción
-- `npm run start` - Iniciar servidor de producción
-- `npm run check` - Verificación de tipos
-- `npm run db:push` - Actualizaciones de esquema de base de datos
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run check` - Type checking
+- `npm run db:push` - Database schema updates
 
-## 🔒 Características de Seguridad
+## 🔒 Security Features
 
-- Autenticación con Passport.js
-- Gestión de sesiones
-- Subida segura de archivos
-- Validación de entrada con Zod
-- Protección de variables de entorno
+- Authentication with Passport.js
+- Session management
+- Secure file uploads
+- Input validation with Zod
+- Environment variable protection
 
-## 🌐 Integración de APIs
+## 🌐 API Integration
 
-- API de WhatsApp personalizada
-- APIs de Google
-- Integración de servicio de correo
-- Soporte WebSocket para características en tiempo real
+- Custom WhatsApp API
+- Google APIs
+- Mail service integration
+- WebSocket support for real-time features
 
-## 🎨 Características UI/UX
+## 🎨 UI/UX Features
 
-- Diseño responsivo
-- Soporte para tema claro/oscuro
-- Biblioteca moderna de componentes
-- Animaciones suaves
-- Componentes accesibles
+- Responsive design
+- Light/dark theme support
+- Modern component library
+- Smooth animations
+- Accessible components
+
+## 📄 License
+
+All rights reserved.
+
+This software and its documentation are the intellectual property of LeFriPlatform. The following are strictly prohibited:
+
+- Reproduction of all or part of the code
+- Distribution or commercialization of the software
+- Modification or creation of derivative works
+- Unauthorized use of any part of the intellectual property
+
+Any unauthorized use of this software constitutes copyright infringement and may result in legal action.
+
+## 🙏 Acknowledgments
+
+- Underlife Foundation
+- Weblifetech
 
 ---
 
-Desarrollado con ❤️ en Ecuador 
+Developed with ❤️ in Ecuador
