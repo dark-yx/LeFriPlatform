@@ -432,7 +432,7 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ChatInterface country={country} />
+            <ChatInterface country={country} processId={processId} />
           </CardContent>
         </Card>
       )}

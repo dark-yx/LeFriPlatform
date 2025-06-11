@@ -25,6 +25,7 @@ export function ChatInterface({ country, processId }: ChatInterfaceProps) {
     },
   ]);
   const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
 
@@ -56,8 +57,8 @@ export function ChatInterface({ country, processId }: ChatInterfaceProps) {
     },
   });
 
-  const handleSendMessage = () => {
-    if (!inputValue.trim() || askQuestion.isPending) return;
+  const handleSendMessage = async () => {
+    if (!inputValue.trim() || isLoading) return;
 
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
@@ -67,8 +68,108 @@ export function ChatInterface({ country, processId }: ChatInterfaceProps) {
     };
 
     setMessages(prev => [...prev, userMessage]);
-    askQuestion.mutate(inputValue);
+    const query = inputValue;
     setInputValue('');
+    setIsLoading(true);
+
+    try {
+      let response;
+      
+      if (processId) {
+        // Use process-specific chat endpoint
+        response = await fetch(`/api/processes/${processId}/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-user-id': '66a1b2c3d4e5f6789abc1234'
+          },
+          body: JSON.stringify({ query }),
+        });
+
+        if (!response.ok) throw new Error('Error en la consulta del proceso');
+
+        const data = await response.json();
+        
+        const assistantMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          content: data.response,
+          sender: 'ai',
+          timestamp: new Date(),
+          citations: data.citations || [],
+          confidence: data.confidence || 0,
+          nextSteps: data.nextSteps
+        };
+
+        setMessages(prev => [...prev, assistantMessage]);
+      } else {
+        // Use general consultation
+        response = await fetch('/api/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query, country, language: 'es' }),
+        });
+
+        if (!response.ok) throw new Error('Error en la consulta');
+
+        const reader = response.body?.getReader();
+        if (!reader) throw new Error('No se pudo leer la respuesta');
+
+        const assistantMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          content: '',
+          sender: 'ai',
+          timestamp: new Date(),
+          citations: [],
+          confidence: 0,
+        };
+
+        setMessages(prev => [...prev, assistantMessage]);
+
+        const decoder = new TextDecoder();
+        let done = false;
+
+        while (!done) {
+          const { value, done: readerDone } = await reader.read();
+          done = readerDone;
+
+          if (value) {
+            const chunk = decoder.decode(value);
+            const lines = chunk.split('\n');
+
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                try {
+                  const data = JSON.parse(line.slice(6));
+                  
+                  if (data.type === 'chunk') {
+                    setMessages(prev => 
+                      prev.map(msg => 
+                        msg.id === assistantMessage.id 
+                          ? { ...msg, content: msg.content + data.data }
+                          : msg
+                      )
+                    );
+                  }
+                } catch (e) {
+                  console.error('Error parsing SSE data:', e);
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Chat error:', error);
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        content: 'Error al procesar la consulta. Intenta nuevamente.',
+        sender: 'ai',
+        timestamp: new Date(),
+        error: true,
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
