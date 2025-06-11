@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,6 +13,7 @@ import { Progress } from '@/components/ui/progress';
 import { Plus, FileText, Clock, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'wouter';
+import { Navbar } from '@/components/navbar';
 
 interface ProcessSummary {
   id: string;
@@ -38,6 +40,7 @@ interface CreateProcessForm {
 }
 
 export function ProcessList() {
+  const { t } = useTranslation();
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [formData, setFormData] = useState<CreateProcessForm>({
     title: '',
@@ -137,36 +140,39 @@ export function ProcessList() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Volver al Dashboard
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-3xl font-bold">Procesos Legales</h1>
-            <p className="text-muted-foreground">
-              Gestiona tus procesos legales y haz seguimiento a cada paso
-            </p>
-          </div>
-        </div>
-        <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-          <DialogTrigger asChild>
-            <Button className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              Nuevo Proceso
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>Crear Nuevo Proceso</DialogTitle>
-              <DialogDescription>
-                Ingresa los detalles básicos de tu proceso legal
-              </DialogDescription>
-            </DialogHeader>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <Navbar />
+      <main className="container mx-auto px-4 py-8">
+        <div className="space-y-6">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-4">
+              <Link href="/dashboard">
+                <Button variant="outline" size="sm">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  {t('common.back')}
+                </Button>
+              </Link>
+              <div>
+                <h1 className="text-3xl font-bold text-neutral-900">{t('processes.title')}</h1>
+                <p className="text-neutral-600">
+                  {t('processes.subtitle')}
+                </p>
+              </div>
+            </div>
+            <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+              <DialogTrigger asChild>
+                <Button className="flex items-center gap-2">
+                  <Plus className="h-4 w-4" />
+                  {t('processes.newProcess')}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md bg-white">
+                <DialogHeader>
+                  <DialogTitle>{t('processes.createProcess')}</DialogTitle>
+                  <DialogDescription>
+                    {t('processes.enterDescription')}
+                  </DialogDescription>
+                </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <Label htmlFor="title">Título del Proceso</Label>

@@ -100,6 +100,66 @@
     "playRecording": "Play Recording",
     "deleteRecording": "Delete Recording"
   },
+  "processes": {
+    "title": "Legal Processes",
+    "subtitle": "Manage your ongoing legal matters",
+    "newProcess": "New Process",
+    "createProcess": "Create Process",
+    "processType": "Process Type",
+    "processTitle": "Process Title",
+    "processDescription": "Description",
+    "priority": "Priority",
+    "deadline": "Deadline",
+    "status": "Status",
+    "progress": "Progress",
+    "createdAt": "Created",
+    "updatedAt": "Updated",
+    "noProcesses": "No legal processes found",
+    "createFirst": "Create your first legal process to get started",
+    "selectProcessType": "Select process type",
+    "enterTitle": "Enter process title",
+    "enterDescription": "Enter process description",
+    "selectPriority": "Select priority",
+    "selectDeadline": "Select deadline (optional)",
+    "creating": "Creating process...",
+    "processCreated": "Process created successfully",
+    "processCreationFailed": "Failed to create process",
+    "types": {
+      "labor": "Labor Law",
+      "civil": "Civil Law", 
+      "criminal": "Criminal Law",
+      "family": "Family Law",
+      "commercial": "Commercial Law",
+      "constitutional": "Constitutional Law",
+      "administrative": "Administrative Law",
+      "tax": "Tax Law"
+    },
+    "statuses": {
+      "draft": "Draft",
+      "active": "Active",
+      "pending": "Pending",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "priorities": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "detail": {
+      "backToProcesses": "Back to Processes",
+      "processDetails": "Process Details",
+      "chat": "Chat",
+      "documents": "Documents",
+      "timeline": "Timeline",
+      "settings": "Settings",
+      "askQuestion": "Ask a question about this process...",
+      "sendMessage": "Send Message",
+      "typing": "Typing...",
+      "noMessages": "No messages yet. Start a conversation about your legal process.",
+      "chatPlaceholder": "Type your message here..."
+    }
+  },
   "emergency": {
     "title": "Emergency Mode",
     "subtitle": "Quick access to emergency resources",

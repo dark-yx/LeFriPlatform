@@ -100,6 +100,66 @@
     "playRecording": "Reproducir Grabación",
     "deleteRecording": "Eliminar Grabación"
   },
+  "processes": {
+    "title": "Procesos Legales",
+    "subtitle": "Gestiona tus asuntos legales en curso",
+    "newProcess": "Nuevo Proceso",
+    "createProcess": "Crear Proceso",
+    "processType": "Tipo de Proceso",
+    "processTitle": "Título del Proceso",
+    "processDescription": "Descripción",
+    "priority": "Prioridad",
+    "deadline": "Fecha Límite",
+    "status": "Estado",
+    "progress": "Progreso",
+    "createdAt": "Creado",
+    "updatedAt": "Actualizado",
+    "noProcesses": "No se encontraron procesos legales",
+    "createFirst": "Crea tu primer proceso legal para comenzar",
+    "selectProcessType": "Seleccionar tipo de proceso",
+    "enterTitle": "Ingresa el título del proceso",
+    "enterDescription": "Ingresa la descripción del proceso",
+    "selectPriority": "Seleccionar prioridad",
+    "selectDeadline": "Seleccionar fecha límite (opcional)",
+    "creating": "Creando proceso...",
+    "processCreated": "Proceso creado exitosamente",
+    "processCreationFailed": "Error al crear el proceso",
+    "types": {
+      "labor": "Derecho Laboral",
+      "civil": "Derecho Civil", 
+      "criminal": "Derecho Penal",
+      "family": "Derecho de Familia",
+      "commercial": "Derecho Comercial",
+      "constitutional": "Derecho Constitucional",
+      "administrative": "Derecho Administrativo",
+      "tax": "Derecho Tributario"
+    },
+    "statuses": {
+      "draft": "Borrador",
+      "active": "Activo",
+      "pending": "Pendiente",
+      "completed": "Completado",
+      "cancelled": "Cancelado"
+    },
+    "priorities": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta"
+    },
+    "detail": {
+      "backToProcesses": "Volver a Procesos",
+      "processDetails": "Detalles del Proceso",
+      "chat": "Chat",
+      "documents": "Documentos",
+      "timeline": "Cronología",
+      "settings": "Configuración",
+      "askQuestion": "Haz una pregunta sobre este proceso...",
+      "sendMessage": "Enviar Mensaje",
+      "typing": "Escribiendo...",
+      "noMessages": "Aún no hay mensajes. Inicia una conversación sobre tu proceso legal.",
+      "chatPlaceholder": "Escribe tu mensaje aquí..."
+    }
+  },
   "emergency": {
     "title": "Modo Emergencia",
     "subtitle": "Acceso rápido a recursos de emergencia",
