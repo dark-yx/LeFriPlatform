@@ -1,6 +1,21 @@
 # LeFri Platform
 
-A comprehensive legal platform that combines legal consultations, process management, and emergency alerts.
+A comprehensive legal platform that combines legal consultations, process management, and emergency alerts. Our mission is to democratize access to immediate and free legal advice, making legal assistance accessible to everyone.
+
+## 👨‍💻 Author
+- **Jonnatan Peña**
+- Location: Ecuador
+
+## 🎯 Purpose
+
+LeFri Platform was created with the vision of democratizing access to legal advice by providing:
+- Immediate legal consultations
+- Free initial legal guidance
+- Emergency legal assistance
+- Process management tools
+- Access to legal resources
+
+Our goal is to break down barriers to legal assistance and ensure that everyone has access to quality legal support when they need it most.
 
 ## 🚀 Technologies
 
@@ -149,4 +164,4 @@ Any unauthorized use of this software constitutes copyright infringement and may
 
 ---
 
-Developed with ❤️ in Ecuador
+Developed with ❤️ in Ecuador by Jonnatan Peña
