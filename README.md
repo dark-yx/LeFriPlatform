@@ -1,3 +1,18 @@
+# LeFriPlatform
+
+## Derechos de Autor y Licencia
+
+© 2024 LeFriPlatform. Todos los derechos reservados.
+
+Este software y su documentación son propiedad intelectual de LeFriPlatform. Se prohíbe estrictamente:
+
+- La reproducción total o parcial del código
+- La distribución o comercialización del software
+- La modificación o creación de trabajos derivados
+- El uso no autorizado de cualquier parte de la propiedad intelectual
+
+Cualquier uso no autorizado de este software constituirá una violación de los derechos de autor y podrá resultar en acciones legales.
+
 # LeFri Platform
 
 A comprehensive web platform developed as a free and public access project, sponsored by Fundación Underlife and Weblifetech.
