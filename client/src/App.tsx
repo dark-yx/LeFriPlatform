@@ -1,104 +1,109 @@
-import { Switch, Route, Redirect } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { useAuth } from "@/hooks/use-auth";
-import { TranslationProvider } from "@/contexts/translations";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ThemeProvider } from "@/components/theme-provider";
-import Login from "@/pages/login";
-import Dashboard from "@/pages/dashboard";
-import Consulta from "@/pages/consulta";
-import Proceso from "@/pages/proceso";
-import Emergencia from "@/pages/emergencia";
-import Profile from "@/pages/profile";
-import NotFound from "@/pages/not-found";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./lib/queryClient";
+import { TranslationProvider } from "@/components/translation-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/toaster";
+import Login from './components/Login';
+import Dashboard from './pages/Dashboard';
+import Consulta from './pages/Consulta';
+import Proceso from './pages/Proceso';
+import Emergencia from './pages/Emergencia';
+import Profile from './pages/Profile';
+import NotFound from './pages/NotFound';
 import { ProcessesPage } from "@/pages/processes";
 import { ProcessDetailPage } from "@/pages/process-detail";
 
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+
 function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
-  
-  if (!user) {
-    return <Redirect to="/login" />;
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return <Navigate to="/login" replace />;
   }
-  
   return <>{children}</>;
 }
 
-function Router() {
-  const { user } = useAuth();
+function AppRoutes() {
+  const token = localStorage.getItem('token');
 
   return (
-    <Switch>
-      <Route path="/login" component={Login} />
+    <Routes>
+      <Route path="/login" element={<Login />} />
       
       {/* Redirect root to appropriate page */}
-      <Route path="/">
-        {user ? <Redirect to="/dashboard" /> : <Redirect to="/login" />}
-      </Route>
+      <Route path="/" element={
+        token ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
+      } />
       
       {/* Protected routes */}
-      <Route path="/dashboard">
+      <Route path="/dashboard" element={
         <AuthGuard>
           <Dashboard />
         </AuthGuard>
-      </Route>
+      } />
       
-      <Route path="/consulta">
+      <Route path="/consulta" element={
         <AuthGuard>
           <Consulta />
         </AuthGuard>
-      </Route>
+      } />
       
-      <Route path="/proceso">
+      <Route path="/proceso" element={
         <AuthGuard>
           <Proceso />
         </AuthGuard>
-      </Route>
+      } />
       
-      <Route path="/processes">
+      <Route path="/processes" element={
         <AuthGuard>
           <ProcessesPage />
         </AuthGuard>
-      </Route>
+      } />
       
-      <Route path="/processes/:id">
+      <Route path="/processes/:id" element={
         <AuthGuard>
           <ProcessDetailPage />
         </AuthGuard>
-      </Route>
+      } />
       
-      <Route path="/emergencia">
+      <Route path="/emergencia" element={
         <AuthGuard>
           <Emergencia />
         </AuthGuard>
-      </Route>
+      } />
       
-      <Route path="/profile">
+      <Route path="/profile" element={
         <AuthGuard>
           <Profile />
         </AuthGuard>
-      </Route>
+      } />
       
       {/* Fallback to 404 */}
-      <Route component={NotFound} />
-    </Switch>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="replit-legal-theme">
-      <QueryClientProvider client={queryClient}>
-        <TranslationProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Router />
-          </TooltipProvider>
-        </TranslationProvider>
-      </QueryClientProvider>
-    </ThemeProvider>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <ThemeProvider defaultTheme="light" storageKey="replit-legal-theme">
+        <QueryClientProvider client={queryClient}>
+          <TranslationProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Router>
+                <AppRoutes />
+              </Router>
+            </TooltipProvider>
+          </TranslationProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </GoogleOAuthProvider>
   );
 }
 
