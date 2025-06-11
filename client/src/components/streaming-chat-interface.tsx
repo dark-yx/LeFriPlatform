@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
@@ -24,10 +25,11 @@ const formatMarkdown = (text: string) => {
 };
 
 export function StreamingChatInterface({ country }: StreamingChatInterfaceProps) {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome',
-      content: 'Hello! I\'m your intelligent legal assistant. I can help you with questions about laws, rights, legal processes, and your country\'s constitution. How can I help you today?',
+      content: t('consultation.greeting'),
       sender: 'ai',
       timestamp: new Date(),
     }

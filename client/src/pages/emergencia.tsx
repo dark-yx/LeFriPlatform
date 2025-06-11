@@ -184,9 +184,9 @@ export default function Emergencia() {
                             <SelectTrigger>
                               <SelectValue placeholder="Seleccionar relación" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-white border border-gray-300 shadow-lg">
                               {relationships.map((rel) => (
-                                <SelectItem key={rel.value} value={rel.value}>
+                                <SelectItem key={rel.value} value={rel.value} className="hover:bg-gray-100">
                                   {rel.label}
                                 </SelectItem>
                               ))}

@@ -42,8 +42,8 @@ export function Navbar() {
 
   return (
     <header className="navbar">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
+      <div className="w-full flex items-center justify-between px-6">
+        {/* Logo - Pegado a la izquierda */}
         <Link href="/dashboard" className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
             <Scale className="w-5 h-5 text-white" />
@@ -51,16 +51,16 @@ export function Navbar() {
           <h1 className="navbar-logo">LeFriAI</h1>
         </Link>
 
-        {/* Right section */}
-        <div className="navbar-links">
+        {/* Right section - Pegado a la derecha */}
+        <div className="flex items-center space-x-4">
           {/* Language Selector */}
           <Select value={i18n.language} onValueChange={handleLanguageChange}>
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="w-[140px] bg-white border-gray-300">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-white border border-gray-300 shadow-lg">
               {languageOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
+                <SelectItem key={option.value} value={option.value} className="hover:bg-gray-100">
                   {option.label}
                 </SelectItem>
               ))}
@@ -82,17 +82,17 @@ export function Navbar() {
                 <ChevronDown className="w-4 h-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem onClick={() => setLocation('/profile')}>
+            <DropdownMenuContent align="end" className="w-48 bg-white border border-gray-300 shadow-lg">
+              <DropdownMenuItem onClick={() => setLocation('/profile')} className="hover:bg-gray-100">
                 <User className="w-4 h-4 mr-2" />
                 {t('navbar.profile')}
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-gray-100">
                 <Settings className="w-4 h-4 mr-2" />
                 {t('navbar.settings')}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+              <DropdownMenuItem onClick={handleLogout} className="text-red-600 hover:bg-red-50">
                 <LogOut className="w-4 h-4 mr-2" />
                 {t('auth.logout')}
               </DropdownMenuItem>

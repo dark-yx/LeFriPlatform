@@ -201,9 +201,9 @@ export function ProcessList() {
                       <SelectTrigger>
                         <SelectValue placeholder={t('processes.selectProcessType')} />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-white border border-gray-300 shadow-lg">
                         {processTypes.map((type) => (
-                          <SelectItem key={type.value} value={type.value}>
+                          <SelectItem key={type.value} value={type.value} className="hover:bg-gray-100">
                             {type.label}
                           </SelectItem>
                         ))}
@@ -229,10 +229,10 @@ export function ProcessList() {
                       <SelectTrigger>
                         <SelectValue placeholder={t('processes.selectPriority')} />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="low">{t('processes.priorities.low')}</SelectItem>
-                        <SelectItem value="medium">{t('processes.priorities.medium')}</SelectItem>
-                        <SelectItem value="high">{t('processes.priorities.high')}</SelectItem>
+                      <SelectContent className="bg-white border border-gray-300 shadow-lg">
+                        <SelectItem value="low" className="hover:bg-gray-100">{t('processes.priorities.low')}</SelectItem>
+                        <SelectItem value="medium" className="hover:bg-gray-100">{t('processes.priorities.medium')}</SelectItem>
+                        <SelectItem value="high" className="hover:bg-gray-100">{t('processes.priorities.high')}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
