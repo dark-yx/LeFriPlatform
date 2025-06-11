@@ -15,7 +15,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 const profileSchema = z.object({
-  name: z.string().min(1, 'El nombre es requerido'),
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Valid email is required'),
+  phone: z.string().min(10, 'Phone number must be at least 10 digits'),
   language: z.string(),
   country: z.string(),
 });
@@ -62,7 +64,9 @@ export default function Profile() {
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name: user?.name || '',
-      language: user?.language || 'es',
+      email: user?.email || '',
+      phone: user?.phone || '',
+      language: user?.language || 'en',
       country: user?.country || 'EC',
     },
   });
@@ -138,13 +142,26 @@ export default function Profile() {
                         <Label htmlFor="email">Email</Label>
                         <Input
                           id="email"
-                          value={user?.email || ''}
-                          disabled
-                          className="bg-neutral-100"
+                          type="email"
+                          {...register('email')}
                         />
-                        <p className="text-xs text-neutral-500 mt-1">
-                          El email no se puede modificar
-                        </p>
+                        {errors.email && (
+                          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="phone">Phone Number</Label>
+                        <Input
+                          id="phone"
+                          type="tel"
+                          {...register('phone')}
+                          placeholder="+1234567890"
+                        />
+                        {errors.phone && (
+                          <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                        )}
                       </div>
                     </div>
                     

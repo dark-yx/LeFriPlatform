@@ -29,8 +29,8 @@ export default function Dashboard() {
 
   const modeCards = [
     {
-      title: 'Modo Consulta',
-      description: 'Realiza consultas legales y obtén respuestas contextualizadas por país usando IA avanzada.',
+      title: 'Consultation Mode',
+      description: 'Ask legal questions and get contextualized answers by country using advanced AI.',
       icon: MessageSquare,
       iconBg: 'bg-blue-100',
       iconColor: 'text-blue-500',
@@ -38,8 +38,8 @@ export default function Dashboard() {
       onClick: () => setLocation('/consulta'),
     },
     {
-      title: 'Modo Proceso',
-      description: 'Guía paso a paso para procesos legales comunes como divorcios, contratos y demandas.',
+      title: 'Process Mode',
+      description: 'Step-by-step guidance for common legal processes like divorce, contracts and lawsuits.',
       icon: FileText,
       iconBg: 'bg-orange-100',
       iconColor: 'text-orange-600',
@@ -47,8 +47,8 @@ export default function Dashboard() {
       onClick: () => setLocation('/processes'),
     },
     {
-      title: 'Modo Emergencia',
-      description: 'Sistema de alertas automáticas vía WhatsApp a tus contactos de emergencia.',
+      title: 'Emergency Mode',
+      description: 'Automatic alert system via WhatsApp to your emergency contacts.',
       icon: AlertTriangle,
       iconBg: 'bg-red-100',
       iconColor: 'text-red-500',
@@ -66,10 +66,10 @@ export default function Dashboard() {
           {/* Welcome Section */}
           <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-8 text-white">
             <h2 className="text-3xl font-bold mb-2">
-              ¡Bienvenido{user?.name ? `, ${user.name.split(' ')[0]}` : ''}!
+              Welcome{user?.name ? `, ${user.name.split(' ')[0]}` : ''}!
             </h2>
             <p className="text-blue-100 text-lg">
-              Tu asistente legal inteligente está listo para ayudarte con consultas, procesos y emergencias.
+              Your intelligent legal assistant is ready to help with consultations, processes and emergencies.
             </p>
           </div>
 
@@ -93,9 +93,9 @@ export default function Dashboard() {
                   </p>
                   <div className={`flex items-center ${card.buttonColor} text-sm font-medium`}>
                     <span>
-                      {card.title === 'Modo Consulta' && 'Iniciar consulta'}
-                      {card.title === 'Modo Proceso' && 'Ver procesos'}
-                      {card.title === 'Modo Emergencia' && 'Configurar alertas'}
+                      {card.title === 'Consultation Mode' && 'Start consultation'}
+                      {card.title === 'Process Mode' && 'View processes'}
+                      {card.title === 'Emergency Mode' && 'Setup alerts'}
                     </span>
                     <ArrowRight className="ml-2 w-4 h-4" />
                   </div>

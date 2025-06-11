@@ -12,7 +12,7 @@ export function Navbar() {
   const [location, setLocation] = useLocation();
   const { user, logout, updateUser } = useAuth();
   const { theme, setTheme } = useTheme();
-  const [language, setLanguage] = useState(user?.language || 'es');
+  const [language, setLanguage] = useState(user?.language || 'en');
 
   const handleLanguageChange = (newLanguage: string) => {
     setLanguage(newLanguage);
@@ -37,9 +37,8 @@ export function Navbar() {
   };
 
   const languageOptions = [
-    { value: 'es', label: '🇪🇸 Español' },
     { value: 'en', label: '🇺🇸 English' },
-    { value: 'fr', label: '🇫🇷 Français' },
+    { value: 'es', label: '🇪🇸 Español' },
   ];
 
   return (
