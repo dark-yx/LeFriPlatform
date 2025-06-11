@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Plus, Edit, Trash2, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,9 +21,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 const emergencyContactSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  phone: z.string().min(10, 'Phone must have at least 10 digits'),
-  relationship: z.string().min(1, 'Relationship is required'),
+  name: z.string().min(1),
+  phone: z.string().min(10),
+  relationship: z.string().min(1),
   whatsappEnabled: z.boolean().default(true),
 });
 
@@ -30,6 +31,7 @@ type EmergencyContactForm = z.infer<typeof emergencyContactSchema>;
 
 export default function Emergencia() {
   const [, setLocation] = useLocation();
+  const { t } = useTranslation();
   const [isAddingContact, setIsAddingContact] = useState(false);
   const [editingContact, setEditingContact] = useState<any>(null);
   const queryClient = useQueryClient();

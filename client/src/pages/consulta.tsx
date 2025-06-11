@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Navbar } from '@/components/navbar';
 import { StreamingChatInterface } from '@/components/streaming-chat-interface';
 import { useAuth } from '@/hooks/use-auth';
-import { useTranslations } from '@/lib/translations';
 import { useLocation } from 'wouter';
 
 export default function Consulta() {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [selectedCountry, setSelectedCountry] = useState(user?.country || 'EC');
-  const t = useTranslations(user?.language || 'es');
 
   const countries = [
     { value: 'EC', label: '🇪🇨 Ecuador' },
@@ -39,11 +39,11 @@ export default function Consulta() {
               >
                 <ArrowLeft className="w-5 h-5 text-neutral-600" />
               </Button>
-              <h1 className="text-2xl font-bold text-neutral-900">Legal Consultation</h1>
+              <h1 className="text-2xl font-bold text-neutral-900">{t('consultation.title')}</h1>
             </div>
             
             <div className="flex items-center space-x-2">
-              <label className="text-sm font-medium text-neutral-700">Country:</label>
+              <label className="text-sm font-medium text-neutral-700">{t('common.country')}:</label>
               <Select value={selectedCountry} onValueChange={setSelectedCountry}>
                 <SelectTrigger className="w-[180px] bg-white border-neutral-300">
                   <SelectValue />

@@ -68,10 +68,10 @@ export default function Dashboard() {
           {/* Welcome Section */}
           <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-8 text-white">
             <h2 className="text-3xl font-bold mb-2">
-              Welcome{user?.name ? `, ${user.name.split(' ')[0]}` : ''}!
+              {t('dashboard.welcome')}{user?.name ? `, ${user.name.split(' ')[0]}` : ''}!
             </h2>
             <p className="text-blue-100 text-lg">
-              Your intelligent legal assistant is ready to help with consultations, processes and emergencies.
+              {t('dashboard.subtitle')}
             </p>
           </div>
 
@@ -95,9 +95,9 @@ export default function Dashboard() {
                   </p>
                   <div className={`flex items-center ${card.buttonColor} text-sm font-medium`}>
                     <span>
-                      {card.title === 'Consultation Mode' && 'Start consultation'}
-                      {card.title === 'Process Mode' && 'View processes'}
-                      {card.title === 'Emergency Mode' && 'Setup alerts'}
+                      {card.title === t('dashboard.consultationMode') && t('common.continue')}
+                      {card.title === t('dashboard.legalProcesses') && t('navbar.processes')}
+                      {card.title === t('dashboard.emergencyMode') && t('emergency.activateEmergency')}
                     </span>
                     <ArrowRight className="ml-2 w-4 h-4" />
                   </div>
