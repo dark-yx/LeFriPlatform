@@ -5,11 +5,13 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/hooks/use-auth';
-import { Scale, ChevronDown, User, Settings, LogOut } from 'lucide-react';
+import { useTheme } from '@/components/theme-provider';
+import { Scale, ChevronDown, User, Settings, LogOut, Moon, Sun, Globe } from 'lucide-react';
 
 export function Navbar() {
   const [location, setLocation] = useLocation();
   const { user, logout, updateUser } = useAuth();
+  const { theme, setTheme } = useTheme();
   const [language, setLanguage] = useState(user?.language || 'es');
 
   const handleLanguageChange = (newLanguage: string) => {
