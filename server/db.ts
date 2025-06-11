@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
-// Use local MongoDB for development, cloud MongoDB for production
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/lefri-ai';
+// Use environment variable for MongoDB URI
+const MONGODB_URI = process.env.MONGODB_URI;
 
 let isConnected = false;
 
