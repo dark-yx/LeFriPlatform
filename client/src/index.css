@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(222, 84%, 4.9%);
+  --muted: hsl(210, 40%, 98%);
+  --muted-foreground: hsl(215.4, 16.3%, 46.9%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(222, 84%, 4.9%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(222, 84%, 4.9%);
+  --border: hsl(214.3, 31.8%, 91.4%);
+  --input: hsl(214.3, 31.8%, 91.4%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(210, 40%, 96%);
+  --secondary-foreground: hsl(222.2, 84%, 4.9%);
+  --accent: hsl(210, 40%, 96%);
+  --accent-foreground: hsl(222.2, 84%, 4.9%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(207, 90%, 54%);
+  --radius: 0.5rem;
+  
+  /* Custom LeFriAI colors */
+  --lefri-primary: hsl(207, 90%, 54%);
+  --lefri-primary-dark: hsl(211, 100%, 43%);
+  --lefri-secondary: hsl(24, 95%, 53%);
+  --lefri-emergency: hsl(0, 84%, 60%);
+  --lefri-success: hsl(142, 71%, 45%);
+  --lefri-neutral-50: hsl(0, 0%, 98%);
+  --lefri-neutral-100: hsl(0, 0%, 96%);
+  --lefri-neutral-200: hsl(0, 0%, 93%);
+  --lefri-neutral-300: hsl(0, 0%, 88%);
+  --lefri-neutral-400: hsl(0, 0%, 74%);
+  --lefri-neutral-500: hsl(0, 0%, 62%);
+  --lefri-neutral-600: hsl(0, 0%, 46%);
+  --lefri-neutral-700: hsl(0, 0%, 38%);
+  --lefri-neutral-800: hsl(0, 0%, 26%);
+  --lefri-neutral-900: hsl(0, 0%, 13%);
+}
+
+.dark {
+  --background: hsl(222.2, 84%, 4.9%);
+  --foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217.2, 32.6%, 17.5%);
+  --muted-foreground: hsl(215, 20.2%, 65.1%);
+  --popover: hsl(222.2, 84%, 4.9%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --card: hsl(222.2, 84%, 4.9%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217.2, 32.6%, 17.5%);
+  --input: hsl(217.2, 32.6%, 17.5%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(222.2, 84%, 4.9%);
+  --secondary: hsl(217.2, 32.6%, 17.5%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --accent: hsl(217.2, 32.6%, 17.5%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(207, 90%, 54%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  .emergency-pulse {
+    animation: pulse-emergency 2s infinite;
+  }
+  
+  .loader {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--lefri-primary);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes pulse-emergency {
+  0% { 
+    box-shadow: 0 0 0 0 hsla(0, 84%, 60%, 0.7); 
+  }
+  70% { 
+    box-shadow: 0 0 0 10px hsla(0, 84%, 60%, 0); 
+  }
+  100% { 
+    box-shadow: 0 0 0 0 hsla(0, 84%, 60%, 0); 
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
