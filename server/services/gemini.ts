@@ -44,6 +44,53 @@ export class GeminiService {
     }
   }
 
+  async generateLegalResponseStream(context: ConsultationContext & { onChunk?: (chunk: string) => void }): Promise<GeminiResponse> {
+    try {
+      const prompt = this.buildLegalPrompt(context);
+      const result = await this.model.generateContentStream(prompt);
+      
+      let fullText = '';
+      for await (const chunk of result.stream) {
+        const chunkText = chunk.text();
+        fullText += chunkText;
+        if (context.onChunk) {
+          context.onChunk(chunkText);
+        }
+      }
+      
+      return { text: fullText };
+    } catch (error) {
+      console.error('Gemini streaming error:', error);
+      const fallbackText = 'Lo siento, no pude procesar tu consulta en este momento. Por favor, intenta nuevamente.';
+      this.simulateStreamingText(fallbackText, context.onChunk);
+      return { 
+        text: fallbackText,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  private simulateStreamingText(text: string, onChunk?: (chunk: string) => void): void {
+    if (!onChunk) return;
+    
+    const words = text.split(' ');
+    let currentIndex = 0;
+    
+    const sendChunk = () => {
+      if (currentIndex < words.length) {
+        const chunkSize = Math.floor(Math.random() * 3) + 1; // 1-3 words per chunk
+        const chunk = words.slice(currentIndex, currentIndex + chunkSize).join(' ') + ' ';
+        onChunk(chunk);
+        currentIndex += chunkSize;
+        
+        // Random delay between 50-150ms for realistic typing
+        setTimeout(sendChunk, Math.random() * 100 + 50);
+      }
+    };
+    
+    sendChunk();
+  }
+
   async generateEmergencyMessage(context: {
     userName: string;
     location: { latitude: number; longitude: number; address?: string };

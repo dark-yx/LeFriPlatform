@@ -62,25 +62,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Legal consultation endpoints
+  // Legal consultation endpoints with streaming
   app.post("/api/ask", requireAuth, async (req: any, res) => {
     try {
       const { query, country, language } = req.body;
       
+      // Set headers for Server-Sent Events
+      res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Cache-Control'
+      });
+
       // Get relevant constitutional articles
       const constitutionalArticles = await constituteService.getRelevantArticles({
         query,
         country,
         language: language || "es",
         limit: 3
-      });
-
-      // Generate AI response with context
-      const aiResponse = await geminiService.generateLegalResponse({
-        query,
-        country: country || "EC",
-        language: language || "es",
-        constitutionalArticles
       });
 
       // Create citations from constitutional articles
@@ -97,6 +98,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
           { title: "Código Civil", url: "#", relevance: 85 }
         );
       }
+
+      // Send initial data
+      res.write(`data: ${JSON.stringify({ 
+        type: 'citations', 
+        data: { citations, constitutionalArticles: constitutionalArticles.slice(0, 2) }
+      })}\n\n`);
+
+      // Generate AI response with streaming
+      const aiResponse = await geminiService.generateLegalResponseStream({
+        query,
+        country: country || "EC",
+        language: language || "es",
+        constitutionalArticles,
+        onChunk: (chunk: string) => {
+          res.write(`data: ${JSON.stringify({ type: 'chunk', data: chunk })}\n\n`);
+        }
+      });
       
       // Save consultation
       await storage.createConsultation({
@@ -106,16 +124,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         country: country || "EC",
         language: language || "es"
       });
+
+      // Send completion event
+      res.write(`data: ${JSON.stringify({ 
+        type: 'complete', 
+        data: { 
+          confidence: aiResponse.error ? 0.5 : 0.92
+        } 
+      })}\n\n`);
       
-      res.json({ 
-        response: aiResponse.text,
-        citations,
-        confidence: aiResponse.error ? 0.5 : 0.92,
-        constitutionalArticles: constitutionalArticles.slice(0, 2) // Include articles for reference
-      });
+      res.end();
     } catch (error) {
       console.error('Consultation error:', error);
-      res.status(500).json({ error: "Failed to process consultation" });
+      res.write(`data: ${JSON.stringify({ 
+        type: 'error', 
+        data: { error: "Failed to process consultation" }
+      })}\n\n`);
+      res.end();
     }
   });
 
