@@ -232,7 +232,7 @@ export default function Emergencia() {
                 <div className="space-y-3">
                   {emergencyContacts?.length > 0 ? (
                     emergencyContacts.map((contact: any, index: number) => (
-                      <div key={contact.id} className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
+                      <div key={contact._id || contact.id || `contact-${index}`} className="flex items-center justify-between p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
                         <div className="flex items-center space-x-3">
                           <Avatar className="w-8 h-8">
                             <AvatarFallback className={`${getAvatarColor(index)} text-white text-xs font-medium`}>

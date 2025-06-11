@@ -650,7 +650,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/emergency/with-voice", upload.single('voiceNote'), async (req: any, res) => {
     try {
       const { latitude, longitude, address } = req.body;
-      const userId = req.headers['x-user-id'] || '66a1b2c3d4e5f6789abc1234';
+      const userId = req.headers['x-user-id'] || req.body.userId || '66a1b2c3d4e5f6789abc1234';
       
       // Get user and contacts
       const user = await storage.getUser(req.userId);

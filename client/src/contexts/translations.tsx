@@ -8,29 +8,119 @@ interface Translations {
 
 const translations: Translations = {
   'dashboard.welcome': {
-    es: 'Bienvenido',
     en: 'Welcome',
+    es: 'Bienvenido',
     pt: 'Bem-vindo'
   },
   'dashboard.subtitle': {
-    es: 'Tu asistente legal inteligente está listo para ayudarte',
     en: 'Your intelligent legal assistant is ready to help',
+    es: 'Tu asistente legal inteligente está listo para ayudarte',
     pt: 'Seu assistente jurídico inteligente está pronto para ajudar'
   },
   'nav.consultation': {
-    es: 'Consulta',
     en: 'Consultation',
+    es: 'Consulta',
     pt: 'Consulta'
   },
   'nav.processes': {
-    es: 'Procesos',
     en: 'Processes',
+    es: 'Procesos',
     pt: 'Processos'
   },
   'nav.emergency': {
-    es: 'Emergencia',
     en: 'Emergency',
+    es: 'Emergencia',
     pt: 'Emergência'
+  },
+  'emergency.title': {
+    en: 'Emergency Contacts',
+    es: 'Contactos de Emergencia',
+    pt: 'Contatos de Emergência'
+  },
+  'emergency.subtitle': {
+    en: 'Configure your emergency contacts to receive instant WhatsApp alerts',
+    es: 'Configura tus contactos de emergencia para recibir alertas instantáneas por WhatsApp',
+    pt: 'Configure seus contatos de emergência para receber alertas instantâneos via WhatsApp'
+  },
+  'emergency.add_contact': {
+    en: 'Add Contact',
+    es: 'Agregar Contacto',
+    pt: 'Adicionar Contato'
+  },
+  'emergency.send_alert': {
+    en: 'Send Emergency Alert',
+    es: 'Enviar Alerta de Emergencia',
+    pt: 'Enviar Alerta de Emergência'
+  },
+  'emergency.recording': {
+    en: 'Recording...',
+    es: 'Grabando...',
+    pt: 'Gravando...'
+  },
+  'emergency.record_voice': {
+    en: 'Record Voice Note',
+    es: 'Grabar Nota de Voz',
+    pt: 'Gravar Nota de Voz'
+  },
+  'processes.title': {
+    en: 'Legal Processes',
+    es: 'Procesos Legales',
+    pt: 'Processos Legais'
+  },
+  'processes.subtitle': {
+    en: 'Manage your legal processes and track each step',
+    es: 'Gestiona tus procesos legales y haz seguimiento a cada paso',
+    pt: 'Gerencie seus processos legais e acompanhe cada etapa'
+  },
+  'processes.create': {
+    en: 'Create Process',
+    es: 'Crear Proceso',
+    pt: 'Criar Processo'
+  },
+  'common.back': {
+    en: 'Back',
+    es: 'Volver',
+    pt: 'Voltar'
+  },
+  'common.save': {
+    en: 'Save',
+    es: 'Guardar',
+    pt: 'Salvar'
+  },
+  'common.cancel': {
+    en: 'Cancel',
+    es: 'Cancelar',
+    pt: 'Cancelar'
+  },
+  'common.edit': {
+    en: 'Edit',
+    es: 'Editar',
+    pt: 'Editar'
+  },
+  'common.delete': {
+    en: 'Delete',
+    es: 'Eliminar',
+    pt: 'Excluir'
+  },
+  'form.name': {
+    en: 'Full Name',
+    es: 'Nombre Completo',
+    pt: 'Nome Completo'
+  },
+  'form.phone': {
+    en: 'Phone Number',
+    es: 'Número de Teléfono',
+    pt: 'Número de Telefone'
+  },
+  'form.relationship': {
+    en: 'Relationship',
+    es: 'Relación',
+    pt: 'Relacionamento'
+  },
+  'form.whatsapp_enabled': {
+    en: 'Notify via WhatsApp',
+    es: 'Notificar por WhatsApp',
+    pt: 'Notificar via WhatsApp'
   },
   'mode.consultation.title': {
     es: 'Modo Consulta',
@@ -93,7 +183,7 @@ const TranslationContext = createContext<TranslationContextType>({
 
 export function TranslationProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<string>(() => {
-    return localStorage.getItem('language') || 'es';
+    return localStorage.getItem('language') || 'en';
   });
 
   useEffect(() => {
@@ -101,7 +191,7 @@ export function TranslationProvider({ children }: { children: React.ReactNode })
   }, [language]);
 
   const t = (key: string): string => {
-    return translations[key]?.[language] || translations[key]?.['es'] || key;
+    return translations[key]?.[language] || translations[key]?.['en'] || key;
   };
 
   return (
