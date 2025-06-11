@@ -111,8 +111,8 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {recentConsultations?.slice(0, 3).map((consultation: any) => (
-                  <div key={consultation.id} className="flex items-center space-x-3 p-3 bg-neutral-50 rounded-lg">
+                {recentConsultations?.slice(0, 3).map((consultation: any, index: number) => (
+                  <div key={consultation.id || `consultation-${index}`} className="flex items-center space-x-3 p-3 bg-neutral-50 rounded-lg">
                     <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                       <MessageSquare className="w-4 h-4 text-blue-500" />
                     </div>
@@ -146,8 +146,8 @@ export default function Dashboard() {
 
                 {activeProcesses?.length > 0 && (
                   <>
-                    {activeProcesses.slice(0, 2).map((process: any) => (
-                      <div key={process.id} className="flex items-center space-x-3 p-3 bg-neutral-50 rounded-lg">
+                    {activeProcesses.slice(0, 2).map((process: any, index: number) => (
+                      <div key={process.id || `process-${index}`} className="flex items-center space-x-3 p-3 bg-neutral-50 rounded-lg">
                         <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
                           <FileText className="w-4 h-4 text-orange-600" />
                         </div>

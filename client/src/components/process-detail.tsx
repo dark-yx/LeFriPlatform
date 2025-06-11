@@ -62,19 +62,32 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
 
   const { data: processData, isLoading } = useQuery<ProcessData>({
     queryKey: ['/api/processes', processId],
+    queryFn: async () => {
+      const response = await fetch(`/api/processes/${processId}`, {
+        headers: { 'x-user-id': '66a1b2c3d4e5f6789abc1234' }
+      });
+      if (!response.ok) throw new Error('Failed to fetch process');
+      return response.json();
+    },
+    enabled: !!processId
   });
 
   const updateProcessMutation = useMutation({
     mutationFn: async (updates: Partial<ProcessData>) => {
+      if (!processId) throw new Error('Process ID is required');
       const response = await fetch(`/api/processes/${processId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-user-id': '66a1b2c3d4e5f6789abc1234'
+        },
         body: JSON.stringify(updates),
       });
       if (!response.ok) throw new Error('Error updating process');
       return response.json();
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/processes', processId] });
       queryClient.invalidateQueries({ queryKey: ['/api/processes'] });
       toast({ title: 'Proceso actualizado correctamente' });
     },

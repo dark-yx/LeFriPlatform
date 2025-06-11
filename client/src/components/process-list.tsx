@@ -180,8 +180,8 @@ export function ProcessList() {
                     <SelectValue placeholder="Selecciona el tipo" />
                   </SelectTrigger>
                   <SelectContent>
-                    {processTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
+                    {processTypes.map((type, index) => (
+                      <SelectItem key={type.value || `type-${index}`} value={type.value}>
                         {type.label}
                       </SelectItem>
                     ))}
@@ -265,8 +265,8 @@ export function ProcessList() {
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {processes.map((process) => (
-            <Card key={process.id} className="hover:shadow-md transition-shadow">
+          {processes.map((process, index) => (
+            <Card key={process.id || `process-${index}`} className="hover:shadow-md transition-shadow">
               <CardHeader>
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
