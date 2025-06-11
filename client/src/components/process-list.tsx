@@ -55,54 +55,61 @@ export function ProcessList() {
     queryKey: ['/api/processes'],
   });
 
+  const processTypes = [
+    { value: 'labor', label: t('processes.types.labor') },
+    { value: 'civil', label: t('processes.types.civil') },
+    { value: 'criminal', label: t('processes.types.criminal') },
+    { value: 'family', label: t('processes.types.family') },
+    { value: 'commercial', label: t('processes.types.commercial') },
+    { value: 'constitutional', label: t('processes.types.constitutional') },
+    { value: 'administrative', label: t('processes.types.administrative') },
+    { value: 'tax', label: t('processes.types.tax') }
+  ];
+
   const createProcessMutation = useMutation({
-    mutationFn: async (data: CreateProcessForm) => {
+    mutationFn: async (newProcess: CreateProcessForm) => {
       const response = await fetch('/api/processes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(newProcess),
       });
-      if (!response.ok) throw new Error('Error creating process');
+      
+      if (!response.ok) {
+        throw new Error('Failed to create process');
+      }
+      
       return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/processes'] });
       setShowCreateDialog(false);
       setFormData({ title: '', type: '', description: '', priority: 'medium' });
-      toast({ title: 'Proceso creado exitosamente' });
+      toast({
+        title: t('processes.processCreated'),
+        description: t('processes.processCreated'),
+      });
     },
-    onError: () => {
-      toast({ title: 'Error al crear proceso', variant: 'destructive' });
+    onError: (error) => {
+      console.error('Error creating process:', error);
+      toast({
+        title: t('common.error'),
+        description: t('processes.processCreationFailed'),
+        variant: 'destructive',
+      });
     }
   });
 
-  const processTypes = [
-    { value: 'civil', label: 'Proceso Civil' },
-    { value: 'penal', label: 'Proceso Penal' },
-    { value: 'laboral', label: 'Proceso Laboral' },
-    { value: 'administrativo', label: 'Proceso Administrativo' },
-    { value: 'familia', label: 'Derecho de Familia' },
-    { value: 'comercial', label: 'Derecho Comercial' },
-    { value: 'constitucional', label: 'Proceso Constitucional' },
-    { value: 'otros', label: 'Otros' }
-  ];
-
-  const getStatusColor = (status: string) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed': return 'default';
-      case 'in_progress': return 'secondary';
-      case 'pending': return 'outline';
-      default: return 'outline';
+      case 'completed': return <CheckCircle className="h-4 w-4 text-green-600" />;
+      case 'in_progress': return <Clock className="h-4 w-4 text-blue-600" />;
+      case 'pending': return <AlertCircle className="h-4 w-4 text-yellow-600" />;
+      default: return <FileText className="h-4 w-4 text-gray-600" />;
     }
   };
 
   const getStatusText = (status: string) => {
-    switch (status) {
-      case 'completed': return 'Completado';
-      case 'in_progress': return 'En Progreso';
-      case 'pending': return 'Pendiente';
-      default: return 'Desconocido';
-    }
+    return t(`processes.statuses.${status}`) || status;
   };
 
   const getPriorityColor = (priority: string) => {
@@ -115,12 +122,7 @@ export function ProcessList() {
   };
 
   const getPriorityText = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'Alta';
-      case 'medium': return 'Media';
-      case 'low': return 'Baja';
-      default: return 'Normal';
-    }
+    return t(`processes.priorities.${priority}`) || priority;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -130,11 +132,16 @@ export function ProcessList() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <Clock className="h-8 w-8 animate-spin mx-auto mb-2" />
-          <p>Cargando procesos...</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <Navbar />
+        <main className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <Clock className="h-8 w-8 animate-spin mx-auto mb-2" />
+              <p className="text-neutral-600">{t('common.loading')}</p>
+            </div>
+          </div>
+        </main>
       </div>
     );
   }
@@ -147,7 +154,7 @@ export function ProcessList() {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
               <Link href="/dashboard">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="bg-white">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   {t('common.back')}
                 </Button>
@@ -173,173 +180,145 @@ export function ProcessList() {
                     {t('processes.enterDescription')}
                   </DialogDescription>
                 </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label htmlFor="title">Título del Proceso</Label>
-                <Input
-                  id="title"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="Ej: Demanda por incumplimiento de contrato"
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="type">Tipo de Proceso</Label>
-                <Select
-                  value={formData.type}
-                  onValueChange={(value) => setFormData({ ...formData, type: value })}
-                  required
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona el tipo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {processTypes.map((type, index) => (
-                      <SelectItem key={type.value || `type-${index}`} value={type.value}>
-                        {type.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="description">Descripción</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Describe brevemente el caso..."
-                  rows={3}
-                />
-              </div>
-              <div>
-                <Label htmlFor="priority">Prioridad</Label>
-                <Select
-                  value={formData.priority}
-                  onValueChange={(value: 'low' | 'medium' | 'high') => 
-                    setFormData({ ...formData, priority: value })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="low">Baja</SelectItem>
-                    <SelectItem value="medium">Media</SelectItem>
-                    <SelectItem value="high">Alta</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="deadline">Fecha Límite (Opcional)</Label>
-                <Input
-                  id="deadline"
-                  type="date"
-                  value={formData.deadline || ''}
-                  onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                />
-              </div>
-              <div className="flex gap-2 pt-4">
-                <Button 
-                  type="submit" 
-                  disabled={createProcessMutation.isPending}
-                  className="flex-1"
-                >
-                  {createProcessMutation.isPending ? 'Creando...' : 'Crear Proceso'}
-                </Button>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => setShowCreateDialog(false)}
-                >
-                  Cancelar
-                </Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      {processes.length === 0 ? (
-        <Card>
-          <CardContent className="text-center py-12">
-            <FileText className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-            <h3 className="text-lg font-semibold mb-2">No tienes procesos legales</h3>
-            <p className="text-muted-foreground mb-4">
-              Crea tu primer proceso legal para comenzar a organizarte
-            </p>
-            <Button 
-              onClick={() => setShowCreateDialog(true)}
-              className="flex items-center gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              Crear Primer Proceso
-            </Button>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {processes.map((process, index) => (
-            <Card key={process._id || process.id || `process-${index}`} className="hover:shadow-md transition-shadow">
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg line-clamp-2">
-                      {process.title}
-                    </CardTitle>
-                    <CardDescription className="line-clamp-2">
-                      {process.description}
-                    </CardDescription>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <Label htmlFor="title">{t('processes.processTitle')}</Label>
+                    <Input
+                      id="title"
+                      value={formData.title}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      placeholder={t('processes.enterTitle')}
+                      required
+                    />
                   </div>
-                  <Badge variant={getPriorityColor(process.metadata.priority)}>
-                    {getPriorityText(process.metadata.priority)}
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <Badge variant={getStatusColor(process.status)}>
-                    {getStatusText(process.status)}
-                  </Badge>
-                  <Badge variant="outline">
-                    {processTypes.find(t => t.value === process.type)?.label || process.type}
-                  </Badge>
-                </div>
-                
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium">Progreso</span>
-                    <span className="text-sm text-muted-foreground">
-                      {process.progress}%
-                    </span>
+                  <div>
+                    <Label htmlFor="type">{t('processes.processType')}</Label>
+                    <Select
+                      value={formData.type}
+                      onValueChange={(value) => setFormData({ ...formData, type: value })}
+                      required
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('processes.selectProcessType')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {processTypes.map((type) => (
+                          <SelectItem key={type.value} value={type.value}>
+                            {type.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
-                  <Progress value={process.progress} className="h-2" />
-                </div>
-
-                {process.metadata.deadline && (
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Clock className="h-4 w-4" />
-                    <span>
-                      Límite: {new Date(process.metadata.deadline).toLocaleDateString()}
-                    </span>
+                  <div>
+                    <Label htmlFor="description">{t('processes.processDescription')}</Label>
+                    <Textarea
+                      id="description"
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      placeholder={t('processes.enterDescription')}
+                      rows={3}
+                    />
                   </div>
-                )}
-
-                <div className="text-xs text-muted-foreground">
-                  Creado: {new Date(process.createdAt).toLocaleDateString()}
-                </div>
-
-                <Link href={`/processes/${process._id || process.id}`}>
-                  <Button className="w-full">
-                    Ver Detalles
+                  <div>
+                    <Label htmlFor="priority">{t('processes.priority')}</Label>
+                    <Select
+                      value={formData.priority}
+                      onValueChange={(value: 'low' | 'medium' | 'high') => setFormData({ ...formData, priority: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('processes.selectPriority')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="low">{t('processes.priorities.low')}</SelectItem>
+                        <SelectItem value="medium">{t('processes.priorities.medium')}</SelectItem>
+                        <SelectItem value="high">{t('processes.priorities.high')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="deadline">{t('processes.deadline')}</Label>
+                    <Input
+                      id="deadline"
+                      type="date"
+                      value={formData.deadline || ''}
+                      onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
+                    />
+                  </div>
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    disabled={createProcessMutation.isPending}
+                  >
+                    {createProcessMutation.isPending ? t('processes.creating') : t('processes.createProcess')}
                   </Button>
-                </Link>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          {processes.length === 0 ? (
+            <Card className="bg-white/80 backdrop-blur-sm border-white/20 shadow-lg">
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                <FileText className="h-12 w-12 text-neutral-400 mb-4" />
+                <h3 className="text-lg font-semibold text-neutral-900 mb-2">
+                  {t('processes.noProcesses')}
+                </h3>
+                <p className="text-neutral-600 text-center mb-4">
+                  {t('processes.createFirst')}
+                </p>
+                <Button onClick={() => setShowCreateDialog(true)}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  {t('processes.newProcess')}
+                </Button>
               </CardContent>
             </Card>
-          ))}
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {processes.map((process) => (
+                <Link key={process.id || process._id} href={`/processes/${process.id || process._id}`}>
+                  <Card className="cursor-pointer hover:shadow-lg transition-shadow bg-white/80 backdrop-blur-sm border-white/20">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-2">
+                          {getStatusIcon(process.status)}
+                          <CardTitle className="text-lg text-neutral-900">{process.title}</CardTitle>
+                        </div>
+                        <Badge variant={getPriorityColor(process.metadata?.priority || 'medium')}>
+                          {getPriorityText(process.metadata?.priority || 'medium')}
+                        </Badge>
+                      </div>
+                      <CardDescription className="text-neutral-600">
+                        {t(`processes.types.${process.type}`) || process.type}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span className="text-neutral-600">{t('processes.progress')}</span>
+                            <span className="text-neutral-900 font-medium">{process.progress}%</span>
+                          </div>
+                          <Progress value={process.progress} className="h-2" />
+                        </div>
+                        <div className="flex justify-between text-sm text-neutral-600">
+                          <span>{getStatusText(process.status)}</span>
+                          <span>{new Date(process.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        {process.description && (
+                          <p className="text-sm text-neutral-600 line-clamp-2">
+                            {process.description}
+                          </p>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
-      )}
+      </main>
     </div>
   );
 }
