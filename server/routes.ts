@@ -67,34 +67,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { query, country, language } = req.body;
       
-      // Simulate AI response (replace with actual Gemini API call)
-      const responses = [
-        "Según la legislación de " + country + ", en este caso específico tienes derecho a solicitar una indemnización por los daños ocasionados. Te recomiendo recopilar toda la documentación relevante y consultar con un abogado especialista en el área.",
-        "La Constitución establece claramente tus derechos en esta situación. El procedimiento a seguir incluye presentar una denuncia formal ante las autoridades competentes dentro del plazo establecido por la ley.",
-        "Para este tipo de proceso legal necesitarás los siguientes documentos: cédula de identidad, certificados pertinentes, y evidencia que respalde tu caso. El proceso puede tomar entre 3 a 6 meses dependiendo de la complejidad.",
-        "En tu país, la ley protege específicamente estos derechos. Te sugiero iniciar con una mediación antes de proceder con acciones legales más formales, ya que puede resultar en una resolución más rápida y económica."
-      ];
-      
-      const response = responses[Math.floor(Math.random() * responses.length)];
+      // Get relevant constitutional articles
+      const constitutionalArticles = await constituteService.getRelevantArticles({
+        query,
+        country,
+        language: language || "es",
+        limit: 3
+      });
+
+      // Generate AI response with context
+      const aiResponse = await geminiService.generateLegalResponse({
+        query,
+        country: country || "EC",
+        language: language || "es",
+        constitutionalArticles
+      });
+
+      // Create citations from constitutional articles
+      const citations = constitutionalArticles.map((article, index) => ({
+        title: `Artículo Constitucional ${index + 1}`,
+        url: `#article-${index + 1}`,
+        relevance: Math.max(95 - index * 5, 75)
+      }));
+
+      // Add fallback citations if no constitutional articles found
+      if (citations.length === 0) {
+        citations.push(
+          { title: "Constitución Nacional", url: "#", relevance: 90 },
+          { title: "Código Civil", url: "#", relevance: 85 }
+        );
+      }
       
       // Save consultation
       await storage.createConsultation({
         userId: req.userId,
         query,
-        response,
+        response: aiResponse.text,
         country: country || "EC",
         language: language || "es"
       });
       
       res.json({ 
-        response,
-        citations: [
-          { title: "Constitución Nacional", url: "#", relevance: 95 },
-          { title: "Código Civil", url: "#", relevance: 87 }
-        ],
-        confidence: 0.92
+        response: aiResponse.text,
+        citations,
+        confidence: aiResponse.error ? 0.5 : 0.92,
+        constitutionalArticles: constitutionalArticles.slice(0, 2) // Include articles for reference
       });
     } catch (error) {
+      console.error('Consultation error:', error);
       res.status(500).json({ error: "Failed to process consultation" });
     }
   });
@@ -104,16 +124,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { latitude, longitude, address } = req.body;
       
-      // Get user's emergency contacts
+      // Get user and contacts
+      const user = await storage.getUser(req.userId);
       const contacts = await storage.getEmergencyContacts(req.userId);
       
-      // Simulate sending WhatsApp alerts
-      const contactsNotified = contacts.map(contact => ({
-        id: contact.id,
-        name: contact.name,
-        phone: contact.phone,
-        status: "sent",
-        sentAt: new Date().toISOString()
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Generate emergency message with AI
+      const emergencyMessage = await geminiService.generateEmergencyMessage({
+        userName: user.name,
+        location: { latitude, longitude, address },
+        language: user.language
+      });
+
+      // Send WhatsApp alerts
+      const whatsappContacts = contacts.filter(contact => contact.whatsappEnabled);
+      const whatsappResults = await whatsAppService.sendEmergencyAlert({
+        contacts: whatsappContacts.map(c => ({ phone: c.phone, name: c.name })),
+        message: emergencyMessage.text,
+        location: { latitude, longitude }
+      });
+
+      // Send email alerts to all contacts
+      const emailResults = [];
+      for (const contact of contacts) {
+        if (contact.phone.includes('@')) { // Assuming email format
+          const emailResult = await emailService.sendEmergencyEmail({
+            to: contact.phone,
+            userName: user.name,
+            message: emergencyMessage.text,
+            location: { latitude, longitude, address }
+          });
+          emailResults.push({
+            phone: contact.phone,
+            name: contact.name,
+            success: emailResult.success,
+            error: emailResult.error
+          });
+        }
+      }
+
+      // Combine results
+      const allResults = [...whatsappResults, ...emailResults];
+      const contactsNotified = allResults.map(result => ({
+        id: Date.now() + Math.random(),
+        name: result.name,
+        phone: result.phone,
+        status: result.success ? "sent" : "failed",
+        sentAt: new Date().toISOString(),
+        error: result.error
       }));
       
       // Save emergency alert
@@ -123,15 +184,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         longitude: longitude?.toString(),
         address,
         contactsNotified,
-        status: "sent"
+        status: contactsNotified.some(c => c.status === "sent") ? "sent" : "failed"
       });
       
       res.json({
-        status: "sent",
+        status: contactsNotified.some(c => c.status === "sent") ? "sent" : "failed",
         contactsNotified,
-        location: { latitude, longitude, address }
+        location: { latitude, longitude, address },
+        message: emergencyMessage.text
       });
     } catch (error) {
+      console.error('Emergency alert error:', error);
       res.status(500).json({ error: "Failed to send emergency alert" });
     }
   });
@@ -219,6 +282,152 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(consultations);
     } catch (error) {
       res.status(500).json({ error: "Failed to get consultations" });
+    }
+  });
+
+  // Voice recording endpoints
+  app.post("/api/voice/upload", requireAuth, upload.single('audio'), async (req: any, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No audio file provided" });
+      }
+
+      const { type = 'emergency' } = req.body;
+      const recording = await voiceService.saveVoiceRecording({
+        userId: req.userId,
+        audioBuffer: req.file.buffer,
+        type,
+        originalName: req.file.originalname
+      });
+
+      res.json({
+        id: recording.id,
+        url: voiceService.getVoiceRecordingUrl(recording.id),
+        filename: recording.filename
+      });
+    } catch (error) {
+      console.error('Voice upload error:', error);
+      res.status(500).json({ error: "Failed to save voice recording" });
+    }
+  });
+
+  app.get("/api/voice/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const audioBuffer = await voiceService.getVoiceRecording(id);
+      
+      if (!audioBuffer) {
+        return res.status(404).json({ error: "Voice recording not found" });
+      }
+
+      res.setHeader('Content-Type', 'audio/mpeg');
+      res.setHeader('Content-Disposition', `inline; filename="${id}.mp3"`);
+      res.send(audioBuffer);
+    } catch (error) {
+      console.error('Voice retrieval error:', error);
+      res.status(500).json({ error: "Failed to retrieve voice recording" });
+    }
+  });
+
+  // Enhanced emergency endpoint with voice recording
+  app.post("/api/emergency/with-voice", requireAuth, upload.single('voiceNote'), async (req: any, res) => {
+    try {
+      const { latitude, longitude, address } = req.body;
+      
+      // Get user and contacts
+      const user = await storage.getUser(req.userId);
+      const contacts = await storage.getEmergencyContacts(req.userId);
+      
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Save voice recording if provided
+      let voiceRecording = null;
+      if (req.file) {
+        voiceRecording = await voiceService.saveVoiceRecording({
+          userId: req.userId,
+          audioBuffer: req.file.buffer,
+          type: 'emergency',
+          originalName: req.file.originalname
+        });
+      }
+
+      // Generate emergency message
+      const emergencyMessage = await geminiService.generateEmergencyMessage({
+        userName: user.name,
+        location: { latitude, longitude, address },
+        language: user.language
+      });
+
+      // Send WhatsApp alerts with voice note
+      const whatsappContacts = contacts.filter(contact => contact.whatsappEnabled);
+      const voiceUrl = voiceRecording ? `${process.env.APP_URL || 'http://localhost:5000'}${voiceService.getVoiceRecordingUrl(voiceRecording.id)}` : undefined;
+      
+      const whatsappResults = await whatsAppService.sendEmergencyAlert({
+        contacts: whatsappContacts.map(c => ({ phone: c.phone, name: c.name })),
+        message: emergencyMessage.text,
+        location: { latitude, longitude },
+        voiceNoteUrl: voiceUrl
+      });
+
+      // Send email alerts with voice attachment
+      const emailResults = [];
+      for (const contact of contacts) {
+        if (contact.phone.includes('@')) {
+          const emailResult = await emailService.sendEmergencyEmail({
+            to: contact.phone,
+            userName: user.name,
+            message: emergencyMessage.text,
+            location: { latitude, longitude, address },
+            voiceNoteAttachment: voiceRecording ? {
+              filename: voiceRecording.filename,
+              content: await voiceService.getVoiceRecording(voiceRecording.id) || Buffer.alloc(0)
+            } : undefined
+          });
+          emailResults.push({
+            phone: contact.phone,
+            name: contact.name,
+            success: emailResult.success,
+            error: emailResult.error
+          });
+        }
+      }
+
+      // Combine results
+      const allResults = [...whatsappResults, ...emailResults];
+      const contactsNotified = allResults.map(result => ({
+        id: Date.now() + Math.random(),
+        name: result.name,
+        phone: result.phone,
+        status: result.success ? "sent" : "failed",
+        sentAt: new Date().toISOString(),
+        error: result.error
+      }));
+      
+      // Save emergency alert
+      await storage.createEmergencyAlert({
+        userId: req.userId,
+        latitude: latitude?.toString(),
+        longitude: longitude?.toString(),
+        address,
+        contactsNotified,
+        status: contactsNotified.some(c => c.status === "sent") ? "sent" : "failed"
+      });
+      
+      res.json({
+        status: contactsNotified.some(c => c.status === "sent") ? "sent" : "failed",
+        contactsNotified,
+        location: { latitude, longitude, address },
+        message: emergencyMessage.text,
+        voiceRecording: voiceRecording ? {
+          id: voiceRecording.id,
+          url: voiceService.getVoiceRecordingUrl(voiceRecording.id)
+        } : null
+      });
+    } catch (error) {
+      console.error('Emergency with voice error:', error);
+      res.status(500).json({ error: "Failed to send emergency alert with voice" });
     }
   });
 
