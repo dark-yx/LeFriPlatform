@@ -11,6 +11,7 @@ import { LanguageSwitcher } from '@/components/language-switcher';
 export default function Login() {
   const [, setLocation] = useLocation();
   const { login, setLoading, isLoading } = useAuth();
+  const { t } = useTranslation();
 
   const handleGoogleAuth = async () => {
     setLoading(true);
@@ -30,28 +31,31 @@ export default function Login() {
       setLocation('/dashboard');
     } catch (error) {
       console.error('Authentication failed:', error);
-      alert('Error en la autenticación. Intenta nuevamente.');
+      alert(t('auth.loginError'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-500 to-blue-700 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-2xl">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
+      <div className="absolute top-4 right-4">
+        <LanguageSwitcher />
+      </div>
+      <Card className="card max-w-md w-full">
         <CardContent className="p-8">
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Scale className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-neutral-900 mb-2">LeFriAI</h1>
-            <p className="text-neutral-600">Tu asistente legal inteligente</p>
+            <h1 className="text-2xl font-bold mb-2">{t('auth.welcomeToLeFri')}</h1>
+            <p className="text-muted-foreground">{t('dashboard.subtitle')}</p>
           </div>
           
           <Button 
             onClick={handleGoogleAuth}
             disabled={isLoading}
-            className="w-full bg-white border-2 border-neutral-200 rounded-xl py-3 px-4 flex items-center justify-center space-x-3 hover:border-blue-300 hover:shadow-md transition-all duration-200 mb-4 text-neutral-700 hover:text-neutral-900"
+            className="btn-primary w-full mb-4"
             variant="outline"
           >
             {isLoading ? (
@@ -65,16 +69,13 @@ export default function Login() {
               </svg>
             )}
             <span className="font-medium">
-              {isLoading ? 'Autenticando...' : 'Continuar con Google'}
+              {isLoading ? t('common.loading') : t('auth.loginWithGoogle')}
             </span>
           </Button>
           
           <div className="text-center">
-            <p className="text-xs text-neutral-500">
-              Al continuar, aceptas nuestros{' '}
-              <a href="#" className="text-blue-500 hover:underline">Términos de Servicio</a>{' '}
-              y{' '}
-              <a href="#" className="text-blue-500 hover:underline">Política de Privacidad</a>
+            <p className="text-xs text-muted-foreground">
+              {t('auth.orContinueWith')}
             </p>
           </div>
         </CardContent>

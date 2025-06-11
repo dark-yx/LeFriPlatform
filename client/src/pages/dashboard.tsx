@@ -50,7 +50,7 @@ export default function Dashboard() {
     },
     {
       title: t('dashboard.emergencyMode'),
-      description: 'Automatic alert system via WhatsApp to your emergency contacts.',
+      description: t('dashboard.emergencyDesc'),
       icon: AlertTriangle,
       iconBg: 'bg-red-100',
       iconColor: 'text-red-500',
