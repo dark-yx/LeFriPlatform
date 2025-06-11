@@ -7,6 +7,7 @@ import { constituteService } from "./services/constitute";
 import { whatsAppService } from "./services/whatsapp";
 import { emailService } from "./services/email";
 import { voiceService } from "./services/voice";
+import { multiAgentService } from "./services/multi-agent";
 import multer from 'multer';
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -590,6 +591,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Voice retrieval error:', error);
       res.status(500).json({ error: "Failed to retrieve voice recording" });
+    }
+  });
+
+  // Process-specific chat endpoint with multi-agent AI
+  app.post("/api/processes/:id/chat", requireAuth, async (req: any, res) => {
+    try {
+      const { query } = req.body;
+      const processId = req.params.id;
+      
+      const process = await storage.getLegalProcess(processId);
+      if (!process) {
+        return res.status(404).json({ error: "Process not found" });
+      }
+
+      const user = await storage.getUser(req.userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const context = {
+        processId: process.id,
+        title: process.title,
+        type: process.type,
+        description: process.description || "",
+        currentStep: process.currentStep || 0,
+        totalSteps: process.totalSteps || 5,
+        metadata: process.metadata,
+        country: user.country || "EC",
+        language: user.language || "es"
+      };
+
+      const response = await multiAgentService.processChat(query, context);
+      
+      res.json({
+        response: response.text,
+        confidence: response.confidence,
+        citations: response.citations,
+        nextSteps: response.nextSteps,
+        error: response.error
+      });
+    } catch (error) {
+      console.error('Process chat error:', error);
+      res.status(500).json({ error: "Failed to process chat" });
     }
   });
 

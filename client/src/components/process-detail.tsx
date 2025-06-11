@@ -115,9 +115,13 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
 
   const generateDocumentMutation = useMutation({
     mutationFn: async () => {
+      if (!processId) throw new Error('Process ID is required');
       const response = await fetch(`/api/processes/${processId}/generate-document`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-user-id': '66a1b2c3d4e5f6789abc1234'
+        },
         body: JSON.stringify({ country }),
       });
       if (!response.ok) throw new Error('Error generating document');

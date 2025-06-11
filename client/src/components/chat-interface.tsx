@@ -12,9 +12,10 @@ import { Send, Mic, Bot, Circle } from 'lucide-react';
 
 interface ChatInterfaceProps {
   country: string;
+  processId?: string;
 }
 
-export function ChatInterface({ country }: ChatInterfaceProps) {
+export function ChatInterface({ country, processId }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
