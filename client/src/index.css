@@ -1,51 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* LeFriAI Color Palette */
+    --primary: 213 94% 68%; /* #2563EB - azul confianza */
+    --secondary: 158 64% 52%; /* #10B981 - verde acción */
+    --accent: 0 84% 60%; /* #EF4444 - rojo emergencia */
+    --background: 210 20% 98%; /* #F9FAFB - gris claro */
+    --foreground: 215 25% 27%; /* #1F2937 - gris oscuro */
+    --border: 214 32% 91%; /* #E5E7EB - gris medio */
+    
+    /* Semantic colors */
+    --success: 158 64% 52%; /* #10B981 */
+    --warning: 38 92% 50%; /* #F59E0B */
+    --error: 0 84% 60%; /* #EF4444 */
+    --info: 213 94% 68%; /* #3B82F6 */
+    --surface: 0 0% 100%; /* #FFFFFF */
+    --surface-dark: 220 26% 14%; /* #111827 */
+
+    /* Original shadcn variables for compatibility */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 215 25% 27%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 207 90% 54%;
+    --popover-foreground: 215 25% 27%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
+    --secondary-foreground: 215 25% 27%;
     --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
+    --muted-foreground: 215 16% 47%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 207 90% 54%;
-    --radius: 0.5rem;
+    --input: 214 32% 91%;
+    --ring: 213 94% 68%;
+    --radius: 0.75rem;
   }
- 
+
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 220 26% 14%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 220 26% 14%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 220 26% 14%;
     --popover-foreground: 210 40% 98%;
-    --primary: 207 90% 54%;
-    --primary-foreground: 222.2 84% 4.9%;
-    --secondary: 217.2 32.6% 17.5%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 220 26% 14%;
+    --secondary: 217 33% 18%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
+    --muted: 217 33% 18%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 18%;
     --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 207 90% 54%;
+    --border: 217 33% 18%;
+    --input: 217 33% 18%;
+    --ring: 224 76% 94%;
   }
 }
 
@@ -54,14 +66,104 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
-    font-family: 'Inter', system-ui, sans-serif;
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+
+  h1 {
+    @apply text-4xl font-bold;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold;
+  }
+
+  h3 {
+    @apply text-2xl font-medium;
+  }
+
+  h4 {
+    @apply text-xl font-medium;
+  }
+
+  p {
+    @apply text-base;
+  }
+
+  small {
+    @apply text-sm;
   }
 }
 
 @layer components {
+  /* Buttons */
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 shadow-md hover:shadow-lg;
+  }
+
+  .btn-secondary {
+    @apply bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-2 px-6 rounded-lg transition duration-200 border border-emerald-500;
+  }
+
+  .btn-emergency {
+    @apply bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-full transition duration-200 shadow-lg hover:shadow-xl animate-pulse;
+  }
+
+  .btn-disabled {
+    @apply bg-gray-300 text-gray-500 cursor-not-allowed font-medium py-2 px-6 rounded-lg;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white dark:bg-gray-900 rounded-xl shadow-md p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition duration-300;
+  }
+
   .card-hover {
     @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  /* Inputs */
+  .input-text {
+    @apply w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100;
+  }
+
+  /* Alerts */
+  .alert-success {
+    @apply bg-emerald-50 dark:bg-emerald-900/20 border-l-4 border-emerald-500 text-emerald-700 dark:text-emerald-300 p-4 rounded;
+  }
+
+  .alert-error {
+    @apply bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 text-red-700 dark:text-red-300 p-4 rounded;
+  }
+
+  .alert-warning {
+    @apply bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 text-amber-700 dark:text-amber-300 p-4 rounded;
+  }
+
+  .alert-info {
+    @apply bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 text-blue-700 dark:text-blue-300 p-4 rounded;
+  }
+
+  /* Navigation */
+  .navbar {
+    @apply bg-white dark:bg-gray-900 shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700;
+  }
+
+  .navbar-logo {
+    @apply text-2xl font-bold text-blue-600 dark:text-blue-400;
+  }
+
+  .navbar-links {
+    @apply flex items-center space-x-6;
+  }
+
+  /* Chat bubbles */
+  .chat-bubble-user {
+    @apply bg-blue-100 dark:bg-blue-900/30 rounded-2xl rounded-br-none p-4 max-w-md shadow-sm ml-auto;
+  }
+
+  .chat-bubble-assistant {
+    @apply bg-white dark:bg-gray-800 rounded-2xl rounded-bl-none p-4 max-w-md shadow-sm border border-gray-200 dark:border-gray-700;
   }
   
   .emergency-pulse {
