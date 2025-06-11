@@ -2,8 +2,22 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertUserSchema, insertEmergencyContactSchema, insertLegalProcessSchema, insertConsultationSchema, insertEmergencyAlertSchema } from "@shared/schema";
+import { geminiService } from "./services/gemini";
+import { constituteService } from "./services/constitute";
+import { whatsAppService } from "./services/whatsapp";
+import { emailService } from "./services/email";
+import { voiceService } from "./services/voice";
+import multer from 'multer';
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Configure multer for file uploads
+  const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 10 * 1024 * 1024, // 10MB limit
+    },
+  });
+
   // Auth middleware (simplified for demo)
   const requireAuth = (req: any, res: any, next: any) => {
     const userId = req.headers['x-user-id'] || '1'; // Demo user
