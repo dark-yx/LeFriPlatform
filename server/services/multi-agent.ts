@@ -45,7 +45,7 @@ export class MultiAgentService {
         limit: 5
       });
 
-      const model = this.genAI.getGenerativeModel({ model: 'gemini-pro' });
+      const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       
       const prompt = `
 Eres un agente especializado en investigación legal. Tu misión es analizar el contexto legal específico del proceso.
@@ -96,7 +96,7 @@ Responde en ${context.language === 'es' ? 'español' : context.language}.
   // Process Planning Agent
   async processPlanningAgent(query: string, context: ProcessContext): Promise<AgentResponse> {
     try {
-      const model = this.genAI.getGenerativeModel({ model: 'gemini-pro' });
+      const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       
       const prompt = `
 Eres un agente especializado en planificación de procesos legales. Tu misión es crear planes detallados y cronogramas.
@@ -153,7 +153,7 @@ Responde en ${context.language === 'es' ? 'español' : context.language}.
   // Document Generation Agent
   async documentGenerationAgent(query: string, context: ProcessContext): Promise<AgentResponse> {
     try {
-      const model = this.genAI.getGenerativeModel({ model: 'gemini-pro' });
+      const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       
       const prompt = `
 Eres un agente especializado en generación de documentos legales. Tu misión es crear documentos formales y precisos.

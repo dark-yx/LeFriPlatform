@@ -1,0 +1,203 @@
+
+Volver
+Detalle del Proceso
+No nos estan pagando el sueldo
+tengo 3 meses sin que me pagen en el trabajo, ynos hacen trabajar 18 horas
+
+Pendiente
+Alta Prioridad
+Chat IA
+Generar Documento
+Progreso del Proceso
+0% completado
+
+Información del Caso
+Número de Caso
+Ingrese número de caso
+Tribunal
+Tribunal competente
+Juez
+Nombre del juez
+Parte Contraria
+Nombre de la parte contraria
+Monto en Disputa
+Monto económico
+Fecha Límite
+dd/mm/aaaa
+Base Legal
+Fundamento Legal
+```html
+<h1>Paso 1: Recopilación de Evidencia y Comunicación Formal</h1>
+
+<p>Este primer paso es crucial para construir un caso sólido.  Se centra en documentar la situación y notificar formalmente a tu empleador sobre el incumplimiento de pago.</p>
+
+<h2>Instrucciones:</h2>
+
+<ol>
+  <li><strong>Documenta todo:</strong> Reúne toda la evidencia posible que demuestre el incumplimiento de pago y las horas extras trabajadas. Esto incluye:</li>
+  <ul>
+    <li><strong>Contratos de trabajo:</strong>  Si los tienes, revisa las cláusulas sobre salario, jornada laboral y pago de horas extra.</li>
+    <li><strong>Comprobantes de pago (nóminas):</strong>  Si has recibido alguna nómina en los últimos meses, incluso si es parcial o incorrecta, guárdala.</li>
+    <li><strong>Registros de entrada y salida:</strong> Si tu empresa utiliza un sistema de control horario, imprime o descarga los registros de tus horas trabajadas durante los últimos tres meses.  Si no hay un sistema formal, crea un registro propio detallando las fechas, horas de entrada y salida, y las tareas realizadas.</li>
+    <li><strong>Testimonios de compañeros:</strong> Si tus compañeros han experimentado situaciones similares, obtén declaraciones escritas que confirmen la falta de pago y las horas extras trabajadas.</li>
+    <li><strong>Correos electrónicos, mensajes de texto o WhatsApp:</strong> Cualquier comunicación escrita con tu empleador relacionada con el salario o las horas trabajadas puede ser útil.</li>
+  </ul>
+  <li><strong>Envía una carta de reclamación formal:</strong>  Escribe una carta formal a tu empleador detallando el problema. Especifica el período sin pago (los últimos tres meses), la cantidad adeudada (calculando el salario base más las horas extras), y solicita el pago inmediato.  Mantén un tono profesional pero firme.  Envía la carta por correo certificado con acuse de recibo para tener constancia de su recepción.</li>
+  <li><strong>Guarda copia de toda la documentación:</strong>  Es fundamental conservar una copia de toda la evidencia recopilada y de la carta de reclamación enviada.</li>
+</ol>
+
+
+<h2>Documentos Necesarios:</h2>
+<ul>
+  <li>Contrato de trabajo</li>
+  <li>Nóminas (si existen)</li>
+  <li>Registros de entrada y salida (o registro propio detallado)</li>
+  <li>Declaraciones de testigos (si aplica)</li>
+  <li>Comunicaciones escritas con el empleador</li>
+</ul>
+
+
+<h2>Plantilla de Carta de Reclamación:</h2>
+
+<p>Puedes usar esta plantilla como base, adaptándola a tu situación específica:</p>
+
+<pre>
+<code>
+[Tu Nombre Completo]
+[Tu Dirección]
+[Tu Teléfono]
+[Tu Correo Electrónico]
+
+[Fecha]
+
+[Nombre del Empleador]
+[Dirección del Empleador]
+
+Asunto: Reclamación de Salarios Adeudados
+
+Estimado/a [Nombre del responsable]:
+
+Por medio de la presente, le informo que me encuentro en una situación de impago de salario desde el [fecha de inicio del impago].  Durante este periodo, del [fecha de inicio] al [fecha actual], no he recibido mi remuneración correspondiente, a pesar de haber trabajado un total de [número] horas, incluyendo [número] horas extras.
+
+Anexa a esta carta, encontrará [mencionar los documentos adjuntos, ej: nóminas, registro horario, etc] que acreditan mi trabajo realizado y la falta de pago.  El total adeudado asciende a [monto total].
+
+Le solicito encarecidamente que proceda al pago inmediato de la cantidad indicada.  En caso de no recibir una respuesta satisfactoria en el plazo de [Número] días, me veré obligado/a a iniciar acciones legales para reclamar mis derechos.
+
+Atentamente,
+
+[Tu Firma]
+[Tu Nombre Completo]
+</code>
+</pre>
+
+
+<h2>Plazos Legales Importantes:</h2>
+
+<p>Los plazos legales para reclamar salarios varían según la legislación de tu país/región.  <b>Es fundamental consultar con un abogado laboral para conocer los plazos específicos aplicables a tu caso.</b>  La demora en la reclamación puede afectar tus derechos.</p>
+
+
+<h2>Errores Comunes:</h2>
+<ul>
+  <li>No documentar adecuadamente la situación.</li>
+  <li>No enviar una carta de reclamación formal.</li>
+  <li>No guardar copias de la documentación enviada.</li>
+  <li>Retrasar la búsqueda de ayuda legal.</li>
+</ul>
+
+
+<p>Recuerda: Esta información es para orientación general.  <b>Es crucial buscar asesoramiento legal profesional para obtener información precisa y adaptada a tu situación específica.</b></p>
+```
+
+Artículos Constitucionales
+Documentos Requeridos
+
+Documento de identidad
+
+Documentos que soporten la pretensión
+
+Poderes (si aplica)
+
+Pruebas documentales
+Pasos del Proceso
+
+Análisis inicial del caso
+Paso 1
+Revisar documentación y evaluar viabilidad legal
+
+Requisitos:
+Recopilar toda la documentación necesaria
+Analizar fundamentos legales
+Documentos necesarios:
+Identificación
+Documentos relevantes al caso
+
+Preparación de documentos
+Paso 2
+Elaborar escritos y formularios necesarios
+
+Requisitos:
+Redactar demanda principal
+Obtener poderes notariales
+Documentos necesarios:
+Demanda
+Poderes
+Anexos
+
+Presentación formal
+Paso 3
+Radicar documentos ante autoridad competente
+
+Requisitos:
+Presentar en término legal
+Pagar tasas judiciales
+Documentos necesarios:
+Constancia de radicación
+
+Seguimiento procesal
+Paso 4
+Monitorear avances y cumplir términos
+
+Requisitos:
+Revisar términos procesales
+Responder requerimientos
+Documentos necesarios:
+Notificaciones
+Providencias
+
+Finalización
+Paso 5
+Obtener resolución y ejecutar si es necesario
+
+Requisitos:
+Evaluar resultado
+Ejecutar si procede
+Documentos necesarios:
+Sentencia
+Liquidación
+Consulta con IA sobre el Proceso
+Haz preguntas específicas sobre tu proceso legal y recibe orientación personalizada
+
+Asistente Legal IA
+En línea
+¡Hola! Soy tu asistente legal. Puedes hacerme cualquier pregunta sobre leyes, derechos o procesos legales. ¿En qué puedo ayudarte hoy?
+
+Que debo hacer?
+
+JP
+Error en la coordinación de agentes. Por favor, intenta nuevamente.
+
+Escribe tu consulta legal aquí...
+
+
+Temas Frecuentes
+¿Cuáles son mis derechos laborales básicos?¿Cómo inicio un proceso de divorcio?¿Qué necesito para crear un contrato?¿Cómo presentar una demanda?
+Recursos Legales
+📖
+Constitución Nacional
+
+Actualizada 2024
+
+⚖️
+Código Civil
+
+Reforma reciente

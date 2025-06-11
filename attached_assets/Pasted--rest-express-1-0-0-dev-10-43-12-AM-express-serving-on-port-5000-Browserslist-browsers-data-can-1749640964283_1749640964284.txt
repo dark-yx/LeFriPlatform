@@ -1,0 +1,69 @@
+> rest-express@1.0.0 dev
+10:43:12 AM [express] serving on port 5000
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+MongoDB connection error: MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+    at _handleConnectionErrors (/home/runner/workspace/node_modules/mongoose/lib/connection.js:1165:11)
+    at NativeConnection.openUri (/home/runner/workspace/node_modules/mongoose/lib/connection.js:1096:11)
+    at async connectToDatabase (/home/runner/workspace/server/db.ts:14:5) {
+  errorLabelSet: Set(0) {},
+  reason: TopologyDescription {
+    type: 'Unknown',
+    servers: Map(1) { 'localhost:27017' => [ServerDescription] },
+    stale: false,
+    compatible: true,
+    heartbeatFrequencyMS: 10000,
+    localThresholdMS: 15,
+    setName: null,
+    maxElectionId: null,
+    maxSetVersion: null,
+    commonWireVersion: 0,
+    logicalSessionTimeoutMinutes: null
+  },
+  code: undefined,
+  cause: TopologyDescription {
+    type: 'Unknown',
+    servers: Map(1) { 'localhost:27017' => [ServerDescription] },
+    stale: false,
+    compatible: true,
+    heartbeatFrequencyMS: 10000,
+    localThresholdMS: 15,
+    setName: null,
+    maxElectionId: null,
+    maxSetVersion: null,
+    commonWireVersion: 0,
+    logicalSessionTimeoutMinutes: null
+  }
+}
+Falling back to memory storage for development
+10:43:43 AM [express] POST /api/auth/google 200 in 16ms :: {"user":{"_id":"1749638623792","email":"jo…
+10:43:44 AM [express] GET /api/consultations 200 in 3ms :: []
+10:43:44 AM [express] GET /api/processes 200 in 2ms :: []
+10:44:03 AM [express] GET /api/consultations 304 in 2ms :: []
+10:44:03 AM [express] GET /api/processes 304 in 1ms :: []
+10:44:21 AM [express] GET /api/consultations 304 in 2ms :: []
+10:44:22 AM [express] GET /api/processes 304 in 1ms :: []
+11:17:34 AM [express] GET /api/emergency-contacts 200 in 1ms :: []
+11:17:51 AM [express] POST /api/voice/upload 200 in 1163ms :: {"id":"voice_1_1749640671067","url":"/a…
+11:17:56 AM [express] POST /api/emergency/with-voice 404 in 819ms :: {"error":"User not found"}
+11:18:20 AM [express] POST /api/emergency 200 in 1087ms :: {"status":"failed","contactsNotified":[],"…
+11:18:20 AM [express] GET /api/emergency-contacts 304 in 1ms :: []
+11:20:12 AM [express] POST /api/processes 200 in 7766ms :: {"_id":"1749640812409","userId":"66a1b2c3d…
+11:20:12 AM [express] GET /api/processes 200 in 1ms :: [{"_id":"1749640812409","userId":"66a1b2c3d4e5…
+11:20:15 AM [express] GET /api/processes/1749640812409 200 in 2ms :: {"_id":"1749640812409","userId":…
+11:20:15 AM [express] GET /api/user 200 in 5ms
+11:20:42 AM [express] POST /api/processes/1749640812409/generate-document 200 in 7476ms
+Coordinator agent error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [404 Not Found] models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (file:///home/runner/workspace/node_modules/@google/generative-ai/dist/index.mjs:432:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async makeRequest (file:///home/runner/workspace/node_modules/@google/generative-ai/dist/index.mjs:401:9)
+    at async generateContent (file:///home/runner/workspace/node_modules/@google/generative-ai/dist/index.mjs:865:22)
+    at async MultiAgentService.coordinatorAgent (/home/runner/workspace/server/services/multi-agent.ts:221:28)
+    at async MultiAgentService.processChat (/home/runner/workspace/server/services/multi-agent.ts:269:12)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:634:24) {
+  status: 404,
+  statusText: 'Not Found',
+  errorDetails: undefined
+}
+11:21:16 AM [express] POST /api/processes/1749640812409/chat 200 in 271ms :: {"response":"Error en la…
