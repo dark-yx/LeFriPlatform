@@ -249,7 +249,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/emergency-contacts/:id", requireAuth, async (req: any, res) => {
     try {
-      await storage.deleteEmergencyContact(parseInt(req.params.id));
+      await storage.deleteEmergencyContact(req.params.id);
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ error: "Failed to delete contact" });
@@ -268,24 +268,263 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/processes", requireAuth, async (req: any, res) => {
     try {
-      const data = insertLegalProcessSchema.parse({
-        ...req.body,
-        userId: req.userId
+      const { title, type, description, priority, deadline } = req.body;
+      
+      const user = await storage.getUser(req.userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Generate initial process structure with AI
+      const processSteps = await geminiService.generateProcessStep({
+        processType: type,
+        currentStep: 0,
+        userData: {
+          title,
+          description,
+          priority,
+          deadline
+        },
+        language: user.language || "es"
       });
-      const process = await storage.createLegalProcess(data);
+
+      // Create default steps based on process type
+      const defaultSteps = [
+        {
+          id: "1",
+          title: "Análisis inicial del caso",
+          description: "Revisar documentación y evaluar viabilidad legal",
+          completed: false,
+          documents: ["Identificación", "Documentos relevantes al caso"],
+          requirements: ["Recopilar toda la documentación necesaria", "Analizar fundamentos legales"]
+        },
+        {
+          id: "2", 
+          title: "Preparación de documentos",
+          description: "Elaborar escritos y formularios necesarios",
+          completed: false,
+          documents: ["Demanda", "Poderes", "Anexos"],
+          requirements: ["Redactar demanda principal", "Obtener poderes notariales"]
+        },
+        {
+          id: "3",
+          title: "Presentación formal",
+          description: "Radicar documentos ante autoridad competente",
+          completed: false,
+          documents: ["Constancia de radicación"],
+          requirements: ["Presentar en término legal", "Pagar tasas judiciales"]
+        },
+        {
+          id: "4",
+          title: "Seguimiento procesal",
+          description: "Monitorear avances y cumplir términos",
+          completed: false,
+          documents: ["Notificaciones", "Providencias"],
+          requirements: ["Revisar términos procesales", "Responder requerimientos"]
+        },
+        {
+          id: "5",
+          title: "Finalización",
+          description: "Obtener resolución y ejecutar si es necesario",
+          completed: false,
+          documents: ["Sentencia", "Liquidación"],
+          requirements: ["Evaluar resultado", "Ejecutar si procede"]
+        }
+      ];
+
+      // Get constitutional articles
+      const constitutionalArticles = await constituteService.getRelevantArticles({
+        query: description || title,
+        country: user.country || "EC",
+        language: user.language || "es",
+        limit: 3
+      });
+
+      const processData = {
+        userId: req.userId,
+        title,
+        type,
+        description: description || "",
+        status: "pending",
+        progress: 0,
+        currentStep: 0,
+        totalSteps: 5,
+        steps: defaultSteps,
+        requiredDocuments: [
+          "Documento de identidad",
+          "Documentos que soporten la pretensión",
+          "Poderes (si aplica)",
+          "Pruebas documentales"
+        ],
+        legalBasis: processSteps.text || `Proceso de ${type} conforme a la normativa vigente`,
+        constitutionalArticles: constitutionalArticles.slice(0, 3),
+        timeline: "El proceso puede tomar entre 6 meses y 2 años dependiendo de la complejidad",
+        metadata: {
+          priority: priority || 'medium',
+          deadline: deadline || '',
+          caseNumber: '',
+          court: '',
+          judge: '',
+          opposingParty: '',
+          amount: ''
+        }
+      };
+
+      const process = await storage.createLegalProcess(processData);
       res.json(process);
     } catch (error) {
-      res.status(400).json({ error: "Invalid process data" });
+      console.error('Process creation error:', error);
+      res.status(500).json({ error: "Failed to create process" });
     }
   });
 
-  app.put("/api/processes/:id", requireAuth, async (req: any, res) => {
+  app.get("/api/processes/:id", requireAuth, async (req: any, res) => {
+    try {
+      const process = await storage.getLegalProcess(req.params.id);
+      if (!process) {
+        return res.status(404).json({ error: "Process not found" });
+      }
+      res.json(process);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to get process" });
+    }
+  });
+
+  app.patch("/api/processes/:id", requireAuth, async (req: any, res) => {
     try {
       const updates = req.body;
-      const process = await storage.updateLegalProcess(parseInt(req.params.id), updates);
+      const process = await storage.updateLegalProcess(req.params.id, updates);
       res.json(process);
     } catch (error) {
       res.status(500).json({ error: "Failed to update process" });
+    }
+  });
+
+  app.post("/api/processes/:id/generate-document", requireAuth, async (req: any, res) => {
+    try {
+      const { country } = req.body;
+      const process = await storage.getLegalProcess(req.params.id);
+      
+      if (!process) {
+        return res.status(404).json({ error: "Process not found" });
+      }
+
+      const user = await storage.getUser(req.userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Get constitutional articles related to the process
+      const constitutionalArticles = await constituteService.getRelevantArticles({
+        query: process.description || process.title,
+        country: country || user.country,
+        language: user.language || "es",
+        limit: 5
+      });
+
+      // Generate comprehensive legal document with AI
+      const documentContent = await geminiService.generateProcessStep({
+        processType: process.type,
+        currentStep: process.currentStep,
+        userData: {
+          title: process.title,
+          description: process.description || "",
+          totalSteps: process.totalSteps,
+          constitutionalArticles,
+          metadata: process.metadata
+        },
+        language: user.language || "es"
+      });
+
+      // Create PDF-like content (in a real app, you'd use a PDF library)
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <title>${process.title}</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+            .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 30px; }
+            .section { margin-bottom: 25px; }
+            .section h2 { color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+            .metadata { background-color: #f5f5f5; padding: 15px; border-radius: 5px; }
+            .legal-basis { background-color: #e8f4f8; padding: 15px; border-left: 4px solid #007acc; }
+            .steps { list-style-type: decimal; }
+            .steps li { margin-bottom: 10px; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>${process.title}</h1>
+            <p>Documento Legal Generado - ${new Date().toLocaleDateString()}</p>
+          </div>
+          
+          <div class="section">
+            <h2>Información del Proceso</h2>
+            <div class="metadata">
+              <p><strong>Tipo:</strong> ${process.type}</p>
+              <p><strong>Estado:</strong> ${process.status}</p>
+              <p><strong>Progreso:</strong> ${process.currentStep}/${process.totalSteps} pasos</p>
+              ${process.metadata?.caseNumber ? `<p><strong>Número de Caso:</strong> ${process.metadata.caseNumber}</p>` : ''}
+              ${process.metadata?.court ? `<p><strong>Tribunal:</strong> ${process.metadata.court}</p>` : ''}
+              ${process.metadata?.judge ? `<p><strong>Juez:</strong> ${process.metadata.judge}</p>` : ''}
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>Descripción del Caso</h2>
+            <p>${process.description || 'Sin descripción disponible'}</p>
+          </div>
+
+          <div class="section">
+            <h2>Fundamento Legal y Constitucional</h2>
+            <div class="legal-basis">
+              ${documentContent.text}
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>Artículos Constitucionales Relevantes</h2>
+            ${constitutionalArticles.map((article, index) => `
+              <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd;">
+                <h4>Artículo ${index + 1}</h4>
+                <p>${article}</p>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="section">
+            <h2>Plan de Acción Recomendado</h2>
+            <ol class="steps">
+              <li>Recopilación de documentación necesaria</li>
+              <li>Preparación de escritos legales</li>
+              <li>Presentación ante autoridad competente</li>
+              <li>Seguimiento del proceso</li>
+              <li>Ejecución de resolución</li>
+            </ol>
+          </div>
+
+          <div class="section">
+            <h2>Recomendaciones</h2>
+            <ul>
+              <li>Mantener toda la documentación organizada</li>
+              <li>Cumplir estrictamente con los plazos legales</li>
+              <li>Consultar con abogado especializado si es necesario</li>
+              <li>Documentar todas las comunicaciones</li>
+            </ul>
+          </div>
+        </body>
+        </html>
+      `;
+
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${process.title.replace(/[^a-zA-Z0-9]/g, '_')}.html"`);
+      res.send(htmlContent);
+      
+    } catch (error) {
+      console.error('Document generation error:', error);
+      res.status(500).json({ error: "Failed to generate document" });
     }
   });
 

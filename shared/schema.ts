@@ -27,9 +27,34 @@ const legalProcessSchema = new Schema({
   title: { type: String, required: true },
   description: { type: String },
   status: { type: String, default: "pending" },
+  progress: { type: Number, default: 0 },
   currentStep: { type: Number, default: 0 },
-  totalSteps: { type: Number, required: true },
-  metadata: { type: Schema.Types.Mixed },
+  totalSteps: { type: Number, default: 5 },
+  steps: [{
+    id: { type: String, required: true },
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    completed: { type: Boolean, default: false },
+    dueDate: { type: String },
+    documents: [{ type: String }],
+    requirements: [{ type: String }]
+  }],
+  requiredDocuments: [{ type: String }],
+  legalBasis: { type: String, default: "" },
+  constitutionalArticles: [{ type: String }],
+  timeline: { type: String, default: "" },
+  metadata: { 
+    type: Schema.Types.Mixed,
+    default: {
+      priority: 'medium',
+      caseNumber: '',
+      court: '',
+      judge: '',
+      opposingParty: '',
+      amount: '',
+      deadline: ''
+    }
+  },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

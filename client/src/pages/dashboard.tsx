@@ -44,7 +44,7 @@ export default function Dashboard() {
       iconBg: 'bg-orange-100',
       iconColor: 'text-orange-600',
       buttonColor: 'text-orange-600',
-      onClick: () => setLocation('/proceso'),
+      onClick: () => setLocation('/processes'),
     },
     {
       title: 'Modo Emergencia',
