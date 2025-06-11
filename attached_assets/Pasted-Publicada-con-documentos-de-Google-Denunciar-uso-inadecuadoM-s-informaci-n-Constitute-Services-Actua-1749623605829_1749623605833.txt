@@ -1,0 +1,1402 @@
+Publicada con documentos de Google
+Denunciar uso inadecuadoMás información
+Constitute Services
+Actualizado automáticamente cada 5 minutos
+
+Constitute Services
+
+
+
+
+Overview
+
+Making a Service Request
+
+Service Method Specifications
+
+Requesting lists of objects
+
+constitutions
+
+topics
+
+locations
+
+Topic searches
+
+constopicsearch
+
+sectionstopicsearch
+
+Free-text searches
+
+textsearch
+
+Requesting constitution HTML
+
+html
+
+ 
+
+
+
+Overview
+
+The Constitute Project site’s service methods enable developers to retrieve constitution and topic data. This document describes the services and how to use them.
+
+
+Making a Service Request
+
+To submit a service request send an HTTP GET request with a set of optional parameters. The parameters are included in the request URL as a set of name=value pairs. The service URL format is shown below.
+
+
+https://www.constituteproject.org/service/<method_name>
+
+[?<parameter_name>=<parameter_value>&<parameter_name>=<parameter_value>]
+
+
+All service methods return JSON strings. Service methods are organised into categories as follows:
+
+
+Requesting lists of objects
+constitutions
+topics
+regions
+Topic searches
+constopicsearch
+sectionstopicsearch
+Free-text search
+textsearch
+Requests for constitution HTML
+html
+
+Constitution data, apart from constitution HTML, are returned in two forms: header data, and section data.  Methods returning header data are:
+
+
+constitutions
+constopicsearch
+textsearch (with the cons_id parameter)
+
+Methods returning constitution section data are:
+
+
+topicsearch
+sectionstopicsearch
+textsearch
+
+Service Method Specifications
+Requesting lists of objects
+constitutions
+
+Returns header data for constitutions. Optional region, country, and date-range filters are available.
+
+
+Parameters
+
+
+region
+
+An optional region ID.  See the locations method below.  Only constitutions of the countries of the specified region are included in the search results. Multiple regions can be specified by repeating the region parameter.
+
+country
+
+An optional country ID.  See the locations method below. Only constitutions belonging to the specified country are included in the search results. Multiple countries can be specified by repeating the country parameter.
+
+from_year
+
+An optional first date-enacted year of a date range in YYYY format. If absent, the default is the earliest date-enacted. Only constitutions with a date-enacted year equal to or greater than  the from_year are included in the search results.
+
+to_year
+
+An optional last date-enacted year of a date range in YYYY format. If absent,  the default is the most recent date-enacted year. Only constitutions with a date-enacted year equal to or less than  the to_year are included in the search results.
+
+lang
+
+Optional parameter defining the language in which constitution titles are returned. The value of the parameter is a two-letter ISO 639-1 code. Currently supported values are en (English), es(Spanish) and ar (Arabic). The default value is en.Only constitutions translated into the specified language will be returned.
+
+historic
+
+An optional Boolean value where true includes historic constitutions in the list and false excludes constitutions. Without this parameter historic constitutions are excluded.
+
+
+
+Sample requests
+
+
+Basic request without parameters:
+
+
+https://www.constituteproject.org/service/constitutions
+
+
+Request with region:
+
+
+https://www.constituteproject.org/service/constitutions?region=Africa
+
+
+Request with multiple regions:
+
+
+https://www.constituteproject.org/service/constitutions?region=Africa&region=Europe
+
+
+Request with a country:
+
+
+https://www.constituteproject.org/service/constitutions?country=Ukraine
+
+
+Request with date range:
+
+
+https://www.constituteproject.org/service/constitutions?from_year=1954&to_year=2000
+
+
+Request with region and from date:
+
+
+https://www.constituteproject.org/service/constitutions?region=Europe&from_year=1960
+
+
+Request with language specified:
+
+
+https://www.constituteproject.org/service/constitutions?lang=en
+
+
+Request to include historic constitutions:
+
+
+https://www.constituteproject.org/service/constitutions?historic=false
+
+
+
+Response format
+
+
+[
+
+    {
+
+        copyright: <copyright_mark>,
+
+        country: <country_name>,
+
+        country_id: <country_id>,
+
+        date_drafted: <date_drafted>,
+
+        id: <constitution_id>,
+
+        in_force: true|false,
+
+        in_draft: true|false,
+
+        in_historic: true|false,
+
+        language: <language>,
+
+        region: <region_name>,
+
+        title: <constitution_title>,
+
+        title_long: <constitution_title_long>,
+
+        title_short: <constitution_title_short>,
+
+        translator: <translator>,
+
+        update_needed: true|false,
+
+        word_length: <constitution_word_length>,
+
+        word_rank: <constitution_word_rank>,
+
+        year_drafted: <year_drafted>,
+
+        year_enacted: <year_enacted>,
+
+        year_reinstated: <year_reinstated>,
+
+        year_revised: <year_revised>,
+
+        year_to: <year_to>,
+
+        year_updated: <year_updated>,
+
+        years_amended: <years_amended>,
+
+        years_in_force: <years_in_force>
+
+    },
+
+    …
+
+    {
+
+        copyright: <copyright_mark>,
+
+        country: <country_name>,
+
+        country_id: <country_id>,
+
+        date_drafted: <date_drafted>,
+
+        id: <constitution_id>,
+
+        in_force: true|false,
+
+        in_draft: true|false,
+
+        in_historic: true|false,
+
+        language: <language>,
+
+        region: <region_name>,
+
+        title: <constitution_title>,
+
+        title_long: <constitution_title_long>,
+
+        title_short: <constitution_title_short>,
+
+        translator: <translator>,
+
+        update_needed: true|false,
+
+        word_length: <constitution_word_length>,
+
+        word_rank: <constitution_word_rank>,
+
+        year_drafted: <year_drafted>,
+
+        year_enacted: <year_enacted>,
+
+        year_reinstated: <year_reinstated>,
+
+        year_revised: <year_revised>,
+
+        year_to: <year_to>,
+
+        year_updated: <year_updated>,
+
+        years_amended: <years_amended>,
+
+        years_in_force: <years_in_force>
+
+    }
+
+]
+
+
+where:
+
+
+copyright
+
+The Constitutions copyright mark
+
+country
+
+The name of a constitution’s country
+
+country_id
+
+The ID of a constitution’s country
+
+date_drafted
+
+The year the constitution was drafted in YYYY-MM-DD format
+
+id
+
+A constitution’s ID. Used as a parameter for calls on the sectionstopicsearch, textsearch, and html services
+
+in_force
+
+true if the constitution is in force; otherwise false. If false the constitution is historic.
+
+is_draft
+
+true if the constitution is a draft; otherwise false.
+
+is_historic
+
+true if the constitution is historic; otherwise false.
+
+language
+
+The default, source language for this constitution
+
+region
+
+The name of a constitution’s region
+
+title
+
+The title of a constitution. The title will be returned in the language defined by the lang URL parameter. If the language parameter is undefined then the constitution title’s language will default to English.
+
+title_long
+
+A longer version of the constitution's title, used in some situations.
+
+title_short
+
+A shortened version of the constitution's title
+
+translator
+
+Credits for the translator(s) of this version of the constitution, if applicable
+
+update_needed
+
+Whether an updated is needed for this revision
+
+word_length
+
+The number of words within the constitution
+
+word_rank
+
+The constitution’s ranking based on word length
+
+year_drafted
+
+The year a constitution was drafted in YYYY format
+
+year_enacted
+
+The year a constitution was enacted in YYYY format
+
+year_reinstated
+
+The year a constitution was reinstated in YYYY format
+
+year_revised
+
+The year a constitution was revised in YYYY format
+
+year_to
+
+The year a constitution is/was valid until in YYYY format
+
+year_updated
+
+The year a constitution was updated in YYYY format
+
+years_amended
+
+The number of years a constitution has been amended over
+
+years_in_force
+
+The number of years a constitution has been in force
+
+
+An empty list [] is returned if no constitutions match the URL parameter values.
+
+
+Sample response fragment (English titles)
+
+
+[
+
+    {
+
+           copyright: null,
+
+           country: "The Islamic Republic of Afghanistan",
+
+           country_id: "Afghanistan"
+
+           date_drafted: "None",
+
+           id: "Afghanistan_2004",
+
+           in_force: true,
+
+           is_draft: false,
+
+           is_historic: false,
+
+           language: "en",
+
+           region: "Asia",
+
+           title: "Afghanistan 2004",
+
+           title_long: "Afghanistan's Constitution of 2004",
+
+           title_short: "Afghanistan",
+
+           translator: null,
+
+           update_needed: false,
+
+           word_length: "10390",
+
+           word_rank: "147",
+
+           year_drafted: null,
+
+           year_enacted: "2004",
+
+           year_reinstated: null,
+
+           year_revised: null,
+
+           year_to: 2021,
+
+           year_updated: null,
+
+           years_amended: null,
+
+           years_in_force: 16
+
+    },
+
+    {
+
+           copyright: null,
+
+           country: "Republic of Albania",
+
+           country_id: "Albania",
+
+           date_drafted: "None",
+
+           id: "Albania_2016",
+
+           in_force: true,
+
+           is_draft: false,
+
+           is_historic: false,
+
+           language: "en",
+
+           region: "Europe",
+
+           title: "Albania 1998 (rev. 2016)",
+
+           title_long: "Albania's Constitution of 1998 with Amendments through 2016",
+
+           title_short: "Albania",
+
+           translator: null,
+
+           update_needed: true,
+
+           word_length: "23186",
+
+           word_rank: "71",
+
+           year_drafted: null,
+
+           year_enacted: "1998",
+
+           year_reinstated: null,
+
+           year_revised: "2016",
+
+           year_to: 2021,
+
+           year_updated: "2016",
+
+           years_amended: 6,
+
+           years_in_force: 23
+
+    },
+
+…
+
+Sample response fragment (Arabic titles)
+
+
+[
+
+  {
+
+    copyright: null,
+
+    country: "جمهورية الأرجنتين",
+
+    country_id: "Argentina",
+
+    date_drafted: null,
+
+    id: "Argentina_1994",
+
+    in_force: true,
+
+    is_draft: false,
+
+    is_historic: false,
+
+    language: "es",
+
+    public: true,
+
+    region: "Americas",
+
+    show: true,
+
+    title: "الأرجنتين 1853 (أعيد تفعيله 1983، المعدل 1994)",
+
+    title_long: "دستور الأرجنتين الصادر عام 1853، أعيد العمل به عام 1983، شاملا تعديلاته لغاية عام 1",
+
+    title_short: "الأرجنتين",
+
+    translator: "ترجمة المؤسسة الدولية للديمقراطية والانتخابات؛ تحديث مشروع الدساتير المقارنة",
+
+    update_needed: false,
+
+    word_length: 13051,
+
+    word_rank: 119,
+
+    year_drafted: null,
+
+    year_enacted: "1853",
+
+    year_reinstated: "1983",
+
+    year_revised: "1994",
+
+    year_to: 2021,
+
+    year_updated: "1994",
+
+    years_amended: 1,
+
+    years_in_force: 168
+
+  }
+
+]
+
+…
+
+topics
+
+Returns the complete topic hierarchy. Topics are organised in a hierarchy as follows:
+
+
+<category_topic>
+
+[<sub_category_topic>]
+
+<topic>
+
+<topic>
+
+
+Note that the sub_category_topic level is optional. This means that category topics are either two or three levels deep.
+
+
+
+Parameters
+
+
+lang
+
+Optional parameter defining the language in which topic description and label field values are returned. The value of the parameter is a two-letter ISO 639-1 code. Currently supported values are en (English), es(Spanish) and ar (Arabic). The default value is en.
+
+
+
+Sample request
+
+
+https://www.constituteproject.org/service/topics?lang=en
+
+
+Response format
+
+
+[
+
+    {
+
+        description: <topic_description>,
+
+        key: <topic_key>,
+
+        keywords: [
+
+            <keyword>,
+
+            …
+
+            <keyword>
+
+        ],
+
+        label: <topic_label>,
+
+        count: <count>,
+
+        topics: [
+
+            {
+
+                description: <topic_description>,
+
+                key: <topic_key>,
+
+                count: <count>,
+
+                keywords: [
+
+                   
+
+                ],
+
+                label: <topic_label>
+
+                topics: [
+
+                    {
+
+                        description: <topic_description>,
+
+                        key: <topic_key>,
+
+                        keywords: [],
+
+                        label: <topic_label>
+
+                        Count: <count>,
+
+                    },
+
+                   
+
+                ]
+
+            },
+
+           
+
+        ]
+
+    },
+
+ 
+
+
+
+where:
+
+
+description
+
+A short description of the topic. The value is null if no description is available. The description will be returned in the language defined by the lang URL parameter. If the language parameter is undefined then the description language will default to English.
+
+key
+
+A topic key is a single short-form code
+
+keywords
+
+An optional list of synonyms of a topic key. May be empty.
+
+label
+
+The human-readable form of a topic. The label will be returned in the language defined by the lang URL parameter. If the language parameter is undefined then the description language will default to English.
+
+topics
+
+Depending on the hierarchy either a sub-category topic or a list of terminal topics
+
+count
+
+Number of constitutions that utilise the topic, or topics within the parent category
+
+
+
+Sample response fragment
+
+
+[
+
+    {
+
+        count: 324,
+
+        description: null,
+
+        key: "amendment",
+
+        keywords: [
+
+           
+
+        ],
+
+        label: "Amendment",
+
+        topics: [
+
+            {
+
+                count: 230,
+
+                description: "Details the way in which the text of the constitution can be formally amended. This is distinct from the task of constitutional interpretation often undertaken by courts.",
+
+                key: "amend",
+
+                keywords: [],
+
+                label: "Constitution amendment procedure"
+
+            },
+
+            {
+
+                count: 94,
+
+                description: "Some provisions in the constitutions may be so fundamental to the constitutional order, or so politically contentious, that they are designated as unamendable. In such cases, unamendable provisions are expressly noted in the constitution.",
+
+                key: "unamend",
+
+                keywords: [
+
+                    "derogable",
+
+                    "inalienable",
+
+                    "inviolable"
+
+                ],
+
+                label: "Unamendable provisions"
+
+            }
+
+        ]
+
+    },
+
+    {
+
+        count: 2516,
+
+        description: null,
+
+        key: "culture_and_identity",
+
+        keywords: [
+
+           
+
+        ],
+
+        label: "Culture and Identity",
+
+        topics: [
+
+            {
+
+                count: 853,
+
+                description: null,
+
+                key: "Citizenship",
+
+                keywords: [],
+
+                label: "Citizenship",
+
+                topics: [
+
+                    {
+
+                        count: 7,
+
+                        description: "Clarifies the citizenship status of members of indigenous groups. In some cases indigenous groups may be granted citizenship in a sub-national unit.",
+
+                        key: "citdep",
+
+                        keywords: [],
+
+                        label: "Right of government to deport citizens"
+
+                    },
+
+                    {
+
+                        count: 155,
+
+                        description: "Describes the conditions under which a government is allowed to revoke an individual's citizenship. Some constitutions expressly forbid the government from revoking citizenship, regardless of the circumstances.",
+
+                        key: "citizen",
+
+                        keywords: [
+
+                            "nationals",
+
+                            "subjects"
+
+                        ],
+
+                        label: "Requirements for birthright citizenship"
+
+                    },
+
+
+…
+
+
+This sample demonstrates a category topic without a sub-category topic (Amendment) and a category topic with a sub-category topic (Culture and Identity : Citizenship).
+
+locations
+
+
+Parameters
+
+
+
+lang
+
+Optional parameter defining the language in which country and region  name field values are returned. The value of the parameter is a two-letter ISO 639-1 code. Currently supported values are en (English), es(Spanish) and ar (Arabic). The default value is en.
+
+
+
+Sample request
+
+
+https://www.constituteproject.org/service/locations?lang=en
+
+
+Response format
+
+
+[
+
+    {
+
+        countries: [
+
+            {
+
+                country_region: <country_region>,
+
+                id: <country_id>,
+
+                isocode: <isocode>,,
+
+                name: <country_name>,
+
+                wgcode: <wgcode>
+
+            },
+
+          …
+
+            {
+
+                country_region: <country_region>,
+
+                id: <country_id>,
+
+                isocode: <isocode>,,
+
+                name: <country_name>,
+
+                wgcode: <wgcode>
+
+
+            }
+
+        ],
+
+        id: <region_id>,
+
+        name: <region_name>
+
+    },
+
+    {
+
+        countries: [
+
+          …
+
+        ]
+
+…            
+
+
+
+where:
+
+
+countries
+
+A list of country dictionaries each containing a country ID and country name.
+
+countries/country_region
+
+A country region or sub-grouping according to geopolitical, rather than geographical location.
+
+countries/id
+
+A country ID. Used as a value on the country parameter of topic search methods.
+
+countries/isocode
+
+ISO 3166 country code
+
+countries/name
+
+A country name. The country name will be returned in the language defined by the lang URL parameter. If the language parameter is undefined then the country name’s language will default to English.
+
+countries/wgcode
+
+An internal country code.
+
+id
+
+A region ID. Used as a value on the region parameter of topic search methods.
+
+name
+
+A region name. The region name will be returned in the language defined by the lang URL parameter. If the language parameter is undefined then the region name’s language will default to English.
+
+
+Sample response fragment
+
+
+[
+
+    {
+
+        countries: [
+
+            {
+
+                country_region: "MiddleEast_NorthAfrica",
+
+                id: "Algeria",
+
+                isocode: "12",
+
+                name: "Algeria",
+
+                wgcode: "615"
+
+            },
+
+           …
+
+            {
+
+                country_region: "SubSaharan_Africa",
+
+                id: "Zimbabwe",
+
+                isocode: "716",
+
+                name: "Zimbabwe",
+
+                wgcode: "552"
+
+            }
+
+        ],
+
+        id: "Africa",
+
+        name: "Africa"
+
+    },
+
+    {
+
+        countries: [
+
+            {
+
+                country_region: "Latin_Caribbean",
+
+                id: "Antigua_and_Barbuda",
+
+                isocode: "28",
+
+                name: "Antigua and Barbuda",
+
+                wgcode: "58"
+
+            },
+
+           …
+
+            {
+
+                country_region: "Latin_Caribbean",
+
+                id: "Venezuela",
+
+                isocode: "862",
+
+                name: "Venezuela (Bolivarian Republic of)",
+
+                wgcode: "101"
+
+            }
+
+        ],
+
+        id: "Americas",
+
+        name: "Americas"
+
+    },
+
+    {
+
+        countries: [
+
+            {
+
+                country_region: "Eastern_Europe",
+
+                id: "Afghanistan",
+
+                isocode: "4",
+
+                name: "Afghanistan",
+
+                wgcode: "700"
+
+            },
+
+…            
+
+
+
+Topic searches
+constopicsearch
+
+
+Returns constitution headers for those constitutions that contain sections tagged by a topic.  Region, country, and date-range filters are available.
+
+
+Parameters
+
+
+key
+
+A topic key, i.e. a topic’s short-form code. Only constitutions tagged with the topic are included in the search results.
+
+region
+
+An optional region ID.  See the locations method above.  Only constitutions of the countries of the region are included in the search results. Multiple regions can be specified by repeating the region parameter.
+
+country
+
+An optional country ID.  See the locations method above. Only constitutions belonging to the country are included in the search results. Multiple countries can be specified by repeating the country parameter.
+
+from_year
+
+An optional first date-enacted year of a date range in YYYY format. If absent, the default is the earliest date-enacted. Only constitutions with a date-enacted year equal to or greater than  the from_year are included in the search results.
+
+to_year
+
+An optional last date-enacted year of a date range in YYYY format. If absent, the default is the most recent date-enacted year. Only constitutions with a date-enacted year equal to or less than  the to_year are included in the search results.
+
+lang
+
+Optional parameter defining the language in which constitution titles are returned. The value of the parameter is a two-letter ISO 639-1 code. Currently supported values are en (English), es(Spanish) and ar (Arabic). The default value is en.Only constitutions translated into the specified language will be returned.
+
+historic
+
+An optional Boolean value where true includes historic constitutions in the list and false excludes constitutions. Without this parameter historic constitutions are excluded.
+
+
+
+Sample requests
+
+
+Basic topic search with language parameter:
+
+
+https://www.constituteproject.org/service/constopicsearch?key=amend&lang=en
+
+
+Topic search with region:
+
+
+https://www.constituteproject.org/service/constopicsearch?key=amend&region=Africa
+
+
+Topic search with multiple regions:
+
+
+https://www.constituteproject.org/service/constopicsearch?key=amend&region=Africa&region=Europe
+
+
+Topic search with country:
+
+
+https://www.constituteproject.org/service/constopicsearch?key=amend&country=Ukraine
+
+
+Topic search with date range:
+
+
+https://www.constituteproject.org/service/constopicsearch?key=amend&from_year=1954&to_year=2000
+
+
+Topic search with request to include historic constitutions:
+
+
+https://www.constituteproject.org/service/constopicsearch?key=amend&historic=true
+
+
+
+Response format
+
+
+See constitutions method section. If no constitutions match the values of the parameters then the constitutions list is empty.
+
+
+Sample response
+
+
+See constitutions method section
+
+
+sectionstopicsearch
+
+
+Returns all the sections tagged with a topic within a single constitution.  Note that the region, country, from_date, to_date,and  historic parameters will be ignored.
+
+
+Parameters
+
+
+key
+
+A topic key, i.e. a topic’s short-form code. Only constitutions tagged with the topic are included in the search results.
+
+cons_id
+
+A constitution ID; multiple can be supplied with more cons_id= parameters
+
+lang
+
+Optional parameter defining the language in which constitution sections are returned. The value of the parameter is a two-letter ISO 639-1 code. Currently supported values are en (English), es(Spanish) and ar (Arabic). The default value is en.If the constitution defined by cons_id is not translated into the target language a 404 is returned.
+
+
+
+Sample request
+
+
+https://www.constituteproject.org/service/sectionstopicsearch?key=amend&cons_id=Afghanistan_2004&lang=en
+
+
+
+Response format
+
+
+The data structure is an array of section dictionaries where each section dictionary comprises:
+
+
+num_results
+
+The number of relevant sections+structure found for the search key
+
+public
+
+A flag for whether this is a public constitution
+
+results
+
+Array of sections with structure as formatted HTML.
+
+
+{
+
+  "Afghanistan_2004": {
+
+    "num_results": 2,
+
+    "public": true,
+
+    "results": [
+
+      "<section data-id=\"section/491\" class=\"_result _result-title\" data-topics=\"unamend,amend\">\n<h4 class=\"article-header\">\n<a class=\"article-header__link header-parts\" target=\"_blank\" rel=\"noopener\" href=\"/constitution/Afghanistan_2004#s492\" data-ng-click=\"analytics('Article', 'Afghanistan_2004 (Lang:en)', 'Afghanistan_2004')\"><span class=\"article-breadcrumb ng-binding ng-scope\" data-ng-repeat=\"crumb in article.header_parts track by $index\" data-ng-show=\"crumb!=''\">Chapter X.  Amendments</span></a>\n</h4><p class=\"content\">Article 149</p><section data-id=\"section/492\" class=\"_result _result-body\"><p class=\"content\">The principles of adherence to the tenets of the Holy religion of Islam as well as Islamic Republicanism shall not be amended. Amending fundamental rights of the people shall be permitted only to improve them. Amending other Articles of this Constitution, with due respect to new experiences and requirements of the time, as well as provisions of Articles 67 and 146 of this Constitution, shall become effective with the proposal of the President and approval of the majority of National Assembly members.</p></section>\n</section>\n",
+
+      "<section data-id=\"section/493\" class=\"_result _result-title\" data-topics=\"hosdec,amend\">\n<h4 class=\"article-header\">\n<a class=\"article-header__link header-parts\" target=\"_blank\" rel=\"noopener\" href=\"/constitution/Afghanistan_2004#s494\" data-ng-click=\"analytics('Article', 'Afghanistan_2004 (Lang:en)', 'Afghanistan_2004')\"><span class=\"article-breadcrumb ng-binding ng-scope\" data-ng-repeat=\"crumb in article.header_parts track by $index\" data-ng-show=\"crumb!=''\">Chapter X.  Amendments&nbsp;&gt;&nbsp;Article 150</span></a>\n</h4><p class=\"content\">Article 150</p><section data-id=\"section/494\" class=\"_result _result-body\"><p class=\"content\">To process the amendment proposals, a commission comprised of members of the Government, National Assembly as well as the Supreme Court shall be formed by presidential decree to prepare the draft proposal. To approve the amendment, the Loya Jirga shall be convened by a Presidential decree in accordance with the provisions of the Chapter on Loya Jirga. If the Loya Jirga approves the amendment with the majority of two-thirds of its members, the President shall enforce it after endorsement.</p></section>\n</section>\n"
+
+    ]
+
+  }
+
+}
+
+
+Free-text searches
+textsearch
+
+
+Returns constitution headers for constitutions with sections that contain the free-text search term. Region, country and date range filters are available.  Alternatively, can be used with the cons_id parameter to return a single constitution’s sections. If no constitution headers or sections are found then the result is an empty array [].
+
+
+Parameters
+
+
+q
+
+A free-text search term. Only constitutions containing the text are included in the search results.
+
+region
+
+An optional region ID.  See the locations method above.  Only constitutions of the countries of the region are included in the search results. Multiple regions can be specified by repeating the region parameter.
+
+country
+
+An optional country ID.  See the locations method above. Only constitutions belonging to the country are included in the search results. Multiple countries can be specified by repeating the country parameter.
+
+from_year
+
+An optional first date-enacted year of a date range in YYYY format. If absent the default is the earliest date-enacted. Only constitutions with a date-enacted year equal to or greater than  the from_year are included in the search results.
+
+to_year
+
+An optional last date-enacted year of a date range in YYYY format. If absent the default is the current year. Only constitutions with a date-enacted year equal to or less than  the to_year are included in the search results.
+
+lang
+
+Optional parameter defining the language in which constitution sections are returned. The value of the parameter is a two-letter ISO 639-1 code. Currently supported values are en (English), es(Spanish) and ar (Arabic). The default value is en.Only constitutions translated into the specified language will be returned.
+
+historic
+
+An optional Boolean value where true includes historic constitutions in the list and false excludes constitutions. Without this parameter historic constitutions are excluded.
+
+
+or
+
+
+q
+
+A free-text search term. Only constitutions containing the text are included in the search results.
+
+cons_id
+
+A constitution ID; multiple can be supplied with more cons_id= parameters
+
+lang
+
+Optional parameter defining the language in which constitution sections are returned. The value of the parameter is a two-letter ISO 639-1 code. Currently supported values are en (English), es(Spanish) and ar (Arabic). The default value is en. If the constitution by cons_id  is not translated into the target language a 404 is returned.
+
+historic
+
+An optional Boolean value where true includes historic constitutions in the list and false excludes constitutions. Without this parameter historic constitutions are excluded.
+
+
+
+Sample request
+
+
+To return constitution headers for a set of constitutions:
+
+
+https://www.constituteproject.org/service/textsearch?q=president&lang=en
+
+
+
+
+To return sections of a single constitution:
+
+
+https://www.constituteproject.org/service/textsearch?q=president&cons_id=Afghanistan_2004
+
+
+
+Response format
+
+
+For a response to a request for constitution headers see:  constitutions
+
+
+For a response to a request for a single constitutions sections see: sectionstopicsearch
+
+
+Sample response
+
+
+For a response to a request for constitution headers see:  constitutions
+
+
+For a response to a request for a single constitutions sections see: sectionstopicsearch
+
+
+Requesting constitution HTML
+html
+
+
+Parameters
+
+
+lang
+
+Optional parameter defining the language in which constitution sections are returned. The value of the parameter is a two-letter ISO 639-1 code. Currently supported values are en (English), es(Spanish) and ar (Arabic). The default value is en. If the constitution by cons_id  is not translated into the target language a 404 is returned.
+
+
+Sample request
+
+
+https://www.constituteproject.org/service/html?cons_id=Australia_1985&lang=en
+
+
+
+https://www.constituteproject.org/service/html?cons_id=Australia_1985&lang=ar
+
+
+
+
+
+Response format
+
+
+{
+
+        html: <constitution_html>,
+
+        title: <constitution_title>
+
+}
+
+
+where:
+
+
+html
+
+A constitution in HTML format
+
+title
+
+The constitution's title
+
+
+
+Sample response fragment in English
+
+
+{
+
+html: "<h1>Afghanistan 2004</h1> <section id="1" class="article-list level0 article-title"> <h2 class="float-left">Preamble</h2> <a href="#1" class="float-right article-share-link">Share</a> <section id="2" class="article-list level1 article-body"> <p>In the name of Allah, the Most Beneficent, the Most Merciful</p> </section> <section id="3" class="article-list level1 article-body"> <p>Praise be to Allah, the Cherisher and Sustainer of Worlds; and Praise and Peace be upon Mohammad, His Last Messenger and his disciples and followers</p>…,
+    title: "Afghanistan 2004"
+
+Sample response fragment in Arabic
+
+
+{
+
+html: " <h1>أستراليا 1901 (المعدل 1985)</h1> <p class="translator">ترجمة المؤسسة الدولية للديمقراطية والانتخابات</p> <section data-id="1" class="article-list level0 article-title"> <h2 id="1" class="float-left">الفصل الأول. البرلمان</h2> <section data-id="2" class="article-list level1 article-title"> <h3 id="2" class="float-left">الجزء الأول. الشؤون العامة</h3> <section data-id="3" class="article-list level2 article-title"> <h3 id="3" class="float-left">1. السلطة التشريعية</h3> <a href="#3" class="float-right article-share-link">Share</a> <section data-id="4"…,
+    title: "Afghanistan 2004"

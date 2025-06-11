@@ -77,8 +77,12 @@ export class MemStorage implements IStorage {
     const id = this.currentId++;
     const now = new Date();
     const user: User = {
-      ...insertUser,
       id,
+      name: insertUser.name,
+      email: insertUser.email,
+      googleId: insertUser.googleId || null,
+      language: insertUser.language || "es",
+      country: insertUser.country || "EC",
       createdAt: now,
       updatedAt: now,
     };
@@ -103,8 +107,12 @@ export class MemStorage implements IStorage {
   async createEmergencyContact(insertContact: InsertEmergencyContact): Promise<EmergencyContact> {
     const id = this.currentId++;
     const contact: EmergencyContact = {
-      ...insertContact,
       id,
+      userId: insertContact.userId,
+      name: insertContact.name,
+      phone: insertContact.phone,
+      relationship: insertContact.relationship,
+      whatsappEnabled: insertContact.whatsappEnabled || true,
       createdAt: new Date(),
     };
     this.emergencyContacts.set(id, contact);
@@ -137,10 +145,15 @@ export class MemStorage implements IStorage {
     const id = this.currentId++;
     const now = new Date();
     const process: LegalProcess = {
-      ...insertProcess,
       id,
+      userId: insertProcess.userId,
+      processType: insertProcess.processType,
+      currentStep: insertProcess.currentStep || 0,
+      status: insertProcess.status || "in_progress",
+      data: insertProcess.data || {},
       startDate: now,
       lastUpdated: now,
+      finalDocumentUrl: insertProcess.finalDocumentUrl || null,
     };
     this.legalProcesses.set(id, process);
     return process;
@@ -179,8 +192,13 @@ export class MemStorage implements IStorage {
   async createEmergencyAlert(insertAlert: InsertEmergencyAlert): Promise<EmergencyAlert> {
     const id = this.currentId++;
     const alert: EmergencyAlert = {
-      ...insertAlert,
       id,
+      userId: insertAlert.userId,
+      latitude: insertAlert.latitude || null,
+      longitude: insertAlert.longitude || null,
+      address: insertAlert.address || null,
+      contactsNotified: insertAlert.contactsNotified || [],
+      status: insertAlert.status || "sent",
       createdAt: new Date(),
     };
     this.emergencyAlerts.set(id, alert);
