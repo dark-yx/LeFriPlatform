@@ -4,6 +4,8 @@ import {
   type LegalProcess, type InsertLegalProcess, type Consultation, type InsertConsultation,
   type EmergencyAlert, type InsertEmergencyAlert
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // User operations
@@ -206,4 +208,129 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// DatabaseStorage implementation using PostgreSQL
+export class DatabaseStorage implements IStorage {
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user || undefined;
+  }
+
+  async getUserByGoogleId(googleId: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.googleId, googleId));
+    return user || undefined;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
+    return user;
+  }
+
+  async updateUser(id: number, updates: Partial<InsertUser>): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set(updates)
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  async getEmergencyContacts(userId: number): Promise<EmergencyContact[]> {
+    return await db
+      .select()
+      .from(emergencyContacts)
+      .where(eq(emergencyContacts.userId, userId));
+  }
+
+  async createEmergencyContact(insertContact: InsertEmergencyContact): Promise<EmergencyContact> {
+    const [contact] = await db
+      .insert(emergencyContacts)
+      .values(insertContact)
+      .returning();
+    return contact;
+  }
+
+  async updateEmergencyContact(id: number, updates: Partial<InsertEmergencyContact>): Promise<EmergencyContact> {
+    const [contact] = await db
+      .update(emergencyContacts)
+      .set(updates)
+      .where(eq(emergencyContacts.id, id))
+      .returning();
+    return contact;
+  }
+
+  async deleteEmergencyContact(id: number): Promise<void> {
+    await db.delete(emergencyContacts).where(eq(emergencyContacts.id, id));
+  }
+
+  async getLegalProcesses(userId: number): Promise<LegalProcess[]> {
+    return await db
+      .select()
+      .from(legalProcesses)
+      .where(eq(legalProcesses.userId, userId));
+  }
+
+  async getLegalProcess(id: number): Promise<LegalProcess | undefined> {
+    const [process] = await db
+      .select()
+      .from(legalProcesses)
+      .where(eq(legalProcesses.id, id));
+    return process || undefined;
+  }
+
+  async createLegalProcess(insertProcess: InsertLegalProcess): Promise<LegalProcess> {
+    const [process] = await db
+      .insert(legalProcesses)
+      .values(insertProcess)
+      .returning();
+    return process;
+  }
+
+  async updateLegalProcess(id: number, updates: Partial<InsertLegalProcess>): Promise<LegalProcess> {
+    const [process] = await db
+      .update(legalProcesses)
+      .set(updates)
+      .where(eq(legalProcesses.id, id))
+      .returning();
+    return process;
+  }
+
+  async getConsultations(userId: number): Promise<Consultation[]> {
+    return await db
+      .select()
+      .from(consultations)
+      .where(eq(consultations.userId, userId));
+  }
+
+  async createConsultation(insertConsultation: InsertConsultation): Promise<Consultation> {
+    const [consultation] = await db
+      .insert(consultations)
+      .values(insertConsultation)
+      .returning();
+    return consultation;
+  }
+
+  async getEmergencyAlerts(userId: number): Promise<EmergencyAlert[]> {
+    return await db
+      .select()
+      .from(emergencyAlerts)
+      .where(eq(emergencyAlerts.userId, userId));
+  }
+
+  async createEmergencyAlert(insertAlert: InsertEmergencyAlert): Promise<EmergencyAlert> {
+    const [alert] = await db
+      .insert(emergencyAlerts)
+      .values(insertAlert)
+      .returning();
+    return alert;
+  }
+}
+
+export const storage = new DatabaseStorage();
