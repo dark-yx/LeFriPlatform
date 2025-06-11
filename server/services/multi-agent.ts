@@ -24,12 +24,14 @@ export interface ProcessContext {
 
 export class MultiAgentService {
   private genAI: GoogleGenerativeAI;
+  private model: any;
 
   constructor() {
     if (!process.env.GEMINI_API_KEY) {
       throw new Error('GEMINI_API_KEY environment variable is required');
     }
     this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    this.model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
   }
 
   // Legal Research Agent
