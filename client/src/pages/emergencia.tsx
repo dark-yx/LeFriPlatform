@@ -20,9 +20,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 const emergencyContactSchema = z.object({
-  name: z.string().min(1, 'El nombre es requerido'),
-  phone: z.string().min(10, 'El teléfono debe tener al menos 10 dígitos'),
-  relationship: z.string().min(1, 'La relación es requerida'),
+  name: z.string().min(1, 'Name is required'),
+  phone: z.string().min(10, 'Phone must have at least 10 digits'),
+  relationship: z.string().min(1, 'Relationship is required'),
   whatsappEnabled: z.boolean().default(true),
 });
 
@@ -81,7 +81,7 @@ export default function Emergencia() {
   };
 
   const handleDeleteContact = (id: number) => {
-    if (confirm('¿Estás seguro de que quieres eliminar este contacto?')) {
+    if (confirm('Are you sure you want to delete this contact?')) {
       deleteContactMutation.mutate(id);
     }
   };
@@ -101,13 +101,13 @@ export default function Emergencia() {
   };
 
   const relationships = [
-    { value: 'madre', label: 'Madre' },
-    { value: 'padre', label: 'Padre' },
-    { value: 'hermano', label: 'Hermano/a' },
-    { value: 'pareja', label: 'Pareja' },
-    { value: 'abogado', label: 'Abogado' },
-    { value: 'amigo', label: 'Amigo/a' },
-    { value: 'otro', label: 'Otro' },
+    { value: 'mother', label: 'Mother' },
+    { value: 'father', label: 'Father' },
+    { value: 'sibling', label: 'Sibling' },
+    { value: 'partner', label: 'Partner' },
+    { value: 'lawyer', label: 'Lawyer' },
+    { value: 'friend', label: 'Friend' },
+    { value: 'other', label: 'Other' },
   ];
 
   return (
@@ -126,7 +126,7 @@ export default function Emergencia() {
             >
               <ArrowLeft className="w-5 h-5 text-neutral-600" />
             </Button>
-            <h1 className="text-2xl font-bold text-neutral-900">Sistema de Emergencia</h1>
+            <h1 className="text-2xl font-bold text-neutral-900">Emergency System</h1>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -137,25 +137,25 @@ export default function Emergencia() {
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-xl">Contactos de Emergencia</CardTitle>
+                  <CardTitle className="text-xl">Emergency Contacts</CardTitle>
                   <Dialog open={isAddingContact} onOpenChange={setIsAddingContact}>
                     <DialogTrigger asChild>
                       <Button className="bg-blue-500 hover:bg-blue-600">
                         <Plus className="w-4 h-4 mr-2" />
-                        Agregar
+                        Add
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Agregar Contacto de Emergencia</DialogTitle>
+                        <DialogTitle>Add Emergency Contact</DialogTitle>
                       </DialogHeader>
                       
                       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                         <div>
-                          <Label htmlFor="name">Nombre Completo</Label>
+                          <Label htmlFor="name">Full Name</Label>
                           <Input
                             id="name"
-                            placeholder="Ej: María Pérez"
+                            placeholder="Ex: Maria Perez"
                             {...register('name')}
                           />
                           {errors.name && (
