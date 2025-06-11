@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useAuth } from '@/hooks/use-auth';
 import { api } from '@/lib/api';
 import { Scale } from 'lucide-react';
+import { LanguageSwitcher } from '@/components/language-switcher';
 
 export default function Login() {
   const [, setLocation] = useLocation();

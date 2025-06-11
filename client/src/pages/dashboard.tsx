@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/navbar';
@@ -10,6 +11,7 @@ import { MessageSquare, FileText, AlertTriangle, Clock, ArrowRight } from 'lucid
 export default function Dashboard() {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   const { data: recentConsultations } = useQuery({
     queryKey: ['/api/consultations'],
@@ -29,8 +31,8 @@ export default function Dashboard() {
 
   const modeCards = [
     {
-      title: 'Consultation Mode',
-      description: 'Ask legal questions and get contextualized answers by country using advanced AI.',
+      title: t('dashboard.consultationMode'),
+      description: t('dashboard.consultationDesc'),
       icon: MessageSquare,
       iconBg: 'bg-blue-100',
       iconColor: 'text-blue-500',
@@ -38,8 +40,8 @@ export default function Dashboard() {
       onClick: () => setLocation('/consulta'),
     },
     {
-      title: 'Process Mode',
-      description: 'Step-by-step guidance for common legal processes like divorce, contracts and lawsuits.',
+      title: t('dashboard.legalProcesses'),
+      description: t('dashboard.legalProcessesDesc'),
       icon: FileText,
       iconBg: 'bg-orange-100',
       iconColor: 'text-orange-600',
@@ -47,7 +49,7 @@ export default function Dashboard() {
       onClick: () => setLocation('/processes'),
     },
     {
-      title: 'Emergency Mode',
+      title: t('dashboard.emergencyMode'),
       description: 'Automatic alert system via WhatsApp to your emergency contacts.',
       icon: AlertTriangle,
       iconBg: 'bg-red-100',
