@@ -307,11 +307,9 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
               <div className="space-y-4">
                 <div>
                   <Label>Fundamento Legal</Label>
-                  <Textarea
-                    value={processData.legalBasis}
-                    onChange={(e) => updateProcessMutation.mutate({ legalBasis: e.target.value })}
-                    className="mt-1"
-                    rows={4}
+                  <div 
+                    className="mt-1 p-3 border rounded-md bg-white min-h-[100px] prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: processData.legalBasis || '' }}
                   />
                 </div>
                 <div>

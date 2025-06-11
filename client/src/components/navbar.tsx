@@ -12,7 +12,7 @@ export function Navbar() {
   const [location, setLocation] = useLocation();
   const { user, logout, updateUser } = useAuth();
   const { theme, setTheme } = useTheme();
-  const [language, setLanguage] = useState(user?.language || 'en');
+  const [language, setLanguage] = useState(user?.language || 'es');
 
   const handleLanguageChange = (newLanguage: string) => {
     setLanguage(newLanguage);

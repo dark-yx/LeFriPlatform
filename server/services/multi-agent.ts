@@ -200,7 +200,7 @@ Responde en ${context.language === 'es' ? 'español' : context.language}.
   // Coordinator Agent - Routes queries to appropriate specialized agents
   async coordinatorAgent(query: string, context: ProcessContext): Promise<AgentResponse> {
     try {
-      const model = this.genAI.getGenerativeModel({ model: 'gemini-pro' });
+      const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       
       // Determine which agent(s) to use based on query intent
       const intentPrompt = `
