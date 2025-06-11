@@ -24,7 +24,14 @@ const formatMarkdown = (text: string) => {
 };
 
 export function StreamingChatInterface({ country }: StreamingChatInterfaceProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      id: 'welcome',
+      content: '¡Hola! Soy tu asistente legal inteligente. Puedo ayudarte con consultas sobre leyes, derechos, procesos legales y la constitución de tu país. ¿En qué puedo ayudarte hoy?',
+      sender: 'ai',
+      timestamp: new Date(),
+    }
+  ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);

@@ -670,8 +670,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.headers['x-user-id'] || req.body.userId || '66a1b2c3d4e5f6789abc1234';
       
       // Get user and contacts
-      const user = await storage.getUser(req.userId);
-      const contacts = await storage.getEmergencyContacts(req.userId);
+      const user = await storage.getUser(userId);
+      const contacts = await storage.getEmergencyContacts(userId);
       
       if (!user) {
         return res.status(404).json({ error: "User not found" });

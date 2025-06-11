@@ -8,69 +8,69 @@ interface ProcessFrequentQuestionsProps {
 }
 
 const processQuestions: Record<string, string[]> = {
-  divorce: [
-    "What documents do I need for divorce proceedings?",
-    "How long does the divorce process typically take?",
-    "What are the grounds for divorce in my jurisdiction?",
-    "How is property divided in a divorce?",
-    "What about child custody arrangements?",
-    "Do I need to appear in court for my divorce?"
+  divorcio: [
+    "¿Qué documentos necesito para el proceso de divorcio?",
+    "¿Cuánto tiempo toma típicamente el proceso de divorcio?",
+    "¿Cuáles son las causales de divorcio en mi jurisdicción?",
+    "¿Cómo se divide la propiedad en un divorcio?",
+    "¿Qué pasa con la custodia de los hijos?",
+    "¿Necesito comparecer en corte para mi divorcio?"
   ],
-  contract: [
-    "What makes a contract legally binding?",
-    "What should I include in a service agreement?",
-    "How do I modify an existing contract?",
-    "What happens if someone breaches a contract?",
-    "Do I need witnesses for my contract?",
-    "How do I terminate a contract legally?"
+  contrato: [
+    "¿Qué hace que un contrato sea legalmente vinculante?",
+    "¿Qué debo incluir en un acuerdo de servicios?",
+    "¿Cómo modifico un contrato existente?",
+    "¿Qué pasa si alguien incumple un contrato?",
+    "¿Necesito testigos para mi contrato?",
+    "¿Cómo termino un contrato legalmente?"
   ],
-  lawsuit: [
-    "What is the statute of limitations for my case?",
-    "What damages can I claim in my lawsuit?",
-    "Do I need to attempt mediation first?",
-    "What evidence do I need to collect?",
-    "How much will filing a lawsuit cost?",
-    "What are the chances of winning my case?"
+  laboral: [
+    "¿Cuál es el plazo de prescripción para mi caso?",
+    "¿Qué daños puedo reclamar en mi demanda?",
+    "¿Necesito intentar mediación primero?",
+    "¿Qué evidencia necesito recopilar?",
+    "¿Cuánto cuesta presentar una demanda?",
+    "¿Cuáles son las posibilidades de ganar mi caso?"
   ],
-  inheritance: [
-    "How do I probate a will?",
-    "What happens if someone dies without a will?",
-    "How are inheritance taxes calculated?",
-    "Can I contest a will?",
-    "What documents do I need for estate administration?",
-    "How long does the probate process take?"
+  herencia: [
+    "¿Cómo tramito la legalización de un testamento?",
+    "¿Qué pasa si alguien muere sin testamento?",
+    "¿Cómo se calculan los impuestos de herencia?",
+    "¿Puedo impugnar un testamento?",
+    "¿Qué documentos necesito para la administración de bienes?",
+    "¿Cuánto tiempo toma el proceso de sucesión?"
   ],
-  business: [
-    "What business structure should I choose?",
-    "What licenses do I need to start my business?",
-    "How do I register my business name?",
-    "What tax obligations does my business have?",
-    "Do I need business insurance?",
-    "How do I protect my intellectual property?"
+  empresa: [
+    "¿Qué estructura empresarial debo elegir?",
+    "¿Qué licencias necesito para iniciar mi negocio?",
+    "¿Cómo registro el nombre de mi empresa?",
+    "¿Qué obligaciones fiscales tiene mi negocio?",
+    "¿Necesito seguro empresarial?",
+    "¿Cómo protejo mi propiedad intelectual?"
   ],
-  employment: [
-    "What are my rights if I'm terminated?",
-    "How do I file for unemployment benefits?",
-    "What constitutes workplace discrimination?",
-    "Can my employer change my contract terms?",
-    "What should I do about workplace harassment?",
-    "Am I entitled to severance pay?"
+  empleo: [
+    "¿Cuáles son mis derechos si me despiden?",
+    "¿Cómo solicito beneficios de desempleo?",
+    "¿Qué constituye discriminación laboral?",
+    "¿Puede mi empleador cambiar los términos de mi contrato?",
+    "¿Qué debo hacer sobre acoso laboral?",
+    "¿Tengo derecho a indemnización?"
   ],
-  immigration: [
-    "What documents do I need for my visa application?",
-    "How long does the immigration process take?",
-    "Can I work while my application is pending?",
-    "What are the requirements for permanent residency?",
-    "How do I bring my family to join me?",
-    "What happens if my application is denied?"
+  inmigracion: [
+    "¿Qué documentos necesito para mi solicitud de visa?",
+    "¿Cuánto tiempo toma el proceso de inmigración?",
+    "¿Puedo trabajar mientras mi solicitud está pendiente?",
+    "¿Cuáles son los requisitos para residencia permanente?",
+    "¿Cómo traigo a mi familia a acompañarme?",
+    "¿Qué pasa si rechazan mi solicitud?"
   ],
   default: [
-    "What legal options do I have in this situation?",
-    "What documents should I prepare?",
-    "What are the potential outcomes?",
-    "How long might this process take?",
-    "What are the associated costs?",
-    "Do I need legal representation?"
+    "¿Qué opciones legales tengo en esta situación?",
+    "¿Qué documentos debo preparar?",
+    "¿Cuáles son los posibles resultados?",
+    "¿Cuánto tiempo podría tomar este proceso?",
+    "¿Cuáles son los costos asociados?",
+    "¿Necesito representación legal?"
   ]
 };
 
@@ -82,7 +82,7 @@ export function ProcessFrequentQuestions({ processType, onQuestionClick }: Proce
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <HelpCircle className="h-5 w-5" />
-          Frequent Questions - {processType}
+          Temas Frecuentes
         </CardTitle>
       </CardHeader>
       <CardContent>
