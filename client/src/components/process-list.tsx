@@ -9,12 +9,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Plus, FileText, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { Plus, FileText, Clock, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'wouter';
 
 interface ProcessSummary {
   id: string;
+  _id?: string;
   title: string;
   type: string;
   description: string;
@@ -138,11 +139,19 @@ export function ProcessList() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Procesos Legales</h1>
-          <p className="text-muted-foreground">
-            Gestiona tus procesos legales y haz seguimiento a cada paso
-          </p>
+        <div className="flex items-center gap-4">
+          <Link href="/dashboard">
+            <Button variant="outline" size="sm">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Volver al Dashboard
+            </Button>
+          </Link>
+          <div>
+            <h1 className="text-3xl font-bold">Procesos Legales</h1>
+            <p className="text-muted-foreground">
+              Gestiona tus procesos legales y haz seguimiento a cada paso
+            </p>
+          </div>
         </div>
         <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
           <DialogTrigger asChild>
@@ -266,7 +275,7 @@ export function ProcessList() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {processes.map((process, index) => (
-            <Card key={process.id || `process-${index}`} className="hover:shadow-md transition-shadow">
+            <Card key={process._id || process.id || `process-${index}`} className="hover:shadow-md transition-shadow">
               <CardHeader>
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
@@ -315,7 +324,7 @@ export function ProcessList() {
                   Creado: {new Date(process.createdAt).toLocaleDateString()}
                 </div>
 
-                <Link href={`/processes/${process.id}`}>
+                <Link href={`/processes/${process._id || process.id}`}>
                   <Button className="w-full">
                     Ver Detalles
                   </Button>

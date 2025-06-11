@@ -252,6 +252,7 @@ export default function Emergencia() {
                             size="sm"
                             variant="ghost"
                             className="text-neutral-400 hover:text-neutral-600 p-1"
+                            onClick={() => setEditingContact(contact)}
                           >
                             <Edit className="w-4 h-4" />
                           </Button>

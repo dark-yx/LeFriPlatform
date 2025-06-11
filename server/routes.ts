@@ -248,6 +248,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.put("/api/emergency-contacts/:id", requireAuth, async (req: any, res) => {
+    try {
+      const contact = await storage.updateEmergencyContact(req.params.id, req.body);
+      res.json(contact);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update contact" });
+    }
+  });
+
   app.delete("/api/emergency-contacts/:id", requireAuth, async (req: any, res) => {
     try {
       await storage.deleteEmergencyContact(req.params.id);
