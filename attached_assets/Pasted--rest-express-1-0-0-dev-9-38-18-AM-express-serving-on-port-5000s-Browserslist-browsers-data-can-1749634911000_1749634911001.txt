@@ -1,0 +1,59 @@
+> rest-express@1.0.0 dev
+9:38:18 AM [express] serving on port 5000s
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Connected to MongoDB
+9:38:23 AM [express] GET /api/consultations 304 in 7ms :: []
+9:38:23 AM [express] GET /api/processes 304 in 1ms :: []
+9:38:29 AM [express] GET /api/emergency-contacts 304 in 2ms :: []
+9:38:46 AM [express] POST /api/emergency/with-voice 404 in 683ms :: {"error":"User not found"}
+MongoDB connection error: MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+    at _handleConnectionErrors (/home/runner/workspace/node_modules/mongoose/lib/connection.js:1165:11)
+    at NativeConnection.openUri (/home/runner/workspace/node_modules/mongoose/lib/connection.js:1096:11)
+    at async connectToDatabase (/home/runner/workspace/server/db.ts:14:5) {
+  errorLabelSet: Set(0) {},
+  reason: TopologyDescription {
+    type: 'Unknown',
+    servers: Map(1) { 'localhost:27017' => [ServerDescription] },
+    stale: false,
+    compatible: true,
+    heartbeatFrequencyMS: 10000,
+    localThresholdMS: 15,
+    setName: null,
+    maxElectionId: null,
+    maxSetVersion: null,
+    commonWireVersion: 0,
+    logicalSessionTimeoutMinutes: null
+  },
+  code: undefined,
+  cause: TopologyDescription {
+    type: 'Unknown',
+    servers: Map(1) { 'localhost:27017' => [ServerDescription] },
+    stale: false,
+    compatible: true,
+    heartbeatFrequencyMS: 10000,
+    localThresholdMS: 15,
+    setName: null,
+    maxElectionId: null,
+    maxSetVersion: null,
+    commonWireVersion: 0,
+    logicalSessionTimeoutMinutes: null
+  }
+}
+Falling back to memory storage for development
+9:38:49 AM [express] POST /api/voice/upload 200 in 119ms :: {"id":"voice_1_1749634729405","url":"/ap…
+9:38:53 AM [express] POST /api/emergency/with-voice 404 in 666ms :: {"error":"User not found"}
+9:39:03 AM [express] POST /api/emergency 200 in 862ms :: {"status":"failed","contactsNotified":[],"l…
+9:39:04 AM [express] GET /api/emergency-contacts 304 in 1ms :: []
+9:39:19 AM [express] POST /api/emergency-contacts 200 in 4ms :: {"_id":"1749634759243","userId":"66a…
+9:39:19 AM [express] GET /api/emergency-contacts 200 in 1ms :: [{"_id":"1749634759243","userId":"66a…
+9:39:21 AM [express] GET /api/consultations 304 in 1ms :: []
+9:39:21 AM [express] GET /api/processes 304 in 1ms :: []
+9:39:39 AM [express] POST /api/voice/upload 200 in 950ms :: {"id":"voice_1_1749634779234","url":"/ap…
+9:39:41 AM [express] POST /api/emergency/with-voice 404 in 536ms :: {"error":"User not found"}
+9:40:22 AM [express] POST /api/ask 200 in 8616ms
+9:41:25 AM [express] POST /api/processes 200 in 10296ms :: {"_id":"1749634885295","userId":"66a1b2c3…
+9:41:25 AM [express] GET /api/processes 200 in 2ms :: [{"_id":"1749634885295","userId":"66a1b2c3d4e5…
+9:41:28 AM [express] GET /api/processes/undefined 404 in 1ms :: {"error":"Process not found"}
+9:41:28 AM [express] GET /api/user 200 in 3ms
