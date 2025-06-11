@@ -160,11 +160,11 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
                    processData.status === 'in_progress' ? 'En Progreso' : 'Pendiente'}
                 </Badge>
                 <Badge variant={
-                  processData.metadata.priority === 'high' ? 'destructive' :
-                  processData.metadata.priority === 'medium' ? 'secondary' : 'outline'
+                  processData.metadata?.priority === 'high' ? 'destructive' :
+                  processData.metadata?.priority === 'medium' ? 'secondary' : 'outline'
                 }>
-                  {processData.metadata.priority === 'high' ? 'Alta Prioridad' :
-                   processData.metadata.priority === 'medium' ? 'Prioridad Media' : 'Baja Prioridad'}
+                  {processData.metadata?.priority === 'high' ? 'Alta Prioridad' :
+                   processData.metadata?.priority === 'medium' ? 'Prioridad Media' : 'Baja Prioridad'}
                 </Badge>
               </div>
             </div>
@@ -214,9 +214,9 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
             <div>
               <Label>Número de Caso</Label>
               <Input
-                value={processData.metadata.caseNumber || ''}
+                value={processData.metadata?.caseNumber || ''}
                 onChange={(e) => {
-                  const metadata = { ...processData.metadata, caseNumber: e.target.value };
+                  const metadata = { ...(processData.metadata || {}), caseNumber: e.target.value };
                   updateProcessMutation.mutate({ metadata });
                 }}
                 placeholder="Ingrese número de caso"
@@ -225,9 +225,9 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
             <div>
               <Label>Tribunal</Label>
               <Input
-                value={processData.metadata.court || ''}
+                value={processData.metadata?.court || ''}
                 onChange={(e) => {
-                  const metadata = { ...processData.metadata, court: e.target.value };
+                  const metadata = { ...(processData.metadata || {}), court: e.target.value };
                   updateProcessMutation.mutate({ metadata });
                 }}
                 placeholder="Tribunal competente"
@@ -236,9 +236,9 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
             <div>
               <Label>Juez</Label>
               <Input
-                value={processData.metadata.judge || ''}
+                value={processData.metadata?.judge || ''}
                 onChange={(e) => {
-                  const metadata = { ...processData.metadata, judge: e.target.value };
+                  const metadata = { ...(processData.metadata || {}), judge: e.target.value };
                   updateProcessMutation.mutate({ metadata });
                 }}
                 placeholder="Nombre del juez"
@@ -247,9 +247,9 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
             <div>
               <Label>Parte Contraria</Label>
               <Input
-                value={processData.metadata.opposingParty || ''}
+                value={processData.metadata?.opposingParty || ''}
                 onChange={(e) => {
-                  const metadata = { ...processData.metadata, opposingParty: e.target.value };
+                  const metadata = { ...(processData.metadata || {}), opposingParty: e.target.value };
                   updateProcessMutation.mutate({ metadata });
                 }}
                 placeholder="Nombre de la parte contraria"
@@ -258,9 +258,9 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
             <div>
               <Label>Monto en Disputa</Label>
               <Input
-                value={processData.metadata.amount || ''}
+                value={processData.metadata?.amount || ''}
                 onChange={(e) => {
-                  const metadata = { ...processData.metadata, amount: e.target.value };
+                  const metadata = { ...(processData.metadata || {}), amount: e.target.value };
                   updateProcessMutation.mutate({ metadata });
                 }}
                 placeholder="Monto económico"
@@ -270,9 +270,9 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
               <Label>Fecha Límite</Label>
               <Input
                 type="date"
-                value={processData.metadata.deadline || ''}
+                value={processData.metadata?.deadline || ''}
                 onChange={(e) => {
-                  const metadata = { ...processData.metadata, deadline: e.target.value };
+                  const metadata = { ...(processData.metadata || {}), deadline: e.target.value };
                   updateProcessMutation.mutate({ metadata });
                 }}
               />
@@ -300,7 +300,7 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
                 <div>
                   <Label>Artículos Constitucionales</Label>
                   <div className="mt-2 space-y-2">
-                    {processData.constitutionalArticles.map((article, index) => (
+                    {(processData.constitutionalArticles || []).map((article, index) => (
                       <Badge key={index} variant="outline" className="block p-2 text-sm">
                         {article}
                       </Badge>
@@ -320,7 +320,7 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
           <CardContent>
             <ScrollArea className="h-64">
               <div className="space-y-2">
-                {processData.requiredDocuments.map((doc, index) => (
+                {(processData.requiredDocuments || []).map((doc, index) => (
                   <div key={index} className="flex items-center gap-2 p-2 border rounded">
                     <Checkbox id={`doc-${index}`} />
                     <Label htmlFor={`doc-${index}`} className="text-sm">
