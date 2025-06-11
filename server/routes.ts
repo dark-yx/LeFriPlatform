@@ -40,7 +40,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             email,
             name,
             googleId,
-            language: "es",
+            language: "en",
             country: "EC"
           });
         }

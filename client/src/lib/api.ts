@@ -35,6 +35,6 @@ export const api = {
     apiRequest('PUT', `/api/processes/${id}`, data),
 
   // Profile
-  updateProfile: (data: { name?: string; language?: string; country?: string }) =>
+  updateProfile: (data: { name?: string; email?: string; phone?: string; language?: string; country?: string }) =>
     apiRequest('PUT', '/api/profile', data),
 };

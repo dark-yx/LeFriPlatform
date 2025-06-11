@@ -48,30 +48,30 @@ export class MultiAgentService {
       const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       
       const prompt = `
-Eres un agente especializado en investigación legal. Tu misión es analizar el contexto legal específico del proceso.
+You are a legal research agent specialized in analyzing specific legal process contexts.
 
-CONTEXTO DEL PROCESO:
-- Tipo: ${context.type}
-- Título: ${context.title}
-- Descripción: ${context.description || 'No especificada'}
-- Paso actual: ${context.currentStep}/${context.totalSteps}
-- País: ${context.country}
-- Metadatos: ${JSON.stringify(context.metadata, null, 2)}
+PROCESS CONTEXT:
+- Type: ${context.type}
+- Title: ${context.title}
+- Description: ${context.description || 'Not specified'}
+- Current step: ${context.currentStep}/${context.totalSteps}
+- Country: ${context.country}
+- Metadata: ${JSON.stringify(context.metadata, null, 2)}
 
-ARTÍCULOS CONSTITUCIONALES RELEVANTES:
+RELEVANT CONSTITUTIONAL ARTICLES:
 ${constitutionalArticles.map((article, index) => `${index + 1}. ${article}`).join('\n')}
 
-CONSULTA DEL USUARIO:
+USER QUERY:
 ${query}
 
-Proporciona:
-1. Análisis legal específico basado en el contexto del proceso
-2. Interpretación de artículos constitucionales aplicables
-3. Precedentes legales relevantes
-4. Recomendaciones específicas para este caso
-5. Nivel de confianza en tu análisis (0-100)
+Provide:
+1. Specific legal analysis based on the process context
+2. Interpretation of applicable constitutional articles
+3. Relevant legal precedents
+4. Specific recommendations for this case
+5. Confidence level in your analysis (0-100)
 
-Responde en ${context.language === 'es' ? 'español' : context.language}.
+Respond in ${context.language === 'es' ? 'Spanish' : 'English'}.
 `;
 
       const result = await model.generateContent(prompt);
@@ -86,7 +86,7 @@ Responde en ${context.language === 'es' ? 'español' : context.language}.
     } catch (error) {
       console.error('Legal research agent error:', error);
       return {
-        text: 'Error en el análisis legal. Por favor, intenta nuevamente.',
+        text: 'Error in legal analysis. Please try again.',
         confidence: 0,
         error: error instanceof Error ? error.message : 'Unknown error'
       };
@@ -99,28 +99,28 @@ Responde en ${context.language === 'es' ? 'español' : context.language}.
       const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       
       const prompt = `
-Eres un agente especializado en planificación de procesos legales. Tu misión es crear planes detallados y cronogramas.
+You are a legal process planning agent specialized in creating detailed plans and timelines.
 
-CONTEXTO DEL PROCESO:
-- Tipo: ${context.type}
-- Título: ${context.title}
-- Descripción: ${context.description || 'No especificada'}
-- Paso actual: ${context.currentStep}/${context.totalSteps}
-- País: ${context.country}
-- Metadatos del caso: ${JSON.stringify(context.metadata, null, 2)}
+PROCESS CONTEXT:
+- Type: ${context.type}
+- Title: ${context.title}
+- Description: ${context.description || 'Not specified'}
+- Current step: ${context.currentStep}/${context.totalSteps}
+- Country: ${context.country}
+- Case metadata: ${JSON.stringify(context.metadata, null, 2)}
 
-CONSULTA DEL USUARIO:
+USER QUERY:
 ${query}
 
-Proporciona:
-1. Plan de acción específico para el siguiente paso
-2. Cronograma detallado con fechas estimadas
-3. Documentos necesarios para cada etapa
-4. Recursos requeridos
-5. Posibles obstáculos y mitigaciones
-6. Próximos pasos recomendados
+Provide:
+1. Specific action plan for the next step
+2. Detailed timeline with estimated dates
+3. Documents needed for each stage
+4. Required resources
+5. Potential obstacles and mitigations
+6. Recommended next steps
 
-Responde en ${context.language === 'es' ? 'español' : context.language}.
+Respond in ${context.language === 'es' ? 'Spanish' : 'English'}.
 `;
 
       const result = await model.generateContent(prompt);
@@ -129,10 +129,10 @@ Responde en ${context.language === 'es' ? 'español' : context.language}.
 
       // Generate next steps
       const nextSteps = [
-        `Revisar documentación para el paso ${context.currentStep + 1}`,
-        'Verificar cumplimiento de requisitos legales',
-        'Preparar documentos necesarios',
-        'Coordinar con autoridades competentes'
+        `Review documentation for step ${context.currentStep + 1}`,
+        'Verify compliance with legal requirements',
+        'Prepare necessary documents',
+        'Coordinate with competent authorities'
       ];
 
       return {
@@ -143,7 +143,7 @@ Responde en ${context.language === 'es' ? 'español' : context.language}.
     } catch (error) {
       console.error('Process planning agent error:', error);
       return {
-        text: 'Error en la planificación del proceso. Por favor, intenta nuevamente.',
+        text: 'Error in process planning. Please try again.',
         confidence: 0,
         error: error instanceof Error ? error.message : 'Unknown error'
       };
