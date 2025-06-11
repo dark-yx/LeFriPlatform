@@ -1,108 +1,223 @@
-import { pgTable, text, serial, integer, boolean, timestamp, json, decimal } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
-import { z } from "zod";
+import mongoose, { Schema, Document } from 'mongoose';
+import { z } from 'zod';
 
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  email: text("email").notNull().unique(),
-  name: text("name").notNull(),
-  googleId: text("google_id").unique(),
-  language: text("language").notNull().default("es"), // es, en, fr
-  country: text("country").notNull().default("EC"), // ISO country codes
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+// Mongoose Schemas
+const userSchema = new Schema({
+  email: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  googleId: { type: String },
+  language: { type: String, default: "es" },
+  country: { type: String, default: "EC" },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
 });
 
-export const emergencyContacts = pgTable("emergency_contacts", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull().references(() => users.id),
-  name: text("name").notNull(),
-  phone: text("phone").notNull(),
-  relationship: text("relationship").notNull(),
-  whatsappEnabled: boolean("whatsapp_enabled").notNull().default(true),
-  createdAt: timestamp("created_at").defaultNow(),
+const emergencyContactSchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  name: { type: String, required: true },
+  phone: { type: String, required: true },
+  relationship: { type: String, required: true },
+  whatsappEnabled: { type: Boolean, default: true },
+  createdAt: { type: Date, default: Date.now },
 });
 
-export const legalDocs = pgTable("legal_docs", {
-  id: serial("id").primaryKey(),
-  country: text("country").notNull(),
-  title: text("title").notNull(),
-  content: text("content").notNull(),
-  sourceUrl: text("source_url"),
-  type: text("type").notNull(), // constitution, law, regulation, treaty, other
-  lastSynced: timestamp("last_synced"),
-  createdAt: timestamp("created_at").defaultNow(),
+const legalProcessSchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  type: { type: String, required: true },
+  title: { type: String, required: true },
+  description: { type: String },
+  status: { type: String, default: "pending" },
+  currentStep: { type: Number, default: 0 },
+  totalSteps: { type: Number, required: true },
+  metadata: { type: Schema.Types.Mixed },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
 });
 
-export const legalProcesses = pgTable("legal_processes", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull().references(() => users.id),
-  processType: text("process_type").notNull(), // divorcio, contrato, laboral
-  currentStep: integer("current_step").notNull().default(0),
-  status: text("status").notNull().default("in_progress"), // in_progress, completed, canceled, pending_review
-  data: json("data").notNull().default({}),
-  startDate: timestamp("start_date").defaultNow(),
-  lastUpdated: timestamp("last_updated").defaultNow(),
-  finalDocumentUrl: text("final_document_url"),
+const consultationSchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  query: { type: String, required: true },
+  response: { type: String, required: true },
+  country: { type: String, default: "EC" },
+  language: { type: String, default: "es" },
+  metadata: { type: Schema.Types.Mixed },
+  createdAt: { type: Date, default: Date.now },
 });
 
-export const consultations = pgTable("consultations", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull().references(() => users.id),
-  query: text("query").notNull(),
-  response: text("response").notNull(),
-  country: text("country").notNull(),
-  language: text("language").notNull(),
-  createdAt: timestamp("created_at").defaultNow(),
+const emergencyAlertSchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  latitude: { type: String },
+  longitude: { type: String },
+  address: { type: String },
+  contactsNotified: { type: Schema.Types.Mixed },
+  status: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
 });
 
-export const emergencyAlerts = pgTable("emergency_alerts", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull().references(() => users.id),
-  latitude: decimal("latitude", { precision: 10, scale: 8 }),
-  longitude: decimal("longitude", { precision: 11, scale: 8 }),
-  address: text("address"),
-  contactsNotified: json("contacts_notified").notNull().default([]),
-  status: text("status").notNull().default("sent"), // sent, failed, partial
-  createdAt: timestamp("created_at").defaultNow(),
+// For RAG and vector search
+const legalDocumentSchema = new Schema({
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  country: { type: String, required: true },
+  category: { type: String, required: true },
+  tags: [{ type: String }],
+  embedding: [{ type: Number }], // Vector embeddings for similarity search
+  constitutionId: { type: String },
+  sectionId: { type: String },
+  sectionName: { type: String },
+  createdAt: { type: Date, default: Date.now },
 });
 
-// Insert schemas
-export const insertUserSchema = createInsertSchema(users).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
+// Conversation history for context-aware responses
+const conversationSchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  sessionId: { type: String, required: true },
+  messages: [{
+    role: { type: String, enum: ['user', 'assistant'], required: true },
+    content: { type: String, required: true },
+    timestamp: { type: Date, default: Date.now }
+  }],
+  context: { type: Schema.Types.Mixed },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
 });
 
-export const insertEmergencyContactSchema = createInsertSchema(emergencyContacts).omit({
-  id: true,
-  createdAt: true,
+// Mongoose Models
+export const User = mongoose.models.User || mongoose.model('User', userSchema);
+export const EmergencyContact = mongoose.models.EmergencyContact || mongoose.model('EmergencyContact', emergencyContactSchema);
+export const LegalProcess = mongoose.models.LegalProcess || mongoose.model('LegalProcess', legalProcessSchema);
+export const Consultation = mongoose.models.Consultation || mongoose.model('Consultation', consultationSchema);
+export const EmergencyAlert = mongoose.models.EmergencyAlert || mongoose.model('EmergencyAlert', emergencyAlertSchema);
+export const LegalDocument = mongoose.models.LegalDocument || mongoose.model('LegalDocument', legalDocumentSchema);
+export const Conversation = mongoose.models.Conversation || mongoose.model('Conversation', conversationSchema);
+
+// Zod validation schemas
+export const insertUserSchema = z.object({
+  email: z.string().email(),
+  name: z.string().min(1),
+  googleId: z.string().optional(),
+  language: z.string().optional(),
+  country: z.string().optional(),
 });
 
-export const insertLegalProcessSchema = createInsertSchema(legalProcesses).omit({
-  id: true,
-  startDate: true,
-  lastUpdated: true,
+export const insertEmergencyContactSchema = z.object({
+  userId: z.string(),
+  name: z.string().min(1),
+  phone: z.string().min(1),
+  relationship: z.string().min(1),
+  whatsappEnabled: z.boolean().optional(),
 });
 
-export const insertConsultationSchema = createInsertSchema(consultations).omit({
-  id: true,
-  createdAt: true,
+export const insertLegalProcessSchema = z.object({
+  userId: z.string(),
+  type: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().optional(),
+  status: z.string().optional(),
+  currentStep: z.number().optional(),
+  totalSteps: z.number().min(1),
+  metadata: z.any().optional(),
 });
 
-export const insertEmergencyAlertSchema = createInsertSchema(emergencyAlerts).omit({
-  id: true,
-  createdAt: true,
+export const insertConsultationSchema = z.object({
+  userId: z.string(),
+  query: z.string().min(1),
+  response: z.string().min(1),
+  country: z.string().optional(),
+  language: z.string().optional(),
+  metadata: z.any().optional(),
 });
 
-// Types
-export type User = typeof users.$inferSelect;
+export const insertEmergencyAlertSchema = z.object({
+  userId: z.string(),
+  latitude: z.string().optional(),
+  longitude: z.string().optional(),
+  address: z.string().optional(),
+  contactsNotified: z.any().optional(),
+  status: z.string().min(1),
+});
+
+// TypeScript types
+export interface UserDocument extends Document {
+  email: string;
+  name: string;
+  googleId?: string;
+  language: string;
+  country: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface EmergencyContactDocument extends Document {
+  userId: string;
+  name: string;
+  phone: string;
+  relationship: string;
+  whatsappEnabled: boolean;
+  createdAt: Date;
+}
+
+export interface LegalProcessDocument extends Document {
+  userId: string;
+  type: string;
+  title: string;
+  description?: string;
+  status: string;
+  currentStep: number;
+  totalSteps: number;
+  metadata?: any;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ConsultationDocument extends Document {
+  userId: string;
+  query: string;
+  response: string;
+  country: string;
+  language: string;
+  metadata?: any;
+  createdAt: Date;
+}
+
+export interface EmergencyAlertDocument extends Document {
+  userId: string;
+  latitude?: string;
+  longitude?: string;
+  address?: string;
+  contactsNotified?: any;
+  status: string;
+  createdAt: Date;
+}
+
+export interface LegalDocumentDocument extends Document {
+  title: string;
+  content: string;
+  country: string;
+  category: string;
+  tags: string[];
+  embedding: number[];
+  constitutionId?: string;
+  sectionId?: string;
+  sectionName?: string;
+  createdAt: Date;
+}
+
+export interface ConversationDocument extends Document {
+  userId: string;
+  sessionId: string;
+  messages: Array<{
+    role: 'user' | 'assistant';
+    content: string;
+    timestamp: Date;
+  }>;
+  context?: any;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
-export type EmergencyContact = typeof emergencyContacts.$inferSelect;
 export type InsertEmergencyContact = z.infer<typeof insertEmergencyContactSchema>;
-export type LegalProcess = typeof legalProcesses.$inferSelect;
 export type InsertLegalProcess = z.infer<typeof insertLegalProcessSchema>;
-export type Consultation = typeof consultations.$inferSelect;
 export type InsertConsultation = z.infer<typeof insertConsultationSchema>;
-export type EmergencyAlert = typeof emergencyAlerts.$inferSelect;
 export type InsertEmergencyAlert = z.infer<typeof insertEmergencyAlertSchema>;

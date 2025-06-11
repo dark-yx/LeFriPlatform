@@ -20,8 +20,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Auth middleware (simplified for demo)
   const requireAuth = (req: any, res: any, next: any) => {
-    const userId = req.headers['x-user-id'] || '1'; // Demo user
-    req.userId = parseInt(userId as string);
+    const userId = req.headers['x-user-id'] || '66a1b2c3d4e5f6789abc1234'; // Demo user
+    req.userId = userId as string;
     next();
   };
 
