@@ -13,6 +13,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Navbar } from '@/components/navbar';
 import { EmergencyButton } from '@/components/emergency-button';
 import { api } from '@/lib/api';
+import { EditContactDialog } from '@/components/edit-contact-dialog';
 import { useLocation } from 'wouter';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,6 +31,7 @@ type EmergencyContactForm = z.infer<typeof emergencyContactSchema>;
 export default function Emergencia() {
   const [, setLocation] = useLocation();
   const [isAddingContact, setIsAddingContact] = useState(false);
+  const [editingContact, setEditingContact] = useState<any>(null);
   const queryClient = useQueryClient();
 
   const { data: emergencyContacts } = useQuery({
@@ -295,6 +297,13 @@ export default function Emergencia() {
           </div>
         </div>
       </main>
+      
+      {/* Edit Contact Dialog */}
+      <EditContactDialog
+        contact={editingContact}
+        isOpen={!!editingContact}
+        onClose={() => setEditingContact(null)}
+      />
     </div>
   );
 }

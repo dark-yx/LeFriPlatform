@@ -17,6 +17,9 @@ export function Navbar() {
   const handleLanguageChange = (newLanguage: string) => {
     setLanguage(newLanguage);
     updateUser({ language: newLanguage });
+    // Update translation context
+    localStorage.setItem('language', newLanguage);
+    window.location.reload(); // Temporary reload for immediate effect
   };
 
   const handleLogout = () => {
