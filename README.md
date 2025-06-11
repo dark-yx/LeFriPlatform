@@ -1,142 +1,152 @@
 # LeFri Platform
 
-Plataforma legal integral que combina consultas legales, gestión de procesos y alertas de emergencia.
+A comprehensive legal platform that combines legal consultations, process management, and emergency alerts.
 
-## 🚀 Tecnologías
+## 🚀 Technologies
 
 - **Frontend**: React, TypeScript, TailwindCSS, Vite
 - **Backend**: Node.js, Express, TypeScript
-- **Base de Datos**: MongoDB
-- **Autenticación**: Google OAuth 2.0
-- **APIs Integradas**: 
+- **Database**: MongoDB
+- **Authentication**: Google OAuth 2.0
+- **Integrated APIs**: 
   - Google Gemini AI
   - WhatsApp Business API
-  - Servicios de Email
-  - Servicios de Voz
+  - Email Services
+  - Voice Services
 
-## 📦 Estructura del Proyecto
+## 📦 Project Structure
 
 ```
 LeFriPlatform/
-├── client/                 # Frontend React
+├── client/                 # React Frontend
 │   ├── src/
-│   │   ├── components/    # Componentes reutilizables
-│   │   ├── pages/        # Páginas principales
-│   │   ├── contexts/     # Contextos de React
-│   │   ├── hooks/        # Hooks personalizados
-│   │   └── types/        # Tipos TypeScript
-├── server/                # Backend Express
-│   ├── config/           # Configuraciones
-│   ├── services/         # Servicios externos
-│   ├── storage/          # Capa de persistencia
-│   └── types/            # Tipos TypeScript
-└── shared/               # Código compartido
+│   │   ├── components/    # Reusable components
+│   │   ├── pages/        # Main pages
+│   │   ├── contexts/     # React contexts
+│   │   ├── hooks/        # Custom hooks
+│   │   └── types/        # TypeScript types
+├── server/                # Express Backend
+│   ├── config/           # Configurations
+│   ├── services/         # External services
+│   ├── storage/          # Persistence layer
+│   └── types/            # TypeScript types
+└── shared/               # Shared code
 ```
 
-## 🛠️ Instalación
+## 🛠️ Installation
 
-1. Clonar el repositorio:
+1. Clone the repository:
 ```bash
-git clone https://github.com/tu-usuario/LeFriPlatform.git
+git clone https://github.com/dark-yx/LeFriPlatform.git
 cd LeFriPlatform
 ```
 
-2. Instalar dependencias:
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Configurar variables de entorno:
+3. Configure environment variables:
 
-En el directorio raíz, crear `.env`:
+In the root directory, create `.env`:
 ```env
-GOOGLE_OAUTH_CLIENT_ID=tu_client_id_de_google
-GOOGLE_OAUTH_CLIENT_SECRET=tu_client_secret_de_google
+GOOGLE_OAUTH_CLIENT_ID=your_google_client_id
+GOOGLE_OAUTH_CLIENT_SECRET=your_google_client_secret
 GOOGLE_OAUTH_REDIRECT_URI=http://localhost:5000/api/auth/google/callback
-MONGODB_URI=tu_uri_de_mongodb
-SESSION_SECRET=tu_secreto_seguro
+MONGODB_URI=your_mongodb_uri
+SESSION_SECRET=your_secure_secret
 ```
 
-En el directorio `client`, crear `.env`:
+In the `client` directory, create `.env`:
 ```env
-VITE_GOOGLE_CLIENT_ID=tu_client_id_de_google
+VITE_GOOGLE_CLIENT_ID=your_google_client_id
 VITE_API_URL=http://localhost:5000
 ```
 
-4. Configurar Google OAuth:
-   - Ir a [Google Cloud Console](https://console.cloud.google.com)
-   - Crear un nuevo proyecto o seleccionar uno existente
-   - Habilitar la API de Google OAuth 2.0
-   - Crear credenciales OAuth 2.0
-   - Agregar los siguientes URIs autorizados:
+4. Configure Google OAuth:
+   - Go to [Google Cloud Console](https://console.cloud.google.com)
+   - Create a new project or select an existing one
+   - Enable Google OAuth 2.0 API
+   - Create OAuth 2.0 credentials
+   - Add the following authorized URIs:
      - `http://localhost:5000`
      - `http://localhost:5173`
-   - Agregar los siguientes orígenes de JavaScript:
+   - Add the following JavaScript origins:
      - `http://localhost:5000`
      - `http://localhost:5173`
 
-5. Iniciar el servidor de desarrollo:
+5. Start the development server:
 ```bash
 npm run dev
 ```
 
-## 🔑 Autenticación
+## 🔑 Authentication
 
-La aplicación utiliza Google OAuth 2.0 para la autenticación. Para que funcione correctamente:
+The application uses Google OAuth 2.0 for authentication. To ensure proper functionality:
 
-1. Asegúrate de que las variables de entorno estén configuradas correctamente
-2. Verifica que los URIs de redirección estén configurados en Google Cloud Console
-3. El cliente ID debe ser el mismo en ambos archivos `.env`
+1. Make sure environment variables are correctly configured
+2. Verify redirect URIs are set up in Google Cloud Console
+3. The client ID must be the same in both `.env` files
 
-## 🚨 Solución de Problemas
+## 🚨 Troubleshooting
 
-### Error de Autenticación con Google
+### Google Authentication Error
 
-Si encuentras el error "Respuesta inválida del servidor":
+If you encounter the "Invalid server response" error:
 
-1. Verifica los logs en la consola del navegador (F12)
-2. Asegúrate de que el servidor esté corriendo en el puerto 5000
-3. Verifica que las variables de entorno estén configuradas correctamente
-4. Limpia el caché del navegador y los datos de localStorage
-5. Reinicia el servidor
+1. Check the browser console logs (F12)
+2. Ensure the server is running on port 5000
+3. Verify environment variables are correctly configured
+4. Clear browser cache and localStorage data
+5. Restart the server
 
-### Problemas Comunes
+### Common Issues
 
-1. **Error de CORS**: 
-   - Verifica que los orígenes estén configurados correctamente
-   - Asegúrate de que el servidor esté configurado para aceptar las credenciales
+1. **CORS Error**: 
+   - Verify origins are correctly configured
+   - Ensure the server is configured to accept credentials
 
-2. **Error de Conexión a MongoDB**:
-   - Verifica la URI de MongoDB
-   - Asegúrate de que la base de datos esté accesible
+2. **MongoDB Connection Error**:
+   - Verify MongoDB URI
+   - Ensure database is accessible
 
-3. **Error de Autenticación**:
-   - Verifica las credenciales de Google OAuth
-   - Asegúrate de que los URIs de redirección estén configurados correctamente
+3. **Authentication Error**:
+   - Verify Google OAuth credentials
+   - Ensure redirect URIs are correctly configured
 
-## 📝 Scripts Disponibles
+## 📝 Available Scripts
 
-- `npm run dev`: Inicia el servidor de desarrollo
-- `npm run build`: Construye la aplicación para producción
-- `npm run start`: Inicia la aplicación en modo producción
-- `npm run check`: Verifica los tipos TypeScript
+- `npm run dev`: Start development server
+- `npm run build`: Build for production
+- `npm run start`: Start production server
+- `npm run check`: TypeScript type checking
 
-## 🔒 Seguridad
+## 🔒 Security
 
-- Autenticación mediante Google OAuth 2.0
-- Sesiones seguras con express-session
-- Protección contra ataques CSRF
-- Validación de datos con Zod
-- Sanitización de entradas
+- Google OAuth 2.0 Authentication
+- Secure sessions with express-session
+- CSRF protection
+- Data validation with Zod
+- Input sanitization
 
-## 🤝 Contribuir
+## 📄 License
 
-1. Fork el repositorio
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+All rights reserved.
 
-## 📄 Licencia
+This software and its documentation are the intellectual property of LeFriPlatform. The following are strictly prohibited:
 
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.md) para más detalles.
+- Reproduction of all or part of the code
+- Distribution or commercialization of the software
+- Modification or creation of derivative works
+- Unauthorized use of any part of the intellectual property
+
+Any unauthorized use of this software constitutes copyright infringement and may result in legal action.
+
+## 🙏 Acknowledgments
+
+- Underlife Foundation
+- Weblifetech
+
+---
+
+Developed with ❤️ in Ecuador
