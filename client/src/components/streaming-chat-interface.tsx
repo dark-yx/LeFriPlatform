@@ -158,10 +158,10 @@ export function StreamingChatInterface({ country }: StreamingChatInterfaceProps)
   };
 
   const quickQuestions = [
-    "What are my basic labor rights?",
-    "How can I start a divorce process?",
-    "What should I do if I'm not being paid my salary?",
-    "What are tenant rights?"
+    t('consultation.laborRights'),
+    t('consultation.quickDivorce'),
+    t('consultation.contracts'),
+    t('consultation.familyLaw')
   ];
 
   return (
