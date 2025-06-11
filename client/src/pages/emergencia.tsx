@@ -164,7 +164,7 @@ export default function Emergencia() {
                         </div>
                         
                         <div>
-                          <Label htmlFor="phone">Número de Teléfono</Label>
+                          <Label htmlFor="phone">Phone Number</Label>
                           <Input
                             id="phone"
                             type="tel"
