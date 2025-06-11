@@ -1,4 +1,4 @@
-# LeFriPlatform
+# LeFri Platform
 
 ## Derechos de Autor y Licencia
 
@@ -13,21 +13,16 @@ Este software y su documentación son propiedad intelectual de LeFriPlatform. Se
 
 Cualquier uso no autorizado de este software constituirá una violación de los derechos de autor y podrá resultar en acciones legales.
 
-# LeFri Platform
+## 🚀 Descripción del Proyecto
 
-A comprehensive web platform developed as a free and public access project, sponsored by Fundación Underlife and Weblifetech.
+LeFri Platform es una plataforma web moderna desarrollada con tecnologías de vanguardia para proporcionar una solución robusta y escalable. El proyecto está desarrollado en Ecuador.
 
-## 🚀 Project Overview
-
-LeFri Platform is a modern web application built with cutting-edge technologies to provide a robust and scalable solution. The project is developed in Ecuador and is available as an open-source initiative.
-
-## 👨‍💻 Author
+## 👨‍💻 Autor
 
 - **Jonnatan Peña**
-- Location: Ecuador
-- Project Sponsors: Fundación Underlife and Weblifetech
+- Ubicación: Ecuador
 
-## 🛠️ Technical Stack
+## 🛠️ Stack Tecnológico
 
 ### Frontend
 - React 18
@@ -35,36 +30,35 @@ LeFri Platform is a modern web application built with cutting-edge technologies 
 - TailwindCSS
 - Radix UI Components
 - React Query
-- Zustand (State Management)
-- Wouter (Routing)
-- Framer Motion (Animations)
+- Zustand (Gestión de Estado)
+- Wouter (Enrutamiento)
+- Framer Motion (Animaciones)
 
 ### Backend
 - Node.js
 - Express.js
 - TypeScript
-- MongoDB with Mongoose
-- WebSocket Support
-- Passport.js (Authentication)
+- MongoDB con Mongoose
+- Soporte WebSocket
+- Passport.js (Autenticación)
 
-### Development Tools
-- Vite
-- ESBuild
-- TypeScript
-- TailwindCSS
-- PostCSS
+### API de WhatsApp
+- Implementación personalizada
+- Integración con múltiples proveedores
+- Sistema de gestión de leads
+- Manejo de mensajes en tiempo real
 
-## 📦 Key Dependencies
+## 📦 Dependencias Principales
 
-### UI Components
-- @radix-ui/* (Comprehensive UI component library)
-- @tanstack/react-query (Data fetching and caching)
-- framer-motion (Animations)
-- lucide-react (Icons)
-- react-hook-form (Form handling)
-- zod (Schema validation)
+### Componentes UI
+- @radix-ui/* (Biblioteca de componentes UI)
+- @tanstack/react-query (Manejo de datos y caché)
+- framer-motion (Animaciones)
+- lucide-react (Iconos)
+- react-hook-form (Manejo de formularios)
+- zod (Validación de esquemas)
 
-### Backend Services
+### Servicios Backend
 - express
 - mongoose
 - passport
@@ -72,79 +66,79 @@ LeFri Platform is a modern web application built with cutting-edge technologies 
 - ws (WebSocket)
 - googleapis
 
-## 🏗️ Project Structure
+## 🏗️ Estructura del Proyecto
 
 ```
 LeFriPlatform/
-├── client/                 # Frontend application
-│   ├── src/               # Source code
-│   └── index.html         # Entry HTML file
-├── server/                # Backend application
-├── shared/                # Shared utilities and types
-├── uploads/               # File upload directory
-├── api-whatsapp-ts/       # WhatsApp API integration
-└── attached_assets/       # Static assets
+├── client/                 # Aplicación Frontend
+│   ├── src/               # Código fuente
+│   └── index.html         # Archivo HTML principal
+├── server/                # Aplicación Backend
+├── shared/                # Utilidades y tipos compartidos
+├── uploads/               # Directorio de archivos subidos
+├── whatsapp-api/          # Integración de API de WhatsApp
+└── attached_assets/       # Recursos estáticos
 ```
 
-## 🚀 Getting Started
+## 🚀 Comenzando
 
-### Prerequisites
-- Node.js (Latest LTS version)
+### Prerrequisitos
+- Node.js (Última versión LTS)
 - MongoDB
-- npm or yarn
+- npm o yarn
 
-### Installation
+### Instalación
 
-1. Clone the repository
+1. Clonar el repositorio
 ```bash
-git clone [repository-url]
+git clone https://github.com/dark-yx/LeFriPlatform.git
 ```
 
-2. Install dependencies
+2. Instalar dependencias
 ```bash
 npm install
 ```
 
-3. Set up environment variables
+3. Configurar variables de entorno
 ```bash
 cp .env.example .env
 ```
 
-4. Start development server
+4. Iniciar servidor de desarrollo
 ```bash
 npm run dev
 ```
 
-## 📝 Available Scripts
+## 📝 Scripts Disponibles
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run check` - Type checking
-- `npm run db:push` - Database schema updates
+- `npm run dev` - Iniciar servidor de desarrollo
+- `npm run build` - Construir para producción
+- `npm run start` - Iniciar servidor de producción
+- `npm run check` - Verificación de tipos
+- `npm run db:push` - Actualizaciones de esquema de base de datos
 
-## 🔒 Security Features
+## 🔒 Características de Seguridad
 
-- Passport.js authentication
-- Session management
-- Secure file uploads
-- Input validation with Zod
-- Environment variable protection
+- Autenticación con Passport.js
+- Gestión de sesiones
+- Subida segura de archivos
+- Validación de entrada con Zod
+- Protección de variables de entorno
 
-## 🌐 API Integration
+## 🌐 Integración de APIs
 
-- WhatsApp API integration
-- Google APIs
-- Email service integration
-- WebSocket support for real-time features
+- API de WhatsApp personalizada
+- APIs de Google
+- Integración de servicio de correo
+- Soporte WebSocket para características en tiempo real
 
-## 🎨 UI/UX Features
+## 🎨 Características UI/UX
 
-- Responsive design
-- Dark/Light theme support
-- Modern component library
-- Smooth animations
-- Accessible components
+- Diseño responsivo
+- Soporte para tema claro/oscuro
+- Biblioteca moderna de componentes
+- Animaciones suaves
+- Componentes accesibles
 
 ## 📄 License
 
@@ -162,4 +156,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-Built with ❤️ in Ecuador 
+Desarrollado con ❤️ en Ecuador 
