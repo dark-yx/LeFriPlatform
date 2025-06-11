@@ -27,7 +27,7 @@ export function StreamingChatInterface({ country }: StreamingChatInterfaceProps)
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome',
-      content: '¡Hola! Soy tu asistente legal inteligente. Puedo ayudarte con consultas sobre leyes, derechos, procesos legales y la constitución de tu país. ¿En qué puedo ayudarte hoy?',
+      content: 'Hello! I\'m your intelligent legal assistant. I can help you with questions about laws, rights, legal processes, and your country\'s constitution. How can I help you today?',
       sender: 'ai',
       timestamp: new Date(),
     }
@@ -156,10 +156,10 @@ export function StreamingChatInterface({ country }: StreamingChatInterfaceProps)
   };
 
   const quickQuestions = [
-    "¿Cuáles son mis derechos laborales básicos?",
-    "¿Cómo puedo iniciar un proceso de divorcio?",
-    "¿Qué debo hacer si no me pagan mi salario?",
-    "¿Cuáles son los derechos de los inquilinos?"
+    "What are my basic labor rights?",
+    "How can I start a divorce process?",
+    "What should I do if I'm not being paid my salary?",
+    "What are tenant rights?"
   ];
 
   return (

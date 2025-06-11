@@ -88,9 +88,8 @@ export default function Profile() {
   ];
 
   const languages = [
-    { value: 'es', label: '🇪🇸 Español' },
     { value: 'en', label: '🇺🇸 English' },
-    { value: 'fr', label: '🇫🇷 Français' },
+    { value: 'es', label: '🇪🇸 Español' },
   ];
 
   // Calculate total usage time (mock)

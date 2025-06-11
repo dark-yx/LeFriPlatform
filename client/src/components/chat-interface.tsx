@@ -19,7 +19,9 @@ export function ChatInterface({ country, processId }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
-      content: '¡Hola! Soy tu asistente legal. Puedes hacerme cualquier pregunta sobre leyes, derechos o procesos legales. ¿En qué puedo ayudarte hoy?',
+      content: processId 
+        ? 'Hello! I\'m your legal assistant specialized in process guidance. I have access to your current process information and can help you with specific questions about your case. What would you like to know?'
+        : 'Hello! I\'m your legal assistant. You can ask me any questions about laws, rights, or legal processes. How can I help you today?',
       sender: 'ai',
       timestamp: new Date(),
     },

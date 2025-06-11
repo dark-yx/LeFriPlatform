@@ -5,8 +5,9 @@ import { z } from 'zod';
 const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   name: { type: String, required: true },
+  phone: { type: String },
   googleId: { type: String },
-  language: { type: String, default: "es" },
+  language: { type: String, default: "en" },
   country: { type: String, default: "EC" },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

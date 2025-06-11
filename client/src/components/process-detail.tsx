@@ -303,12 +303,12 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
             <CardTitle>Base Legal</CardTitle>
           </CardHeader>
           <CardContent>
-            <ScrollArea className="h-64">
+            <ScrollArea className="h-96">
               <div className="space-y-4">
                 <div>
-                  <Label>Fundamento Legal</Label>
+                  <Label>Legal Foundation</Label>
                   <div 
-                    className="mt-1 p-3 border rounded-md bg-white min-h-[100px] prose prose-sm max-w-none"
+                    className="mt-1 p-4 border rounded-md bg-white min-h-[200px] prose prose-sm max-w-none"
                     dangerouslySetInnerHTML={{ __html: processData.legalBasis || '' }}
                   />
                 </div>
