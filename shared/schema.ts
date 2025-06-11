@@ -121,6 +121,7 @@ export const Conversation = mongoose.models.Conversation || mongoose.model('Conv
 export const insertUserSchema = z.object({
   email: z.string().email(),
   name: z.string().min(1),
+  phone: z.string().optional(),
   googleId: z.string().optional(),
   language: z.string().optional(),
   country: z.string().optional(),
@@ -167,6 +168,7 @@ export const insertEmergencyAlertSchema = z.object({
 export interface UserDocument extends Document {
   email: string;
   name: string;
+  phone?: string;
   googleId?: string;
   language: string;
   country: string;

@@ -17,7 +17,7 @@ import { z } from 'zod';
 const profileSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   email: z.string().email('Valid email is required'),
-  phone: z.string().min(10, 'Phone number must be at least 10 digits'),
+  phone: z.string().optional(),
   language: z.string(),
   country: z.string(),
 });
@@ -111,7 +111,7 @@ export default function Profile() {
             >
               <ArrowLeft className="w-5 h-5 text-neutral-600" />
             </Button>
-            <h1 className="text-2xl font-bold text-neutral-900">Mi Perfil</h1>
+            <h1 className="text-2xl font-bold text-neutral-900">My Profile</h1>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -121,14 +121,14 @@ export default function Profile() {
                 <CardHeader>
                   <CardTitle className="text-xl flex items-center space-x-2">
                     <User className="w-5 h-5" />
-                    <span>Información Personal</span>
+                    <span>Personal Information</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="name">Nombre Completo</Label>
+                        <Label htmlFor="name">Full Name</Label>
                         <Input
                           id="name"
                           {...register('name')}
@@ -166,7 +166,7 @@ export default function Profile() {
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="country">País</Label>
+                        <Label htmlFor="country">Country</Label>
                         <Select 
                           value={watch('country')} 
                           onValueChange={(value) => setValue('country', value)}
@@ -184,7 +184,7 @@ export default function Profile() {
                         </Select>
                       </div>
                       <div>
-                        <Label htmlFor="language">Idioma Preferido</Label>
+                        <Label htmlFor="language">Preferred Language</Label>
                         <Select 
                           value={watch('language')} 
                           onValueChange={(value) => setValue('language', value)}
