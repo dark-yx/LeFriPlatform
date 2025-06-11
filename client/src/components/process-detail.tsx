@@ -344,7 +344,7 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {processData.steps.map((step, index) => (
+            {(processData.steps || []).map((step, index) => (
               <div key={step.id} className="border rounded-lg p-4">
                 <div className="flex items-start gap-3">
                   <Checkbox
@@ -372,11 +372,11 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
                         Fecha límite: {new Date(step.dueDate).toLocaleDateString()}
                       </p>
                     )}
-                    {step.requirements.length > 0 && (
+                    {(step.requirements || []).length > 0 && (
                       <div className="mt-2">
                         <Label className="text-xs">Requisitos:</Label>
                         <ul className="text-xs text-muted-foreground mt-1 space-y-1">
-                          {step.requirements.map((req, reqIndex) => (
+                          {(step.requirements || []).map((req, reqIndex) => (
                             <li key={reqIndex} className="flex items-center gap-1">
                               <span className="w-1 h-1 bg-current rounded-full" />
                               {req}
@@ -385,11 +385,11 @@ export function ProcessDetail({ processId, country }: ProcessDetailProps) {
                         </ul>
                       </div>
                     )}
-                    {step.documents.length > 0 && (
+                    {(step.documents || []).length > 0 && (
                       <div className="mt-2">
                         <Label className="text-xs">Documentos necesarios:</Label>
                         <div className="flex flex-wrap gap-1 mt-1">
-                          {step.documents.map((doc, docIndex) => (
+                          {(step.documents || []).map((doc, docIndex) => (
                             <Badge key={docIndex} variant="outline" className="text-xs">
                               {doc}
                             </Badge>
