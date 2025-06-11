@@ -175,7 +175,7 @@ export function VoiceRecorder({
       const response = await fetch('/api/voice/upload', {
         method: 'POST',
         headers: {
-          'X-User-Id': '1', // Demo auth
+          'x-user-id': '66a1b2c3d4e5f6789abc1234',
         },
         body: formData,
       });

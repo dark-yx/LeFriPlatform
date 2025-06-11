@@ -9,6 +9,7 @@ import { emailService } from "./services/email";
 import { voiceService } from "./services/voice";
 import { multiAgentService } from "./services/multi-agent";
 import multer from 'multer';
+import puppeteer from 'puppeteer';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Configure multer for file uploads
@@ -528,9 +529,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
         </html>
       `;
 
+      // Generate PDF using Puppeteer
+      const browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+      const page = await browser.newPage();
+      await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+      
+      const pdfBuffer = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' }
+      });
+      
+      await browser.close();
+
       res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `attachment; filename="${process.title.replace(/[^a-zA-Z0-9]/g, '_')}.html"`);
-      res.send(htmlContent);
+      res.setHeader('Content-Disposition', `attachment; filename="${process.title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf"`);
+      res.send(pdfBuffer);
       
     } catch (error) {
       console.error('Document generation error:', error);

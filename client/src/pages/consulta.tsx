@@ -39,11 +39,11 @@ export default function Consulta() {
               >
                 <ArrowLeft className="w-5 h-5 text-neutral-600" />
               </Button>
-              <h1 className="text-2xl font-bold text-neutral-900">{t.consultation}</h1>
+              <h1 className="text-2xl font-bold text-neutral-900">Consulta Legal</h1>
             </div>
             
             <div className="flex items-center space-x-2">
-              <label className="text-sm font-medium text-neutral-700">{t.country}:</label>
+              <label className="text-sm font-medium text-neutral-700">País:</label>
               <Select value={selectedCountry} onValueChange={setSelectedCountry}>
                 <SelectTrigger className="w-[180px] bg-white border-neutral-300">
                   <SelectValue />
