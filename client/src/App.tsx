@@ -11,6 +11,8 @@ import Proceso from "@/pages/proceso";
 import Emergencia from "@/pages/emergencia";
 import Profile from "@/pages/profile";
 import NotFound from "@/pages/not-found";
+import { ProcessesPage } from "@/pages/processes";
+import { ProcessDetailPage } from "@/pages/process-detail";
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
@@ -50,6 +52,18 @@ function Router() {
       <Route path="/proceso">
         <AuthGuard>
           <Proceso />
+        </AuthGuard>
+      </Route>
+      
+      <Route path="/processes">
+        <AuthGuard>
+          <ProcessesPage />
+        </AuthGuard>
+      </Route>
+      
+      <Route path="/processes/:id">
+        <AuthGuard>
+          <ProcessDetailPage />
         </AuthGuard>
       </Route>
       
