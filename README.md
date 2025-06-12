@@ -65,14 +65,56 @@ npm install
 
 In the root directory, create `.env`:
 ```env
+# Google OAuth Configuration
 GOOGLE_OAUTH_CLIENT_ID=your_google_client_id
 GOOGLE_OAUTH_CLIENT_SECRET=your_google_client_secret
 GOOGLE_OAUTH_REDIRECT_URI=http://localhost:5000/api/auth/google/callback
+
+# Database Configuration
 MONGODB_URI=your_mongodb_uri
 SESSION_SECRET=your_secure_secret
+
+# Google Gemini AI Configuration
+GOOGLE_GEMINI_API_KEY=your_gemini_api_key
+
+# WhatsApp Business API Configuration
+WHATSAPP_API_KEY=your_whatsapp_api_key
+WHATSAPP_PHONE_NUMBER_ID=your_whatsapp_phone_number_id
+WHATSAPP_BUSINESS_ACCOUNT_ID=your_whatsapp_business_account_id
+
+# Email Service Configuration
+SMTP_HOST=your_smtp_host
+SMTP_PORT=your_smtp_port
+SMTP_USER=your_smtp_user
+SMTP_PASSWORD=your_smtp_password
+EMAIL_FROM=your_email_address
+
+# Voice Service Configuration
+VOICE_API_KEY=your_voice_api_key
+VOICE_API_SECRET=your_voice_api_secret
 ```
 
-4. Configure Google OAuth:
+4. Configure API Services:
+   - **Google Gemini AI**:
+     - Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
+     - Create a new API key
+     - Add the API key to your `.env` file
+
+   - **WhatsApp Business API**:
+     - Go to [Meta for Developers](https://developers.facebook.com/)
+     - Create a WhatsApp Business account
+     - Set up your WhatsApp Business API
+     - Add the credentials to your `.env` file
+
+   - **Email Service**:
+     - Set up an SMTP server (e.g., Gmail, SendGrid, etc.)
+     - Add the SMTP credentials to your `.env` file
+
+   - **Voice Service**:
+     - Set up your preferred voice service provider
+     - Add the voice service credentials to your `.env` file
+
+5. Configure Google OAuth:
    - Go to [Google Cloud Console](https://console.cloud.google.com)
    - Create a new project or select an existing one
    - Enable Google OAuth 2.0 API
@@ -82,7 +124,7 @@ SESSION_SECRET=your_secure_secret
    - Add the following JavaScript origin:
      - `http://localhost:5000`
 
-5. Start the development server:
+6. Start the development server:
 ```bash
 npm run dev
 ```
@@ -117,6 +159,11 @@ If you encounter the "Invalid server response" error:
    - Verify Google OAuth credentials
    - Ensure redirect URI is correctly configured
 
+3. **API Integration Issues**:
+   - Verify all API keys are correctly set in `.env`
+   - Check API service status and quotas
+   - Ensure proper API permissions are granted
+
 ## 📝 Available Scripts
 
 - `npm run dev`: Start development server
@@ -131,6 +178,8 @@ If you encounter the "Invalid server response" error:
 - CSRF protection
 - Data validation with Zod
 - Input sanitization
+- API key protection
+- Environment variable security
 
 ## 📄 License
 
