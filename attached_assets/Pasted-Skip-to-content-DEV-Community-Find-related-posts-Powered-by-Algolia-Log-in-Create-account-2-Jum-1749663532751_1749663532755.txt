@@ -1,0 +1,653 @@
+Skip to content
+DEV Community
+Find related posts...
+Powered by  Algolia
+Log in
+Create account
+
+2
+Jump to Comments
+
+22
+Save
+
+Boost
+
+Cover image for Construyendo una app multi-lenguaje con React. 🌐
+Franklin Martinez
+Franklin Martinez
+Posted on 17 feb 2023
+
+
+28
+
+3
+
+3
+
+2
+
+3
+Construyendo una app multi-lenguaje con React. 🌐
+#
+javascript
+#
+react
+#
+spanish
+#
+tutorial
+En la actualidad, crear una app que soporte varios idiomas se vuelve mas indispensable para llegar a un gran alcance con los usuarios. Asi que en esta ocasión, con ayuda de React vamos a construirlo.
+
+ 
+
+Tabla de contenido.
+📌 Tecnologías a utilizar.
+
+📌 Creando el proyecto.
+
+📌 Primeros pasos.
+
+📌 Configurando i18n.
+
+📌 Usando useTranslation.
+
+📌 Mover las traducciones a archivos separados.
+
+📌 Conclusión.
+
+📌 Demostración.
+
+📌 Código fuente.
+
+ 
+
+🈵 Tecnologías a utilizar. m
+▶️ React JS 18.2.0
+▶️ i18next 22.4.9
+▶️ Vite JS 4.0.0
+▶️ TypeScript 4.9.3
+▶️ CSS vanilla (Los estilos los encuentras en el repositorio al final de este post)
+🈵 Creando el proyecto.
+Al proyecto le colocaremos el nombre de: multi-lang-app (opcional, tu le puedes poner el nombre que gustes).
+
+npm create vite@latest
+Creamos el proyecto con Vite JS y seleccionamos React con TypeScript.
+
+Luego ejecutamos el siguiente comando para navegar al directorio que se acaba de crear.
+
+cd multi-lang-app
+Luego instalamos las dependencias.
+
+npm install
+Después abrimos el proyecto en un editor de código (en mi caso VS code).
+
+code .
+🈵 Primeros pasos.
+Primero vamos a instalar una librería para poder crear rutas en nuestra app. En este caso usaremos react-router-dom
+
+npm install react-router-dom
+Creamos una carpeta src/pages y dentro creamos 2 archivos que serán nuestras paginas y serán muy sencillas
+
+Home.tsx
+export const Home = () => {
+
+    return (
+        <main>
+            <h1>Multi-language app</h1>
+            <span>Select another language!</span>
+        </main>
+    )
+}
+About.tsx
+export const About = () => {
+
+    return (
+        <main>
+            <h1>About</h1>
+        </main>
+    )
+}
+También crearemos un componente Menu sencillo para que se puedan move entre rutas y cambiar el idioma desde cualquier ruta.
+
+Pero antes, vamos a definir los lenguajes a usar, en un archivo aparte. En mi caso los creare en una carpeta src/constants creamos un archivo index.ts y agregamos:
+
+export const LANGUAGES = [
+    { label: 'Spanish', code: 'es' },
+    { label: 'English', code: 'en' },
+    { label: 'Italian', code: 'it' },
+]
+Ahora si, creamos una carpeta src/components y dentro el archivo Menu.tsx y agregamos lo siguiente:
+
+import { NavLink } from 'react-router-dom';
+import { LANGUAGES } from '../constants';
+
+const isActive = ({ isActive }: any) => `link ${isActive ? 'active' : ''}`
+
+export const Menu = () => {
+
+    return (
+        <nav>
+            <div>
+                <NavLink className={isActive} to='/'>Home</NavLink>
+                <NavLink className={isActive} to='/about'>About</NavLink>
+            </div>
+
+            <select defaultValue={'es'} >
+                {
+                    LANGUAGES.map(({ code, label }) => (
+                        <option
+                            key={code}
+                            value={code}
+                        >{label}</option>
+                    ))
+                }
+            </select>
+        </nav>
+    )
+}
+Finalmente crearemos nuestro router en el archivo src/App.tsx, agregando las paginas y el componente Menu.
+
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Menu } from './components/Menu';
+import { About } from './pages/About';
+import { Home } from './pages/Home';
+
+const App = () => {
+
+  return (
+    <BrowserRouter>
+      <Menu />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/about' element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+export default App
+Y listo, ya tenemos una aplicación sencilla de dos rutas.
+
+🈵 Configurando i18n.
+Primero vamos a instalar estas dependencias.
+
+npm install i18next react-i18next
+react-i18next es el paquete que nos ayudará a traducir nuestras paginas en un proyecto de React de una forma más fácil, pero para ello necesita otro paquete que es i18next para realizar la configuración de la internacionalización
+
+Asi que básicamente, i18next es el ecosistema en si, y react-i18next es el plugin para complementarlo.
+
+Ahora vamos a crear un nuevo archivo nombrado i18n.ts lo crearemos en la dentro de la carpeta src (src/i18n.ts).
+Dentro vamos a importar el paquete de i18next y vamos a acceder al método use porque vamos a cargar el plugin de initReactI18next para usar la internacionalización con React mas fácil.
+
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+i18n.use(initReactI18next)
+
+export default i18n;
+Ahora accederemos a su método init para agregar un objeto de configuración.
+
+lng: Lenguaje por defecto.
+fallbackLng: Lenguaje que se cargara en caso de que las traducciones que el usuario busca no están disponibles.
+resources: un objeto con las traducciones que se usaran en la aplicación.
+interpolation.escapeValue: sirve para escapar los valores y evitar ataques XSS, lo pondremos en false, porque React ya lo hace por defecto.
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+i18
+    .use(initReactI18next)
+    .init({
+        lng: 'en',
+        fallbackLng: 'en',
+        interpolation:{
+            escapeValue: false
+        },
+        resources: {}
+    });
+
+export default i18n;
+En la parte de resources, tiene que crearse de la siguiente manera:
+
+La llave del objeto debe ser el código del lenguaje, en este caso "en" de "English" y luego dentro un objeto translation que dentro vendrán todas las traducciones, identificadas por llave-valor.
+
+Y es importante, mantener el mismo nombre de la llave de los objetos, lo único que cambia es su valor. Nota como en ambos objetos translation, dentro tienen la misma clave de title
+
+resources:{
+    en: {
+        translation: {
+            title: 'Multi-language app',
+        }
+    },
+    es: {
+        translation: {
+            title: 'Aplicación en varios idiomas',
+        }
+    },
+}
+Asi quedaría nuestro archivo una vez agregada las traducciones.
+
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+i18n
+    .use(i18nBackend)
+    .use(initReactI18next)
+    .init({
+        fallbackLng: 'en',
+        lng: getCurrentLang(),
+        interpolation:{
+            escapeValue: false
+        },
+        resources: {
+            en: {
+                translation: {
+                    title: 'Multi-language app',
+                    label: "Select another language!",
+                    about: 'About',
+                    home: 'Home'
+                }
+            },
+            es: {
+                translation: {
+                    title: 'Aplicación en varios idiomas',
+                    label: "Selecciona otro lenguaje!",
+                    about: 'Sobre mí',
+                    home: 'Inicio'
+                }
+            },
+            it: {
+                translation: {
+                    title: 'Applicazione multilingue',
+                    label: "Selezionare un'altra lingua ",
+                    about: 'Su di me',
+                    home: 'Casa'
+                }
+            },
+        }
+    });
+
+export default i18n;
+Finalmente este archivo solo lo importaremos en el archivo src/main.tsx
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+
+import './i18n'
+
+import './index.css'
+
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+🈵 Usando useTranslation.
+Bueno ahora que terminamos la configuración de i18n, vamos a usar las traducciones que creamos. Asi que en el archivo src/components/Menu.tsx
+
+Vamos a usar el hook que nos da react-i18next que es el useTranslation
+
+De este hook, recuperamos el objeto i18nm y la función t
+
+const { i18n, t } = useTranslation()
+Para usar las traducciones es de la siguiente manera:
+
+Mediante brackets ejecutamos la función t que recibe como parámetro un string que hace referencia a la llave de algún valor que esta dentro del objeto translation que configuramos anteriormente. (Verifica en tu configuración del archivo i18n.ts exista un objeto con la llave home y que contenga un valor).
+
+Dependiendo de lenguaje por defecto que coloques, este se mostrara.
+
+<NavLink className={isActive} to='/'>
+    {t('home')}
+</NavLink>
+Bueno, ahora vamos a cambiar entre idiomas.
+
+Primero una función que se ejecute cada vez que el select cambie
+Accedemos al valor del evento.
+Mediante el objeto i18n accedemos al método changeLanguage y le pasamos el valor por parámetro.
+    const onChangeLang = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const lang_code = e.target.value
+        i18n.changeLanguage(lang_code)
+    }
+Ahora si cambias entre idiomas veras como cambian los textos de tu app.
+
+El archivo Menu.tsx quedaría asi.
+
+import { useTranslation } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
+import { LANGUAGES } from '../constants/index';
+
+const isActive = ({ isActive }: any) => `link ${isActive ? 'active' : ''}`
+
+export const Menu = () => {
+
+    const { i18n, t } = useTranslation()
+
+    const onChangeLang = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const lang_code = e.target.value
+        i18n.changeLanguage(lang_code)
+    }
+
+    return (
+        <nav>
+            <div>
+                <NavLink className={isActive} to='/'>{t('home')}</NavLink>
+                <NavLink className={isActive} to='/about'>{t('about')}</NavLink>
+            </div>
+
+            <select defaultValue={i18n.language} onChange={onChangeLang}  >
+                {
+                    LANGUAGES.map(({ code, label }) => (
+                        <option
+                            key={code}
+                            value={code}
+                        >{label}</option>
+                    ))
+                }
+            </select>
+        </nav>
+    )
+}
+Ahora vamos a las otras paginas para agregar la traducción a los textos.
+
+Home.tsx
+
+import { useTranslation } from 'react-i18next';
+
+export const Home = () => {
+
+    const { t } = useTranslation()
+
+    return (
+        <main>
+            <h1>{t('title')}</h1>
+            <span>{t('label')} </span>
+        </main>
+    )
+}
+About.tsx
+
+import { useTranslation } from 'react-i18next';
+
+export const About = () => {
+
+    const { t } = useTranslation()
+
+    return (
+        <main>
+            <h1>{t('about')}</h1>
+        </main>
+    )
+}
+Bueno, ahora digamos rápidamente te mostrare como interpolar variables.
+
+Dentro de la función t, el segundo parámetro es un objeto, el cual le puedes especificar la variable a interpolar.
+
+Nota que yo le agrego la propiedad name. Bueno entonces esta propiedad name, la tengo que tener muy en cuenta
+
+import { useTranslation } from 'react-i18next';
+
+export const About = () => {
+
+    const { t } = useTranslation()
+
+    return (
+        <main>
+            <h1>{t('about')}</h1>
+            <span>{t('user', { name: 'Bruce Wayne 🦇' })}</span>
+
+        </main>
+    )
+}
+Ahora vamos a un archivo json (pero lo que sea haga en uno, se tiene que replicar en todos los archivos json de traducciones).
+
+Primero agrego la nueva propiedad user, ya que no la tenia antes.
+Luego mediante corchetes dobles agrego el nombre de la propiedad que le asigne antes, el cual era name.
+{
+    "title": "Multi-language app",
+    "label": "Select another language!",
+    "about": "About me",
+    "home": "Home",
+    "user": "My name is: {{name}}"
+}
+Y de esa manera interpolamos valores.
+
+🈵 Mover las traducciones a archivos separados.
+Pero que pasa cuando las traducciones son demasiadas, entonces tu archivo i18n.ts se saldría de control. Lo mejor sera moverlas a archivos separados.
+
+Para esto necesitaremos instalar otro plugin.
+
+npm install i18next-http-backend
+Este plugin cargara los recursos desde un servidor, por lo que sera bajo demanda.
+
+Ahora vamos a crear dentro de la carpeta public una carpeta i18n (public/i18n).
+Y dentro vamos a ir creando archivos .json que serán nombrados según sea su traducción, por ejemplo.
+El archivo es.json sera para las traducciones en Español, el archivo it.json sera solo para las traducciones en italiano, etc.
+Al final tendremos 3 archivos porque en esta app solo manejamos 3 idiomas.
+
+Luego, movemos cada contenido del objeto translation del archivo i18n.ts a su archivo JSON correspondiente.
+Por ejemplo el archivo en.json.
+
+{
+    "title": "Multi-language app",
+    "label": "Select another language!",
+    "about": "About",
+    "home": "Home"
+}
+Una vez echo eso con los 3 archivos, vamos al i18n.ts y vamos a modificar algunas cosas.
+
+Primero la propiedad resources la vamos a quitar.
+Vamos a importar el paquete de i18next-http-backend y mediante el método use, se lo pasamos como parámetro para que ejecute ese plugin.
+import i18n from 'i18next';
+import i18nBackend from "i18next-http-backend";
+import { initReactI18next } from 'react-i18next';
+
+i18n
+    .use(i18nBackend)
+    .use(initReactI18next)
+    .init({
+        fallbackLng: 'en',
+        lng: 'en',
+        interpolation:{
+            escapeValue: false
+        }
+    });
+
+export default i18n;
+Finalmente, necesitamos agregar una nueva propiedad, la cual es backend que recibe un objeto, al cual accederemos a la propiedad loadPath.
+
+La propiedad loadPath, recibe una función que contiene el lenguaje y debe retornar un string.
+Pero una manera mas sencilla es interpolando la variable lng.
+
+Asi tendremos nuestro path de donde se obtendrán las traducciones, nota que estoy apuntando a la carpeta public.
+
+Ahora cuando quieras agregar un nuevo idioma, solo agregas el archivo json en la carpeta i18n dentro de public.
+
+import i18n from 'i18next';
+import i18nBackend from "i18next-http-backend";
+import { initReactI18next } from 'react-i18next';
+
+i18n
+    .use(i18nBackend)
+    .use(initReactI18next)
+    .init({
+        fallbackLng: 'en',
+        lng: 'en',
+        interpolation:{
+            escapeValue: false
+        },
+        backend: {
+            loadPath: 'http://localhost:5173/i18n/{{lng}}.json',
+        }
+    });
+
+export default i18n;
+Pero hay un paso mas que hacer, si notas en la propiedad loadedPath, el host es http://localhost:5173 y cuando lo suba a producción, no funcionaran las traducciones por lo cual debemos validar si estamos en modo desarrollo o no, para poder agregar el host correcto.
+
+import i18n from 'i18next';
+import i18nBackend from "i18next-http-backend";
+import { initReactI18next } from 'react-i18next';
+
+const getCurrentHost = import.meta.env.MODE === 'development' ? 'http://localhost:5173' : 'LINK TO PROD'
+
+i18n
+    .use(i18nBackend)
+    .use(initReactI18next)
+    .init({
+        fallbackLng: 'en',
+        lng: 'en',
+        interpolation:{
+            escapeValue: false
+        },
+        backend: {
+            loadPath: `${getCurrentHost}/i18n/{{lng}}.json`,
+        }
+    });
+
+export default i18n;
+Un tip más, es que las traducciones como están en el backend podrían seguir siendo cargadas mientras la pagina ya esta lista, por lo que es aconsejable manejar un Suspense en la app.
+
+import { Suspense } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Menu } from './components/Menu';
+import { About } from './pages/About';
+import { Home } from './pages/Home';
+
+const App = () => {
+
+    return (
+
+    <Suspense fallback='loading'>
+        <BrowserRouter>
+        <Menu />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/about' element={<About />} />
+        </Routes>
+      </BrowserRouter>
+    </Suspense>
+
+  )
+}
+export default App
+El componente Suspense pone en pausa la app hasta que este lista, y en la propiedad fallback es lo que se le muestra al usuario mientras espera a que la aplicación este lista, aquí es un lugar perfecto para poner un loading o spinner.
+
+Probablemente no se note una mejora considerable, ya que nuestra tiene muy pocas traducciones. Pero es una buena practica.
+
+🈵 Conclusión.
+Crear una app multi-idioma ahora resulta ser mas sencillo gracias a i18n y su plugins.
+
+Espero que te haya gustado esta publicación y que también espero haberte ayudado a entender como realizar este tipo de aplicaciones de una manera mas fácil. 🙌
+
+Si conoces alguna otra forma distinta o mejor de realizar esta aplicación con gusto puedes comentar todas tus observaciones y sugerencias, te lo agradecería bastante!.
+
+Te invito a que revises mi portafolio en caso de que estés interesado en contactarme para algún proyecto! Franklin Martinez Lucas
+
+🔵 No olvides seguirme también en twitter: @Frankomtz361
+
+🈵 Demostración simple.
+https://multi-lang-app-react.netlify.app/
+
+🈵 Código fuente.
+https://github.com/Franklin361/multi-lang-app
+
+Top comments (2)
+Subscribe
+pic
+Add to the discussion
+ 
+ 
+raibtoffoletto profile image
+Raí B. Toffoletto
+•
+20 feb 23
+
+Gracias por el artículo! Muy bien escrito 🎉.
+
+Me gusta mucho trabajar con i18next mismo si el proyeto tenga solo un idioma. Asi todo que sea texto se puede cambiar en los archivos json sin la nececiudad de compilar de nuevo la aplicacion!
+
+
+3
+ likes
+Like
+
+Reply
+ 
+ 
+flash010603 profile image
+Usuario163
+•
+24 feb 23
+
+Me gusta mucho esta libreria, muy buena y popular!
+
+
+2
+ likes
+Like
+
+Reply
+Code of Conduct • Report abuse
+Read next
+dpc profile image
+Daily JavaScript Challenge #JS-140: Binary Gap Length
+DPC - Apr 1
+
+omriluz1 profile image
+Source Maps for JavaScript Debugging
+Omri Luz - Apr 4
+
+omriluz1 profile image
+Using Console.time and Performance.now for Profiling
+Omri Luz - Apr 3
+
+omriluz1 profile image
+Error Propagation with Custom Error Types
+Omri Luz - Apr 3
+
+
+Franklin Martinez
+Follow
+I'm Front End Developer React ⚛️
+Location
+Monterrey, Nuevo León, México
+Joined
+10 jul 2021
+More from Franklin Martinez
+Building a multi-language app with Vue JS. 🌐
+#vue #typescript #tutorial #webdev
+Construyendo una app multi-lenguaje con Vue JS. 🌐
+#vue #typescript #tutorial #webdev
+Administrando el estado con React Query. 〽️
+#javascript #react #spanish #tutorial
+💎 DEV Diamond Sponsors
+
+Thank you to our Diamond Sponsors for supporting the DEV Community
+
+Neon - Official Database Partner
+Neon is the official database partner of DEV
+
+Algolia - Official Search Partner
+Algolia is the official search partner of DEV
+
+DEV Community — A space to discuss and keep up software development and manage your software career
+
+Home
+DEV++
+Podcasts
+Videos
+Tags
+DEV Help
+Forem Shop
+Advertise on DEV
+DEV Challenges
+DEV Showcase
+About
+Contact
+Free Postgres Database
+Software comparisons
+Code of Conduct
+Privacy Policy
+Terms of use
+Built on Forem — the open source software that powers DEV and other inclusive communities.
+
+Made with love and Ruby on Rails. DEV Community © 2016 - 2025.

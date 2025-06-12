@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/navbar';
@@ -10,6 +11,7 @@ import { MessageSquare, FileText, AlertTriangle, Clock, ArrowRight } from 'lucid
 export default function Dashboard() {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   const { data: recentConsultations } = useQuery({
     queryKey: ['/api/consultations'],
@@ -29,8 +31,8 @@ export default function Dashboard() {
 
   const modeCards = [
     {
-      title: 'Consultation Mode',
-      description: 'Ask legal questions and get contextualized answers by country using advanced AI.',
+      title: t('dashboard.consultationMode'),
+      description: t('dashboard.consultationDesc'),
       icon: MessageSquare,
       iconBg: 'bg-blue-100',
       iconColor: 'text-blue-500',
@@ -38,8 +40,8 @@ export default function Dashboard() {
       onClick: () => setLocation('/consulta'),
     },
     {
-      title: 'Process Mode',
-      description: 'Step-by-step guidance for common legal processes like divorce, contracts and lawsuits.',
+      title: t('dashboard.legalProcesses'),
+      description: t('dashboard.legalProcessesDesc'),
       icon: FileText,
       iconBg: 'bg-orange-100',
       iconColor: 'text-orange-600',
@@ -47,8 +49,8 @@ export default function Dashboard() {
       onClick: () => setLocation('/processes'),
     },
     {
-      title: 'Emergency Mode',
-      description: 'Automatic alert system via WhatsApp to your emergency contacts.',
+      title: t('dashboard.emergencyMode'),
+      description: t('dashboard.emergencyDesc'),
       icon: AlertTriangle,
       iconBg: 'bg-red-100',
       iconColor: 'text-red-500',
@@ -66,10 +68,10 @@ export default function Dashboard() {
           {/* Welcome Section */}
           <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-8 text-white">
             <h2 className="text-3xl font-bold mb-2">
-              Welcome{user?.name ? `, ${user.name.split(' ')[0]}` : ''}!
+              {t('dashboard.welcome')}{user?.name ? `, ${user.name.split(' ')[0]}` : ''}!
             </h2>
             <p className="text-blue-100 text-lg">
-              Your intelligent legal assistant is ready to help with consultations, processes and emergencies.
+              {t('dashboard.subtitle')}
             </p>
           </div>
 
@@ -93,9 +95,9 @@ export default function Dashboard() {
                   </p>
                   <div className={`flex items-center ${card.buttonColor} text-sm font-medium`}>
                     <span>
-                      {card.title === 'Consultation Mode' && 'Start consultation'}
-                      {card.title === 'Process Mode' && 'View processes'}
-                      {card.title === 'Emergency Mode' && 'Setup alerts'}
+                      {card.title === t('dashboard.consultationMode') && t('common.continue')}
+                      {card.title === t('dashboard.legalProcesses') && t('navbar.processes')}
+                      {card.title === t('dashboard.emergencyMode') && t('emergency.activateEmergency')}
                     </span>
                     <ArrowRight className="ml-2 w-4 h-4" />
                   </div>

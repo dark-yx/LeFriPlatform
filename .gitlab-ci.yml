@@ -1,0 +1,52 @@
+image: node:18
+
+stages:
+  - setup
+  - test
+  - build
+  - deploy
+
+variables:
+  NPM_TOKEN: ${NPM_TOKEN}
+
+cache:
+  paths:
+    - node_modules/
+
+install_dependencies:
+  stage: setup
+  script:
+    - npm ci
+  artifacts:
+    paths:
+      - node_modules/
+
+test:
+  stage: test
+  script:
+    - npm run test
+  dependencies:
+    - install_dependencies
+
+build:
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+      - build/
+  dependencies:
+    - install_dependencies
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Configurando despliegue en Google Cloud"
+    - gcloud auth activate-service-account --key-file=$GOOGLE_CLOUD_KEY
+    - gcloud config set project $GOOGLE_CLOUD_PROJECT
+    - gcloud app deploy
+  only:
+    - main
+  environment:
+    name: production 

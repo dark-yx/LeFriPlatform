@@ -10,58 +10,188 @@ import { voiceService } from "./services/voice";
 import { multiAgentService } from "./services/multi-agent";
 import multer from 'multer';
 import puppeteer from 'puppeteer';
+import session from 'express-session';
+import passport from './config/passport';
+import { Request } from 'express';
+import { User } from './types/user';
+import express from 'express';
+import { OAuth2Client } from 'google-auth-library';
+
+// Extender la interfaz Request para incluir user y logout
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;
+      logout(callback: (err: any) => void): void;
+    }
+  }
+}
+
+const router = express.Router();
+const client = new OAuth2Client(process.env.GOOGLE_OAUTH_CLIENT_ID);
+
+router.post('/auth/google', async (req, res) => {
+  console.log('Iniciando autenticación con Google...');
+  console.log('Headers recibidos:', req.headers);
+  console.log('Body recibido:', req.body);
+  
+  // Configurar headers para asegurar respuesta JSON
+  res.setHeader('Content-Type', 'application/json');
+  
+  try {
+    const { credential } = req.body;
+    
+    if (!credential) {
+      console.log('Error: Credencial no proporcionada');
+      return res.status(400).json({ message: 'Credencial no proporcionada' });
+    }
+
+    console.log('Verificando token de Google...');
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_OAUTH_CLIENT_ID
+    });
+
+    const payload = ticket.getPayload();
+    
+    if (!payload) {
+      console.log('Error: No se pudo obtener el payload del token');
+      return res.status(400).json({ message: 'No se pudo verificar el token' });
+    }
+
+    console.log('Payload del token:', payload);
+    const { email, name, sub: googleId } = payload;
+
+    // Buscar o crear usuario en la base de datos
+    console.log('Buscando usuario en la base de datos...');
+    let user = await storage.getUserByGoogleId(googleId);
+    
+    if (!user) {
+      console.log('Usuario no encontrado, creando nuevo usuario...');
+      user = await storage.createUser({
+        email,
+        name,
+        googleId,
+        role: 'user'
+      });
+    }
+
+    console.log('Usuario encontrado/creado:', user);
+
+    // Generar token de sesión
+    const token = 'tu-token-de-sesion'; // En producción, usar JWT
+
+    const response = {
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role
+      },
+      token
+    };
+
+    console.log('Enviando respuesta:', response);
+    return res.json(response);
+  } catch (error) {
+    console.error('Error en la autenticación con Google:', error);
+    return res.status(500).json({ 
+      message: 'Error en la autenticación',
+      error: error instanceof Error ? error.message : 'Error desconocido'
+    });
+  }
+});
+
+// Rutas protegidas
+router.get('/consultations', (req, res) => {
+  res.json([]);
+});
+
+router.get('/processes', (req, res) => {
+  res.json([]);
+});
+
+export default router;
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Configurar sesión
+  app.use(session({
+    secret: process.env.SESSION_SECRET || 'tu-secreto-seguro',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 24 * 60 * 60 * 1000 // 24 horas
+    }
+  }));
+
+  // Inicializar Passport
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  // Middleware de autenticación
+  const requireAuth = (req: Request, res: any, next: any) => {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.status(401).json({ error: 'No autenticado' });
+  };
+
+  // Rutas de autenticación
+  app.get('/api/auth/google',
+    passport.authenticate('google', { 
+      scope: ['profile', 'email'],
+      prompt: 'select_account'
+    })
+  );
+
+  app.get('/api/auth/google/callback',
+    (req, res, next) => {
+      passport.authenticate('google', { 
+        failureRedirect: '/login',
+        failureMessage: true
+      })(req, res, next);
+    },
+    (req, res) => {
+      // Si la autenticación fue exitosa
+      if (req.user) {
+        res.redirect('/');
+      } else {
+        res.status(401).json({ 
+          error: 'Error de autenticación',
+          message: 'No se pudo autenticar con Google'
+        });
+      }
+    }
+  );
+
+  app.get('/api/auth/logout', (req: Request, res) => {
+    req.logout((err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Error al cerrar sesión' });
+      }
+      res.json({ message: 'Sesión cerrada exitosamente' });
+    });
+  });
+
+  app.get('/api/auth/me', requireAuth, async (req: Request, res) => {
+    try {
+      const user = await storage.getUser(req.user?.id);
+      if (!user) {
+        return res.status(404).json({ error: "Usuario no encontrado" });
+      }
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ error: "Error al obtener usuario" });
+    }
+  });
+
   // Configure multer for file uploads
   const upload = multer({
     storage: multer.memoryStorage(),
     limits: {
       fileSize: 10 * 1024 * 1024, // 10MB limit
     },
-  });
-
-  // Auth middleware (simplified for demo)
-  const requireAuth = (req: any, res: any, next: any) => {
-    const userId = req.headers['x-user-id'] || '66a1b2c3d4e5f6789abc1234'; // Demo user
-    req.userId = userId as string;
-    next();
-  };
-
-  // Authentication endpoints
-  app.post("/api/auth/google", async (req, res) => {
-    try {
-      const { email, name, googleId } = req.body;
-      
-      let user = await storage.getUserByGoogleId(googleId);
-      if (!user) {
-        user = await storage.getUserByEmail(email);
-        if (!user) {
-          user = await storage.createUser({
-            email,
-            name,
-            googleId,
-            language: "en",
-            country: "EC"
-          });
-        }
-      }
-      
-      res.json({ user, token: `demo_token_${user.id}` });
-    } catch (error) {
-      res.status(500).json({ error: "Authentication failed" });
-    }
-  });
-
-  app.get("/api/auth/me", requireAuth, async (req: any, res) => {
-    try {
-      const user = await storage.getUser(req.userId);
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
-      }
-      res.json(user);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to get user" });
-    }
   });
 
   // Legal consultation endpoints with streaming

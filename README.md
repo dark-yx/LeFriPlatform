@@ -1,128 +1,136 @@
-## 🚀 Project Description
+# LeFri Platform
 
-LeFri Platform is a modern web platform developed with cutting-edge technologies to provide a robust and scalable solution. The project is being developed in Ecuador.
+A comprehensive legal platform that combines legal consultations, process management, and emergency alerts. Our mission is to democratize access to immediate and free legal advice, making legal assistance accessible to everyone.
 
 ## 👨‍💻 Author
 - **Jonnatan Peña**
 - Location: Ecuador
 
-## 🛠️ Technology Stack
+## 🎯 Purpose
 
-### Frontend
-- React 18
-- TypeScript
-- TailwindCSS
-- Radix UI Components
-- React Query
-- Zustand (State Management)
-- Wouter (Routing)
-- Framer Motion (Animations)
+LeFri Platform was created with the vision of democratizing access to legal advice by providing:
+- Immediate legal consultations
+- Free initial legal guidance
+- Emergency legal assistance
+- Process management tools
+- Access to legal resources
 
-### Backend
-- Node.js
-- Express.js
-- TypeScript
-- MongoDB with Mongoose
-- WebSocket Support
-- Passport.js (Authentication)
+Our goal is to break down barriers to legal assistance and ensure that everyone has access to quality legal support when they need it most.
 
-### WhatsApp API
-- Custom Implementation
-- Multi-Vendor Integration
-- Lead Management System
-- Real-Time Message Handling
+## 🚀 Technologies
 
-## 📦 Main Dependencies
+- **Frontend**: React, TypeScript, TailwindCSS, Vite
+- **Backend**: Node.js, Express, TypeScript
+- **Database**: MongoDB
+- **Authentication**: Google OAuth 2.0
+- **Integrated APIs**: 
+  - Google Gemini AI
+  - WhatsApp Business API
+  - Email Services
+  - Voice Services
 
-### UI Components
-- @radix-ui/* (UI Components Library)
-- @tanstack/react-query (Data handling and caching)
-- framer-motion (Animations)
-- lucide-react (Icons)
-- react-hook-form (Form handling)
-- zod (Schema validation)
-
-### Backend Services
-- express
-- mongoose
-- passport
-- nodemailer
-- ws (WebSocket)
-- googleapis
-
-## 🏗️ Project Structure
+## 📦 Project Structure
 
 ```
 LeFriPlatform/
-├── client/ # Frontend Application
-│ ├── src/ # Source Code
-│ └── index.html # Main HTML file
-├── server/ # Backend Application
-├── shared/ # Utilities and shared types
-├── uploads/ # Directory of uploaded files
-├── whatsapp-api/ # WhatsApp API integration
-└── attached_assets/ # Static resources
+├── client/                 # React Frontend
+│   ├── src/
+│   │   ├── components/    # Reusable components
+│   │   ├── pages/        # Main pages
+│   │   ├── contexts/     # React contexts
+│   │   ├── hooks/        # Custom hooks
+│   │   └── types/        # TypeScript types
+├── server/                # Express Backend
+│   ├── config/           # Configurations
+│   ├── services/         # External services
+│   ├── storage/          # Persistence layer
+│   └── types/            # TypeScript types
+└── shared/               # Shared code
 ```
 
-## 🚀 Getting Started
+## 🛠️ Installation
 
-### Prerequisites
-- Node.js (Latest LTS version)
-- MongoDB
-- npm or yarn
-
-### Installation
-
-1. Clone the repository
+1. Clone the repository:
 ```bash
 git clone https://github.com/dark-yx/LeFriPlatform.git
+cd LeFriPlatform
 ```
 
-2. Install dependencies
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Set environment variables
-```bash
-cp .env.example .env
+3. Configure environment variables:
+
+In the root directory, create `.env`:
+```env
+GOOGLE_OAUTH_CLIENT_ID=your_google_client_id
+GOOGLE_OAUTH_CLIENT_SECRET=your_google_client_secret
+GOOGLE_OAUTH_REDIRECT_URI=http://localhost:5000/api/auth/google/callback
+MONGODB_URI=your_mongodb_uri
+SESSION_SECRET=your_secure_secret
 ```
 
-4. Start the development server
+4. Configure Google OAuth:
+   - Go to [Google Cloud Console](https://console.cloud.google.com)
+   - Create a new project or select an existing one
+   - Enable Google OAuth 2.0 API
+   - Create OAuth 2.0 credentials
+   - Add the following authorized URI:
+     - `http://localhost:5000`
+   - Add the following JavaScript origin:
+     - `http://localhost:5000`
+
+5. Start the development server:
 ```bash
 npm run dev
 ```
 
+## 🔑 Authentication
+
+The application uses Google OAuth 2.0 for authentication. To ensure proper functionality:
+
+1. Make sure environment variables are correctly configured
+2. Verify redirect URI is set up in Google Cloud Console
+3. The client ID must be correctly configured in the `.env` file
+
+## 🚨 Troubleshooting
+
+### Google Authentication Error
+
+If you encounter the "Invalid server response" error:
+
+1. Check the browser console logs (F12)
+2. Ensure the server is running on port 5000
+3. Verify environment variables are correctly configured
+4. Clear browser cache and localStorage data
+5. Restart the server
+
+### Common Issues
+
+1. **MongoDB Connection Error**:
+   - Verify MongoDB URI
+   - Ensure database is accessible
+
+2. **Authentication Error**:
+   - Verify Google OAuth credentials
+   - Ensure redirect URI is correctly configured
+
 ## 📝 Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run check` - Type checking
-- `npm run db:push` - Database schema updates
+- `npm run dev`: Start development server
+- `npm run build`: Build for production
+- `npm run start`: Start production server
+- `npm run check`: TypeScript type checking
 
-## 🔒 Security Features
+## 🔒 Security
 
-- Authentication with Passport.js
-- Session management
-- Secure file uploads
-- Input validation with Zod
-- Environment variable protection
-
-## 🌐 API Integration
-
-- Custom WhatsApp API
-- Google APIs
-- Mail service integration
-- WebSocket support for real-time features
-
-## 🎨 UI/UX Features
-
-- Responsive design
-- Light/dark theme support
-- Modern component library
-- Smooth animations
-- Accessible components
+- Google OAuth 2.0 Authentication
+- Secure sessions with express-session
+- CSRF protection
+- Data validation with Zod
+- Input sanitization
 
 ## 📄 License
 
@@ -144,4 +152,4 @@ Any unauthorized use of this software constitutes copyright infringement and may
 
 ---
 
-Developed with ❤️ in Ecuador
+Developed with ❤️ in Ecuador by Jonnatan Peña
